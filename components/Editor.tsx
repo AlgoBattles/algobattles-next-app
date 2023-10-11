@@ -6,10 +6,11 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
 type EditorProps = {
     templateCode: string;
+    userCode: string;
+    setUserCode: (code: string) => void;
   };
 
-
-const AceEditor = ({templateCode}: EditorProps) => {
+const AceEditor = ({templateCode, userCode, setUserCode}: EditorProps) => {
   const editor1Ref = useRef();
 
   useEffect(() => {
@@ -20,13 +21,22 @@ const AceEditor = ({templateCode}: EditorProps) => {
     editor1.setTheme("ace/theme/chaos");
     editor1.session.setMode("ace/mode/javascript");
     console.log('templateCode', templateCode)
-    editor1.setValue(`${templateCode}`);
+    userCode ? editor1.setValue(`${userCode}`) : editor1.setValue(`${templateCode}`);
     editor1.setOptions({
         fontSize: "10pt" // Set the font size (default is 12pt)
       });
+    // Add an event listener for the change event
+    editor1.on('change', function() {
+        const code = editor1.getValue();
+        setUserCode(code);
+    });
   }, [templateCode]);
 
+  function runCode(code: string) {
+    fetch('http://localhost:3001/runCode', {
 
+    })
+  }
 
   return (
     <div className="w-full h-[50vh] border border-blue-700 rounded-[3px]">

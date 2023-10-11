@@ -2,12 +2,26 @@
 import React, { useState } from 'react';
 import TestCaseDetails from './TestCaseDetails';
 
-type TabComponentProps = {
-    prompt: string;
-    testCases: any[][][];
+type TestCase = {
+    input: {
+      [key: string]: any;
+    };
+    output: {
+      [key: string]: any;
+    };
   };
 
-function TabComponent({ prompt, testCases }: TabComponentProps) {
+type TabComponentProps = {
+    prompt: string;
+    testCases: {
+        [key: string]: TestCase;
+    } | null;
+    results: {
+        [key: string]: any;
+    } | null;
+}
+
+function TabComponent({ prompt, testCases, results }: TabComponentProps) {
   const [activeTab, setActiveTab] = useState('Task');
   const [activeTestCase, setActiveTestCase] = useState(0);
 
@@ -38,13 +52,9 @@ function TabComponent({ prompt, testCases }: TabComponentProps) {
 
       {activeTab === 'Test-cases' && (
         <div className="text-gray-300">
-          <TestCaseDetails />
+          <TestCaseDetails testCases={testCases} results={results}/>
         </div>
       )}
-      
-      <div className="flex justify-end mt-4 text-orange-500">
-        14:23 | CODE
-      </div>
     </div>
   );
 }
