@@ -16,7 +16,19 @@
   }
 }
 
+@font-face {
+  font-family: 'LuckiestGuy';
+  src: url('../public/fonts/LuckiestGuy.ttf') format('woff2');
+  font-weight: 400; /* Regular weight */
+  font-style: normal;
+}
+
+html {
+  height: 100%;
+}
+
 body {
+  height: 100%;
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
       to bottom,
