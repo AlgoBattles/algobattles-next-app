@@ -4,9 +4,13 @@ import ProgressBar from './ProgressBar';
 import Button from '@mui/material/Button';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
-const AceEditor = () => {
+type EditorProps = {
+    templateCode: string;
+  };
+
+
+const AceEditor = ({templateCode}: EditorProps) => {
   const editor1Ref = useRef();
-  const editor2Ref = useRef();
 
   useEffect(() => {
     const ace = require('ace-builds/src-noconflict/ace');
@@ -15,14 +19,14 @@ const AceEditor = () => {
     const editor1 = ace.edit(editor1Ref.current);
     editor1.setTheme("ace/theme/chaos");
     editor1.session.setMode("ace/mode/javascript");
-    editor1.setValue(`function foo(items) {
-      var x = "All this is syntax highlighted";
-      return x;
-    }`);
+    console.log('templateCode', templateCode)
+    editor1.setValue(`${templateCode}`);
     editor1.setOptions({
         fontSize: "10pt" // Set the font size (default is 12pt)
       });
-  }, []);
+  }, [templateCode]);
+
+
 
   return (
     <div className="w-full h-[50vh] border border-blue-700 rounded-[3px]">

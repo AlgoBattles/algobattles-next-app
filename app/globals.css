@@ -37,3 +37,10 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.bg-gold-gradient {
+  background-image: radial-gradient(circle at center bottom, #47311d, transparent, black);
+  border-radius: 50% 50% 0 0; /* Semi-circle at the bottom */
+  height: 0;
+  padding-bottom: 50%; /* This gives the element its height, making it a half-circle */
+}

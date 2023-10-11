@@ -14,6 +14,7 @@ export default function Home() {
         <Button variant="outlined" className="mr-3 border border-gray-300 px-4 py-2 text-white">Play A Friend</Button>
         </Link>
       </div>
+      {/* <div className="absolute bottom-0 left-0 right-0 h-1/5 bg-gold-gradient"></div> */}
     </div>
   );
 }
