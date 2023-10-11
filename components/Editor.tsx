@@ -1,17 +1,30 @@
 "use client"
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ProgressBar from './ProgressBar';
 import Button from '@mui/material/Button';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import { createClient } from '@supabase/supabase-js'
+import axios from 'axios'
+
+const supabaseClient = createClient(
+  'https://jdrrftsbeohpznqghpxr.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpkcnJmdHNiZW9ocHpucWdocHhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTM0OTQ5NzIsImV4cCI6MjAwOTA3MDk3Mn0.3ZXOev203HqvH3X7UWE_B9X7NGYu0Z6tlmFyAi0ii4k'
+);
 
 type EditorProps = {
     templateCode: string;
     userCode: string;
     setUserCode: (code: string) => void;
+    setResults: (code: string) => void;
+    testCases: {
+        [key: string]: any;
+    } | null;
   };
 
-const AceEditor = ({templateCode, userCode, setUserCode}: EditorProps) => {
+const AceEditor = ({templateCode, userCode, setUserCode, testCases, setResults}: EditorProps) => {
   const editor1Ref = useRef();
+  const [userId , setUserId] = useState("oliver");
+  const [testCasesArray, setTestCasesArray] = useState<any[][] | null>(null)
 
   useEffect(() => {
     const ace = require('ace-builds/src-noconflict/ace');
@@ -20,27 +33,93 @@ const AceEditor = ({templateCode, userCode, setUserCode}: EditorProps) => {
     const editor1 = ace.edit(editor1Ref.current);
     editor1.setTheme("ace/theme/chaos");
     editor1.session.setMode("ace/mode/javascript");
-    console.log('templateCode', templateCode)
     userCode ? editor1.setValue(`${userCode}`) : editor1.setValue(`${templateCode}`);
     editor1.setOptions({
-        fontSize: "10pt" // Set the font size (default is 12pt)
+        fontSize: "10pt" 
       });
     // Add an event listener for the change event
     editor1.on('change', function() {
         const code = editor1.getValue();
-        setUserCode(code);
+        setUserCode(`${code}`);
     });
   }, [templateCode]);
 
-  function runCode(code: string) {
-    fetch('http://localhost:3001/runCode', {
+  useEffect(() => {
+    try {
+    checkIfActiveSession()
+    }
+    catch (error){
+      console.log(error)
+    }
+  }, []);
 
+  useEffect(() => {
+    if (testCases) {
+        setTestCasesArray(formatTestCases(testCases))
+    } 
+    console.log('testCasesArray', testCasesArray)
+  }, [testCases])
+
+  const formatTestCases = (data) => { 
+    const result = Object.values(data).map(key => {
+    const inputValues = [key.input.nums, key.input.target];
+    const expectedOutput = key.output.expected;
+    return [inputValues, expectedOutput];
     })
+    return result;
+    };
+
+  const checkIfActiveSession = async () => {
+    const { data, error } = await supabaseClient
+          .from('battle_sessions')
+          .select('*')
+          .eq('user_id', userId)
+    console.log('data', data)
+    if (data && data.length > 0) {
+        console.log('hit active session')
+        return
+    }
+    else {
+        console.log('creating session')
+        await createUserContainer()
+    }
+  } 
+  
+  const createUserContainer = async () => {
+    fetch('http://localhost:8080/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "userId": "oliver",
+        "lang": "js"
+    })
+    })
+  }
+
+  const runCode = async (code: string) => {
+    const result = await fetch('http://localhost:8080/runCode', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+          },
+        body: JSON.stringify({
+            code: userCode,
+            testCases: JSON.stringify(testCasesArray),
+            userId: "oliver",
+            funcName: "twoSum"
+        })
+    })
+    console.log('result is' + result)
+    const data = await result.json()
+    console.log(data)
+    setResults(data)
   }
 
   return (
     <div className="w-full h-[50vh] border border-blue-700 rounded-[3px]">
-    <div className="flex flex-row w-full h-[13%] rounded-[3px] bg-black justify-between">
+    <div onClick={() => runCode(userCode)} className="flex flex-row w-full h-[13%] rounded-[3px] bg-black justify-between">
         <Button variant="contained" startIcon={<PlayArrowIcon />} className="h-8 w-30 bg-blue-500 hover:bg-blue-700 m-2 text-white" sx={{
     fontSize: '12px',
     fontFamily: 'arial',

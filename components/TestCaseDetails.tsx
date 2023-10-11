@@ -10,19 +10,14 @@ type TestCase = {
   };
 
 type Result = {
-    received: {
       [key: string]: any;
-    };
-    correct: boolean;
 };
 
   type TabComponentProps = {
     testCases: {
       [key: string]: TestCase;
     } | null;
-    results: {
-        [key: string]: Result;
-    } | null; 
+    results: Result[] | null; 
   };
 
 const TabComponent = ({testCases, results}: TabComponentProps) => {
@@ -52,7 +47,7 @@ const TabComponent = ({testCases, results}: TabComponentProps) => {
                 <div className="">
                     <label className="text-white text-sm">{`${key} =`}</label>
                 </div> 
-                <div className="p-2 w-full rounded-md bg-gray-800 text-white">{`${testCases[selectedTab.toLowerCase().replace(/\s/g, '')].input[key]}`}</div>
+                <div className="p-2 w-full rounded-md bg-gray-800 text-white">{JSON.stringify(testCases[selectedTab.toLowerCase().replace(/\s/g, '')].input[key])}</div>
             </div>
         ))}
         <div className="mt-4">
@@ -61,11 +56,11 @@ const TabComponent = ({testCases, results}: TabComponentProps) => {
         <div className="">
             <label className="text-white text-sm">expected =</label>
         </div>
-        <div className="p-2 w-full rounded-md bg-gray-800 text-white">{`${testCases[selectedTab.toLowerCase().replace(/\s/g, '')].output.expected}`}</div>
+        <div className="p-2 w-full rounded-md bg-gray-800 text-white">{JSON.stringify(testCases[selectedTab.toLowerCase().replace(/\s/g, '')].output.expected)}</div>
         <div className="">
             <label className="text-white text-sm">received =</label>
         </div>
-        <div className="p-2 w-full rounded-md bg-gray-800 text-white">{`nothing`}</div>
+        <div className="p-2 w-full rounded-md bg-gray-800 text-white">{results && JSON.stringify(results[Number(selectedTab.slice(-1)) - 1].received)}</div>
       </div>
     </div>
     }
