@@ -1,9 +1,10 @@
 "use client"
 import React, { useEffect, useRef, useState } from 'react';
-import Editor from '../../components/Editor';
-import OpponentEditor from '../../components/OpponentEditor';
-import TestCases from '../../components/TestCases';
+import Editor from '../_components/Editor';
+import OpponentEditor from '../_components/OpponentEditor';
+import TestCases from '../_components/TestCases';
 import { createClient } from '@supabase/supabase-js'
+import io from 'socket.io-client';
 
 const supabaseClient = createClient(
   'https://jdrrftsbeohpznqghpxr.supabase.co',
@@ -23,9 +24,16 @@ const Battle = () => {
   const [opponentProgress, setOpponentProgress] = useState(0);
 
   useEffect(() => {
+    
+    // check redis for active battle 
+
+    // if active battle, load battle state from redis
+
+    // else create new battle state and add to redis
+
     try {
       const algoNum = Math.floor(Math.random() * 2)
-      const algo = async () => {
+      const setAlgo = async () => {
         const { data, error } = await supabaseClient
               .from('algos')
               .select('*')
@@ -37,24 +45,86 @@ const Battle = () => {
           setTestCases(data[0].test_cases_json) 
         }
       } 
-    algo()
+    setAlgo()
     }
     catch (error){
       console.log(error)
     }
   }, []);
 
+
+  // battle in redis
+
+  // key = user_id, value = battle id
+
+  // key = battle_id, value = {
+  // algo_id: ,
+  // user1_id: , 
+  // user2_id: , 
+  // user1_code: , 
+  // user2_code: 
+  // user1_progress: , 
+  // user2_progress: , 
+  // game_status: "active", "complete"
+  // }
+
+
+  const socketRef = useRef(null);
+  const currRoomId = 'room1';
+
   useEffect(() => {
+    // connect to socket server
+    const serverURL = 'http://localhost:8081';
+    const socket = io(serverURL, {
+      query: {
+        roomId: currRoomId,
+    }
+    });
+    socket.on('connect', () => {
+      console.log('connected to socket server');
+    });
+
+    socket.on('message', ({message, action}) => {
+      console.log('Received message:', message);
+      console.log('Received action:', action);
+      
+
+    });
+
+    socketRef.current = socket;
+
+    return () => {
+      socket.disconnect();
+    };
+    
+  }, []);
+
+  const sendCode = (message) => {
+    if (socketRef.current) {
+      socketRef.current.emit('message', {room: `${currRoomId}`, action: 'opponent code', message: `${message}`});
+    }
+  }
+
+
+  useEffect(() => {
+    // emit to socket server
     console.log('userCode', userCode)
+    sendCode(userCode);
   }, [userCode]);
+
+  
+
+
+
+  
+
 
   return (
     <div className="flex flex-col min-h-screen items-center justify-center bg-black">
     <h1 style={{fontFamily: 'LuckiestGuy', fontSize: '50px', textAlign: 'left', width: '100%', marginTop: '20px', marginLeft: '20px'}} >AlgoBattles</h1>
     <div className="grid grid-cols-2 grid-rows-2 gap-4 p-4 w-full">
-    {/* <div className="flex flex-wrap justify-between p-4 w-full"> */}
       <Editor templateCode={templateCode} userCode={userCode} setUserCode={setUserCode} testCases={testCases} setResults={setResults}></Editor>
-      <OpponentEditor></OpponentEditor>
+      <OpponentEditor opponentCode={opponentCode} opponentProgress={opponentProgress}></OpponentEditor>
       <TestCases prompt={prompt} testCases={testCases} results={results}></TestCases>
     </div>
     </div>

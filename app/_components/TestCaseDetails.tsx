@@ -42,8 +42,8 @@ const TabComponent = ({testCases, results}: TabComponentProps) => {
         <div className="mt-4">
             <label className="text-grey text-med font-bold">Input</label>
         </div>
-        {Object.keys(testCases[selectedTab.toLowerCase().replace(/\s/g, '')].input).map(key => (
-            <div>
+        {Object.keys(testCases[selectedTab.toLowerCase().replace(/\s/g, '')].input).map((key, index) => (
+            <div key={index}>
                 <div className="">
                     <label className="text-white text-sm">{`${key} =`}</label>
                 </div> 

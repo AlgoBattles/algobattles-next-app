@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, Dispatch, SetStateAction } from 'react';
 import ProgressBar from './ProgressBar';
 import Button from '@mui/material/Button';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -12,9 +12,9 @@ const supabaseClient = createClient(
 );
 
 type EditorProps = {
-    templateCode: string;
-    userCode: string;
-    setUserCode: (code: string) => void;
+    templateCode: string | null;
+    userCode: string | null;
+    setUserCode: (code: string) => void | Dispatch<SetStateAction<null>>;
     setResults: (code: string) => void;
     testCases: {
         [key: string]: any;
@@ -25,40 +25,6 @@ const AceEditor = ({templateCode, userCode, setUserCode, testCases, setResults}:
   const editor1Ref = useRef();
   const [userId , setUserId] = useState("oliver");
   const [testCasesArray, setTestCasesArray] = useState<any[][] | null>(null)
-
-  useEffect(() => {
-    const ace = require('ace-builds/src-noconflict/ace');
-    require('ace-builds/src-noconflict/theme-chaos');
-    require('ace-builds/src-noconflict/mode-javascript');
-    const editor1 = ace.edit(editor1Ref.current);
-    editor1.setTheme("ace/theme/chaos");
-    editor1.session.setMode("ace/mode/javascript");
-    userCode ? editor1.setValue(`${userCode}`) : editor1.setValue(`${templateCode}`);
-    editor1.setOptions({
-        fontSize: "10pt" 
-      });
-    // Add an event listener for the change event
-    editor1.on('change', function() {
-        const code = editor1.getValue();
-        setUserCode(`${code}`);
-    });
-  }, [templateCode]);
-
-  useEffect(() => {
-    try {
-    checkIfActiveSession()
-    }
-    catch (error){
-      console.log(error)
-    }
-  }, []);
-
-  useEffect(() => {
-    if (testCases) {
-        setTestCasesArray(formatTestCases(testCases))
-    } 
-    console.log('testCasesArray', testCasesArray)
-  }, [testCases])
 
   const formatTestCases = (data) => { 
     const result = Object.values(data).map(key => {
@@ -74,13 +40,13 @@ const AceEditor = ({templateCode, userCode, setUserCode, testCases, setResults}:
           .from('battle_sessions')
           .select('*')
           .eq('user_id', userId)
-    console.log('data', data)
+    // console.log('data', data)
     if (data && data.length > 0) {
-        console.log('hit active session')
+        // console.log('hit active session')
         return
     }
     else {
-        console.log('creating session')
+        // console.log('creating session')
         await createUserContainer()
     }
   } 
@@ -111,20 +77,56 @@ const AceEditor = ({templateCode, userCode, setUserCode, testCases, setResults}:
             funcName: "twoSum"
         })
     })
-    console.log('result is' + result)
+    // console.log('result is' + result)
     const data = await result.json()
-    console.log(data)
+    // console.log(data)
     setResults(data)
   }
+
+  useEffect(() => {
+    try {
+    checkIfActiveSession()
+    }
+    catch (error){
+      console.log(error)
+    }
+  }, []);
+
+  useEffect(() => {
+    const ace = require('ace-builds/src-noconflict/ace');
+    require('ace-builds/src-noconflict/theme-chaos');
+    require('ace-builds/src-noconflict/mode-javascript');
+    const editor1 = ace.edit(editor1Ref.current);
+    editor1.setTheme("ace/theme/chaos");
+    editor1.session.setMode("ace/mode/javascript");
+    userCode ? editor1.setValue(`${userCode}`) : editor1.setValue(`${templateCode}`);
+    editor1.setOptions({
+        fontSize: "10pt" 
+      });
+    // Add an event listener for the change event
+    editor1.on('change', function() {
+        const code = editor1.getValue();
+        setUserCode(`${code}`);
+    });
+  }, [templateCode]);
+
+
+  useEffect(() => {
+    if (testCases) {
+        setTestCasesArray(formatTestCases(testCases))
+    } 
+    // console.log('testCasesArray', testCasesArray)
+  }, [testCases])
+
 
   return (
     <div className="w-full h-[50vh] border border-blue-700 rounded-[3px]">
     <div onClick={() => runCode(userCode)} className="flex flex-row w-full h-[13%] rounded-[3px] bg-black justify-between">
         <Button variant="contained" startIcon={<PlayArrowIcon />} className="h-8 w-30 bg-blue-500 hover:bg-blue-700 m-2 text-white" sx={{
-    fontSize: '12px',
-    fontFamily: 'arial',
-  }}>Run code</Button>
-  <ProgressBar percentage={70} />
+            fontSize: '12px',
+            fontFamily: 'arial',
+            }}>Run code</Button>
+        <ProgressBar percentage={70} />
     </div>
     <div id="editor1" ref={editor1Ref} className="w-full h-[87%] rounded-[3px]" />
     </div>
