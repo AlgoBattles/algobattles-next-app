@@ -1,8 +1,6 @@
 "use client"
 import React, { useEffect, useRef } from 'react';
 import ProgressBar from './OpponentProgress';
-import Button from '@mui/material/Button';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
 const AceEditor = () => {
   const editor1Ref = useRef();
