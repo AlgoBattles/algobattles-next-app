@@ -40,7 +40,7 @@ function SignupComponent() {
 
   async function getUID() {
     const user = await supabase.auth.getUser();
-    if (user.data) {
+    if (user.data.user) {
       console.log('User is signed in:', user);
       console.log(user.data.user)
       console.log(user.data.user.id)
