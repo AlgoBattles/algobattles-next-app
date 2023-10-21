@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link'
 import Button from '@mui/material/Button';
 import { Email } from '@mui/icons-material';
@@ -43,6 +43,23 @@ function SignupComponent() {
       }
       // router.refresh()
     }
+  
+    async function checkAuthStatus() {
+      const user = await supabase.auth.getUser();
+      if (user.data.user) {
+        router.push('/home')
+        return user
+      } else {
+        return
+      }
+    }
+
+    useEffect(() => {
+      const checkAuth = async () => {
+        await checkAuthStatus();
+      };
+      checkAuth();
+    }, [])
 
     // const handleOAuth = async () => {
     //   await supabase.auth.signIn({
@@ -88,11 +105,16 @@ function SignupComponent() {
             <div>
               <div className="mb-6 mt-6">
                 <label className="text-white mb-2 block font-semibold">Email</label>
-                <input type="email" onChange={handleEmailInput} placeholder="admiralsnackbar@algobattles.xyz" className="w-full p-2 bg-gray-900 text-white rounded focus:outline-none" />
+                <div className="flex items-center bg-gray-900 p-2 rounded">
+                  <input type="text" onChange={handleEmailInput} placeholder="admiralsnackbar@algobattles.xyz" className="bg-transparent text-white flex-grow focus:outline-none" />
+                </div>    
               </div>
               <div className="mb-6 mt-6">
                 <label className="text-white mb-2 block font-semibold">Password</label>
-                <input type="password" onChange={handlePasswordInput} placeholder="Password" className="w-full p-2 bg-gray-900 text-white rounded focus:outline-none" />
+                {/* <input type="password" onChange={handlePasswordInput} placeholder="Password" className="w-full p-2 bg-gray-900 text-white rounded focus:outline-none" /> */}
+                <div className="flex items-center bg-gray-900 p-2 rounded">
+                  <input type="password" onChange={handlePasswordInput} placeholder="Password" className="bg-transparent text-white flex-grow focus:outline-none" />
+                </div>  
                 <label className="text-red-500 text-sm mt-2 mb-2 block">{error}</label>
               </div> 
                 <button onClick={handleSignIn} className="bg-orange-500 text-white w-full py-2 font-bold rounded-3xl">CONTINUE</button>

@@ -19,25 +19,35 @@ function SignupComponent() {
 
   const router = useRouter()
   const supabase = createClientComponentClient<Database>()
-  
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY
-
-  
 
   const handleUsernameInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
   }
 
-  const handleFinish = () => {
-    if (avatar && username && preferredLanguage && UID) {
-      setUser(({ ...user, avatar, username, preferredLanguage, UID }));
+  const handleFinish = async () => {
+    if (email && avatar && username && preferredLanguage && UID) {
+      setUser(({ ...user, email, avatar, username, preferredLanguage, UID }));
+      console.log('user is: ', user)
+      const { data, error } = await supabase
+          .from('users')
+          .insert([
+            { user_id: UID, username, email, preferredLanguage, avatar },
+          ])
+          .select()
+      if (data) {
+          console.log('data is: ', data)
+          router.push('/home')
+      }
+      else if (error) {
+      setError(error.message)
+      console.log(error)
+      return
+      }
     }
     else {
       setError('Please fill out all fields')
     }
   }
-
   async function getUID() {
     const user = await supabase.auth.getUser();
     if (user.data.user) {
@@ -51,15 +61,17 @@ function SignupComponent() {
       console.log('No user is signed in');
     }
   }
-
   useEffect(() => {
     const fetchUID = async () => {
       await getUID();
     };
-    console.log('context state is: ')
-    console.log(user);
     fetchUID()
   }, [])
+
+  useEffect(() => {
+    console.log('context state is: ')
+    console.log(user);
+  }, [user])
 
 
   return (
@@ -84,11 +96,11 @@ function SignupComponent() {
         <div className="flex gap-2">
         <button onClick={() => setLang('javascript')} className={`px-4 py-2 text-[10pt] font-semibold rounded-3xl ${preferredLanguage === 'javascript' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-blue-500'}`}>JavaScript</button>
         <button onClick={() => setLang('python')} className={`px-4 py-2 text-[10pt] font-semibold rounded-3xl ${preferredLanguage === 'python' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-blue-500'}`}>Python</button>
-        <label className="text-red-500 text-sm mt-2 mb-2 block">{error}</label>
       </div>
-      <Link href="/home">
+      <label className="text-red-500 text-sm mt-2 mb-2 block">{error}</label>
+      {/* <Link href="/home"> */}
       <button onClick={handleFinish} className="bg-orange-500 text-white w-full py-2 rounded mt-10">FINISH</button>
-      </Link>
+      {/* </Link> */}
       </div>
     </div>
   );

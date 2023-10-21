@@ -4,36 +4,54 @@ import Link from 'next/link'
 import Button from '@mui/material/Button';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter } from 'next/navigation'
+import { useUser } from '../_contexts/UserContext';
 
 // import type { Database } from '@/lib/database.types'
 
-// import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
-
 export default function Home() {
+  const { user, setUser } = useUser();
 
   const supabase = createClientComponentClient<Database>()
   const router = useRouter()
 
-  async function getUserInfo() {
+  async function checkAuthStatus() {
     const user = await supabase.auth.getUser();
-    if (user) {
+    if (user.data.user) {
       console.log('User is signed in:', user);
       return user
-
     } else {
-      console.log('No user is signed in');
+      router.push('/')
     }
   }
+
+  async function retrieveUserInfo() {
+    const { data, error } = await supabase
+        .from('users')
+        .select()
+    if (data) {
+        setUser(({ ...user, email: data[0].email, avatar: data[0].avatar, username: data[0].username, preferredLanguage: data[0].preferredLanguage, UID: data[0].user_id }));
+    }
+    else if (error) {
+    console.log(error)
+    return
+    }
+  }
+
   useEffect(() => {
     const fetchUserInfo = async () => {
-      await getUserInfo();
+      await checkAuthStatus();
+      await retrieveUserInfo();
     };
     fetchUserInfo();
   }, [])
 
+  useEffect(() => {
+    console.log('user is: ', user)
+  }, [user])
+
   const handleSignOut = async () => {
     await supabase.auth.signOut();
-    router.refresh()
+    router.push('/')
   }
 
   return (
@@ -43,7 +61,7 @@ export default function Home() {
         <Link href="/battle">
           <Button variant="outlined" className="mr-3 border border-gray-300 px-4 py-2 text-white">Play Random</Button>
         </Link>
-        <Link href="/battle">
+        <Link href="/waitingRoom/sendInvite">
         <Button variant="outlined" className="mr-3 border border-gray-300 px-4 py-2 text-white">Play A Friend</Button>
         </Link>
       </div>

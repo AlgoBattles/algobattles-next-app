@@ -110,14 +110,7 @@ const Battle = () => {
     // emit to socket server
     console.log('userCode', userCode)
     sendCode(userCode);
-  }, [userCode]);
-
-  
-
-
-
-  
-
+  }, [userCode]); 
 
   return (
     <div className="flex flex-col min-h-screen items-center justify-center bg-black">
