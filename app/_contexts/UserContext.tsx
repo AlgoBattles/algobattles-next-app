@@ -6,7 +6,7 @@ interface User {
   username: string;
   preferredLanguage: string;
   avatar: string;
-  password: string;
+  UID: string;
 }
 
 interface UserContextType {
@@ -24,7 +24,7 @@ const defaultUserContext: UserContextType = {
     username: '',
     preferredLanguage: '',
     avatar: '',
-    password: '',
+    UID: '',
   },
   setUser: () => {},
 };

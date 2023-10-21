@@ -15,6 +15,7 @@ function SignupComponent() {
 
     const [email, setEmail] = useState(''); 
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('')
 
     const router = useRouter()
     const supabase = createClientComponentClient<Database>()
@@ -33,6 +34,7 @@ function SignupComponent() {
         password,
       })
       if (error) {
+        setError(error.message)
         console.log(error)
         return
       }
@@ -86,16 +88,14 @@ function SignupComponent() {
             <div>
               <div className="mb-6 mt-6">
                 <label className="text-white mb-2 block font-semibold">Email</label>
-                <input type="email" onChange={handleEmailInput} placeholder="your-email@domain.com" className="w-full p-2 bg-gray-900 text-white rounded focus:outline-none" />
+                <input type="email" onChange={handleEmailInput} placeholder="admiralsnackbar@algobattles.xyz" className="w-full p-2 bg-gray-900 text-white rounded focus:outline-none" />
               </div>
               <div className="mb-6 mt-6">
                 <label className="text-white mb-2 block font-semibold">Password</label>
                 <input type="password" onChange={handlePasswordInput} placeholder="Password" className="w-full p-2 bg-gray-900 text-white rounded focus:outline-none" />
-              </div>
-              
+                <label className="text-red-500 text-sm mt-2 mb-2 block">{error}</label>
+              </div> 
                 <button onClick={handleSignIn} className="bg-orange-500 text-white w-full py-2 font-bold rounded-3xl">CONTINUE</button>
-              
-
             </div>
         )}
     </div>
