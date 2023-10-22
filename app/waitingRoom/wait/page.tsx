@@ -126,7 +126,7 @@ export default function Home() {
             }
         ])
         .select()
-        
+
 
   }
 
@@ -160,10 +160,8 @@ export default function Home() {
         console.log('confirming back')
         if (action === 'confirm battle'){
             setReady(true)
-            socket.emit('message', {room: `${currRoomId}`, action: 'confirmation 2', message: `${'confirmed'}`});
-            
+            socket.emit('message', {room: `${currRoomId}`, action: 'confirmation 2', message: `${'confirmed'}`});  
         }
-     
     });
 
     socketRef.current = socket;
