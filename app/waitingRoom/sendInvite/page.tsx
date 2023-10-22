@@ -18,19 +18,27 @@ export default function Home() {
   const router = useRouter()
 
   async function checkAuthStatus() {
-    const user = await supabase.auth.getUser();
-    if (user.data.user) {
-      console.log('User is signed in:', user);
-      return user
+    const userAuthInfo = await supabase.auth.getUser();
+    if (userAuthInfo.data.user) {
+      console.log('User is signed in:', userAuthInfo.data.user);
+      if (userAuthInfo.data.user.id) {
+        setUser(({ ...user, UID: userAuthInfo.data.user.id }));
+        return userAuthInfo.data.user.id 
+      }
     } else {
       router.push('/')
     }
   }
   async function retrieveUserInfo() {
+    console.log('hitting retrieve user info')
+    console.log('user is', user)
     const { data, error } = await supabase
         .from('users')
         .select()
-    if (data) {
+        .eq('user_id', user.UID)
+    console.log(data)
+    if (data && data.length >= 1) {
+        console.log('setting user state')
         setUser(({ ...user, email: data[0].email, avatar: data[0].avatar, username: data[0].username, preferredLanguage: data[0].preferredLanguage, UID: data[0].user_id }));
     }
     else if (error) {
@@ -38,13 +46,19 @@ export default function Home() {
     return
     }
   }
+
   useEffect(() => {
-    const fetchUserInfo = async () => {
-      await checkAuthStatus();
-      await retrieveUserInfo();
+    const checkEverything = async () => {
+      if (!user.UID) {
+        await checkAuthStatus();
+      }
+      else if (user.UID && !user.username) {
+        await retrieveUserInfo();
+      } 
+      console.log('use effect has updated user to: ', user)
     };
-    fetchUserInfo();
-  }, [])
+    checkEverything();
+  }, [user])
 
   const handleOpponentInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setOpponent(event.target.value);
@@ -70,11 +84,15 @@ export default function Home() {
         console.log('user data is: ')
         console.log(userData)
 
+         
+
         const { data: inviteData, error: inviteError } = await supabase
             .from('battle_invites')
             .insert([
                 {
                     user_id: user.UID,
+                    inviter_username: user.username,
+                    inviter_avatar: user.avatar,
                     invitee: userData[0].user_id,
                     invitee_username: userData[0].username,
                     invitee_avatar: userData[0].avatar,

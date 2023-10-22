@@ -26,19 +26,27 @@ export default function Home() {
   const router = useRouter()
 
   async function checkAuthStatus() {
-    const user = await supabase.auth.getUser();
-    if (user.data.user) {
-      console.log('User is signed in:', user);
-      return user
+    const userAuthInfo = await supabase.auth.getUser();
+    if (userAuthInfo.data.user) {
+      console.log('User is signed in:', userAuthInfo.data.user);
+      if (userAuthInfo.data.user.id) {
+        setUser(({ ...user, UID: userAuthInfo.data.user.id }));
+        return userAuthInfo.data.user.id 
+      }
     } else {
       router.push('/')
     }
   }
   async function retrieveUserInfo() {
+    console.log('hitting retrieve user info')
+    console.log('user is', user)
     const { data, error } = await supabase
         .from('users')
         .select()
-    if (data) {
+        .eq('user_id', user.UID)
+    console.log(data)
+    if (data && data.length >= 1) {
+        console.log('setting user state')
         setUser(({ ...user, email: data[0].email, avatar: data[0].avatar, username: data[0].username, preferredLanguage: data[0].preferredLanguage, UID: data[0].user_id }));
     }
     else if (error) {
@@ -51,9 +59,11 @@ export default function Home() {
     const { data, error } = await supabase
         .from('battle_invites')
         .select()
-        .eq('user_id', user.UID)
-    if (data) {
+        .eq('inviter_username', user.username)
+    if (data && data.length >= 1) {
         console.log('invite data is: ', data)
+        console.log('the invitee username is' , data[0].invitee_username)
+        console.log('my username is', user.username)
         setOpponentUsername(data[0].invitee_username)
         setOpponentAvatar(data[0].invitee_avatar)
         return data
@@ -64,6 +74,22 @@ export default function Home() {
     }
   }
 
+  useEffect(() => {
+    const checkEverything = async () => {
+      if (!user.UID) {
+        await checkAuthStatus();
+      }
+      else if (user.UID && !user.username) {
+        await retrieveUserInfo();
+      }
+      else if (user.UID && user.username) {
+        await retrieveInviteDetails();
+      }
+      console.log('use effect has updated user to: ', user)
+    };
+    checkEverything();
+  }, [user])
+
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     router.push('/')
@@ -72,15 +98,6 @@ export default function Home() {
   const handleStartBattle = async () => {
     console.log('starting battle')
   }
-
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      await checkAuthStatus();
-      await retrieveUserInfo();
-      await retrieveInviteDetails();
-    };
-    fetchUserInfo();
-  }, [])
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -107,8 +124,14 @@ export default function Home() {
     });
 
     socket.on('message', ({message, action}) => {
-      console.log('Received message:', message);
-      console.log('Received action:', action);
+        console.log('Received message:', message);
+        console.log('Received action:', action);
+        console.log('confirming back')
+        if (action === 'confirm battle'){
+            setReady(true)
+            socket.emit('message', {room: `${currRoomId}`, action: 'confirmation 2', message: `${'confirmed'}`});
+        }
+     
     });
 
     socketRef.current = socket;
@@ -119,11 +142,11 @@ export default function Home() {
     
   }, []);
 
-  const sendCode = (message) => {
-    if (socketRef.current) {
-      socketRef.current.emit('message', {room: `${currRoomId}`, action: 'opponent code', message: `${message}`});
-    }
-  }
+//   const sendCode = (message) => {
+//     if (socketRef.current) {
+//       socketRef.current.emit('message', {room: `${currRoomId}`, action: 'opponent code', message: `${message}`});
+//     }
+//   }
 
 
   return (
@@ -132,19 +155,23 @@ export default function Home() {
       <div className="flex justify-center items-center flex-grow">
       <div className="bg-gray-800 w-[400px] h-[400px] p-6 rounded-lg border-[1px] border-gray-700">
             <div className="mb-6 mt-6">
-                <div className="text-2xl font-semibold mb-6 mt-6">Waiting for opponent...</div>
+                <div className="text-2xl font-semibold mb-6 mt-6">{ready ? 'Starting battle...' : 'Waiting for opponent...'}</div>
             </div>
-            <div>
+            <div className="flex flex-col">
+                <div>
                 {opponentAvatar && opponentAvatar}
+                </div>
+                <div>
                 {opponentUsername && opponentUsername}
+                </div>
             </div>
             <div>
                 <Stopwatch seconds={seconds} />
             </div>
-            { ready && <Button onClick={handleStartBattle} variant='outlined' className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 w-[100%] rounded-3xl">
+            {/* { ready && <Button onClick={handleStartBattle} variant='outlined' className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 w-[100%] rounded-3xl">
                 Ready
             </Button>
-            }
+            } */}
       </div>
       </div>
     </div>
