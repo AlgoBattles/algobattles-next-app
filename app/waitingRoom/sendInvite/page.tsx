@@ -76,6 +76,8 @@ export default function Home() {
                 {
                     user_id: user.UID,
                     invitee: userData[0].user_id,
+                    invitee_username: userData[0].username,
+                    invitee_avatar: userData[0].avatar,
                     socket_room: 'room1'
                 }
             ])

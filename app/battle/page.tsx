@@ -87,8 +87,6 @@ const Battle = () => {
     socket.on('message', ({message, action}) => {
       console.log('Received message:', message);
       console.log('Received action:', action);
-      
-
     });
 
     socketRef.current = socket;
