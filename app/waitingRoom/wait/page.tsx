@@ -95,8 +95,39 @@ export default function Home() {
     router.push('/')
   }
 
+  // key = user_id, value = battle id
+
+  // key = battle_id, value = {
+  // algo_id: ,
+  // user1_id: , 
+  // user2_id: , 
+  // user1_code: , 
+  // user2_code: 
+  // user1_progress: , 
+  // user2_progress: , 
+  // game_status: "active", "complete"
+  // }
+
+
   const handleStartBattle = async () => {
     console.log('starting battle')
+    const { data, error } = await supabase
+        .from('battle_state')
+        .insert([
+            {
+                algo_id: 1,
+                user1_id: user.username,
+                user2_id: opponentUsername,
+                user1_code: '',
+                user2_code: '',
+                user1_progress: 0,
+                user2_progress: 0,
+                game_status: 'active'
+            }
+        ])
+        .select()
+        
+
   }
 
   useEffect(() => {
@@ -130,6 +161,7 @@ export default function Home() {
         if (action === 'confirm battle'){
             setReady(true)
             socket.emit('message', {room: `${currRoomId}`, action: 'confirmation 2', message: `${'confirmed'}`});
+            
         }
      
     });
@@ -142,11 +174,6 @@ export default function Home() {
     
   }, []);
 
-//   const sendCode = (message) => {
-//     if (socketRef.current) {
-//       socketRef.current.emit('message', {room: `${currRoomId}`, action: 'opponent code', message: `${message}`});
-//     }
-//   }
 
 
   return (
