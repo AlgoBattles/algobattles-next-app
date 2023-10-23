@@ -2,11 +2,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import io from 'socket.io-client';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import Button from '@mui/material/Button';
 import { useUser } from '../../_contexts/UserContext';
 import Stopwatch from '@/app/_components/Stopwatch';
+import io from 'socket.io-client';
+import { Socket } from 'socket.io-client';
 
 
 // import type { Database } from '@/lib/database.types'
@@ -99,7 +100,7 @@ export default function Home() {
   }, []);
 
 
-  const socketRef = useRef(null);
+  const socketRef = useRef<Socket | null>(null);
   const currRoomId = 'room1';
 
   useEffect(() => {
@@ -117,6 +118,9 @@ export default function Home() {
     socket.on('message', ({message, action}) => {
         if (action === 'confirmation 2') {
             setReady(true)
+        }
+        else if (action === 'start battle') {
+            router.push('/battle')
         }
       console.log('Received message:', message);
       console.log('Received action:', action);
@@ -156,9 +160,11 @@ export default function Home() {
             <div>
                 <Stopwatch seconds={seconds} />
             </div>
+            <div className="mt-10">
             <Button onClick={confirmBattle} variant='outlined' className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 w-[100%] rounded-3xl">
                 Ready
             </Button>
+            </div>
             
       </div>
       </div>

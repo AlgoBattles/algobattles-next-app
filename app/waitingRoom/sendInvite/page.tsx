@@ -84,11 +84,11 @@ export default function Home() {
         console.log('user data is: ')
         console.log(userData)
 
-         
+
 
         const { data: inviteData, error: inviteError } = await supabase
             .from('battle_invites')
-            .insert([
+            .upsert([
                 {
                     user_id: user.UID,
                     inviter_username: user.username,

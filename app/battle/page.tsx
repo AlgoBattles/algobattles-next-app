@@ -5,6 +5,7 @@ import OpponentEditor from '../_components/OpponentEditor';
 import TestCases from '../_components/TestCases';
 import { createClient } from '@supabase/supabase-js'
 import io from 'socket.io-client';
+import { Socket } from 'socket.io-client';
 
 const supabaseClient = createClient(
   'https://jdrrftsbeohpznqghpxr.supabase.co',
@@ -23,29 +24,35 @@ const Battle = () => {
   const [opponentCode, setOpponentCode] = useState('Loading...');
   const [opponentProgress, setOpponentProgress] = useState(0);
 
-  useEffect(() => {
-    
-    // check redis for active battle 
 
-    // if active battle, load battle state from redis
+  const setAlgo = async () => {
+    const { data, error } = await supabaseClient
+          .from('algos')
+          .select('*')
+          .eq('id', 1)
+    if (data) {
+      setFuncName(data[0].func_name)
+      setTemplateCode(data[0].template_code)
+      setPrompt(data[0].prompt)
+      setTestCases(data[0].test_cases_json) 
+    }
+  } 
 
-    // else create new battle state and add to redis
-
+  const retrieveState = async () => {
     try {
-      const algoNum = Math.floor(Math.random() * 2)
-      const setAlgo = async () => {
-        const { data, error } = await supabaseClient
-              .from('algos')
-              .select('*')
-              .eq('id', 1)
-        if (data) {
-          setFuncName(data[0].func_name)
-          setTemplateCode(data[0].template_code)
-          setPrompt(data[0].prompt)
-          setTestCases(data[0].test_cases_json) 
-        }
-      } 
-    setAlgo()
+
+    }
+    catch (error) {
+      console.log(error)
+    }
+  }
+
+  
+  
+  useEffect(() => {
+    try {
+      
+      setAlgo()
     }
     catch (error){
       console.log(error)
@@ -53,23 +60,9 @@ const Battle = () => {
   }, []);
 
 
-  // battle in redis
-
-  // key = user_id, value = battle id
-
-  // key = battle_id, value = {
-  // algo_id: ,
-  // user1_id: , 
-  // user2_id: , 
-  // user1_code: , 
-  // user2_code: 
-  // user1_progress: , 
-  // user2_progress: , 
-  // game_status: "active", "complete"
-  // }
 
 
-  const socketRef = useRef(null);
+  const socketRef = useRef<Socket | null>(null);
   const currRoomId = 'room1';
 
   useEffect(() => {
@@ -97,17 +90,16 @@ const Battle = () => {
     
   }, []);
 
-  const sendCode = (message) => {
+  const sendCode = (message: string) => {
     if (socketRef.current) {
       socketRef.current.emit('message', {room: `${currRoomId}`, action: 'opponent code', message: `${message}`});
     }
   }
 
-
   useEffect(() => {
     // emit to socket server
     console.log('userCode', userCode)
-    sendCode(userCode);
+    userCode && sendCode(userCode);
   }, [userCode]); 
 
   return (
