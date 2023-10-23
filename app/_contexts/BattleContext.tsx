@@ -2,18 +2,19 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 
 interface Battle {
-  algo_id: number;
-  algo_prompt: string;
-  func_name: string;
-  template_code: string;
-  test_cases_obj: string;
-  user1_id: string;
-  user2_id: string;
-  user1_code: string;
-  user2_code: string;
-  user1_progress: number;
-  user2_progress: number;
-  game_status: string;
+  algoId: number;
+  algoPrompt: string;
+  funcName: string;
+  templateCode: string;
+  testCasesObj: string;
+  userRole: string;
+  userId: string;
+  opponentId: string;
+  userCode: string;
+  opponentCode: string;
+  userProgress: number;
+  opponentProgress: number;
+  gameStatus: string;
 }
 
 interface BattleContextType {
@@ -27,18 +28,19 @@ interface BattleProviderProps {
 
 const defaultBattleContext: BattleContextType = {
     battle: {
-      algo_id: 0,
-      algo_prompt: '',
-      func_name: '',
-      template_code: '',
-      test_cases_obj: '',
-      user1_id: '',
-      user2_id: '',
-      user1_code: '',
-      user2_code: '',
-      user1_progress: 0,
-      user2_progress: 0,
-      game_status: '',
+      algoId: 0,
+      algoPrompt: '',
+      funcName: '',
+      templateCode: '',
+      testCasesObj: '',
+      userRole: '',
+      userId: '',
+      opponentId: '',
+      userCode: '',
+      opponentCode: '',
+      userProgress: 0,
+      opponentProgress: 0,
+      gameStatus: '',
     },
     setBattle: () => {},
   };
