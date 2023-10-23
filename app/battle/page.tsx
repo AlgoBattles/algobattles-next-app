@@ -6,6 +6,8 @@ import TestCases from '../_components/TestCases';
 import { createClient } from '@supabase/supabase-js'
 import io from 'socket.io-client';
 import { Socket } from 'socket.io-client';
+import { useBattle } from '../_contexts/BattleContext';
+
 
 const supabaseClient = createClient(
   'https://jdrrftsbeohpznqghpxr.supabase.co',
@@ -13,6 +15,8 @@ const supabaseClient = createClient(
 );
 
 const Battle = () => {
+
+  const {battle, setBattle} = useBattle();
 
   const [funcName, setFuncName] = useState('foo');
   const [templateCode, setTemplateCode] = useState('')
@@ -25,7 +29,7 @@ const Battle = () => {
   const [opponentProgress, setOpponentProgress] = useState(0);
 
 
-  const setAlgo = async () => {
+  const getAlgoDetails = async () => {
     const { data, error } = await supabaseClient
           .from('algos')
           .select('*')
@@ -38,28 +42,27 @@ const Battle = () => {
     }
   } 
 
-  const retrieveState = async () => {
+  const getBattleState = async () => {
     try {
-
+      const { data, error } = await supabaseClient
+        .from('battle_state')
+        .select('*')
+        .eq('user1_id', '')
     }
     catch (error) {
       console.log(error)
     }
   }
-
-  
   
   useEffect(() => {
     try {
       
-      setAlgo()
+      getAlgoDetails()
     }
     catch (error){
       console.log(error)
     }
   }, []);
-
-
 
 
   const socketRef = useRef<Socket | null>(null);

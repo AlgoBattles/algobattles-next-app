@@ -1,5 +1,4 @@
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { useUser } from '../_contexts/UserContext';
 
 const supabase = createClientComponentClient()
 
