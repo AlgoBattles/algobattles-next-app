@@ -1,12 +1,19 @@
 "use client"
 import React, { useEffect, useRef, useState } from 'react';
+import Button from '@mui/material/Button';
 import Editor from '../_components/Editor';
 import OpponentEditor from '../_components/OpponentEditor';
 import TestCases from '../_components/TestCases';
 import { createClient } from '@supabase/supabase-js'
 import io from 'socket.io-client';
 import { Socket } from 'socket.io-client';
+import { useRouter } from 'next/navigation'
+import { useUser } from '../_contexts/UserContext';
 import { useBattle } from '../_contexts/BattleContext';
+import { checkAuthStatus, retrieveUserInfo } from '../_helpers/authHelpers';
+import { pullBattleStateFromDB, pushBattleStateToDB } from '../_helpers/battleStateHelpers';
+
+
 
 
 const supabaseClient = createClient(
@@ -15,9 +22,9 @@ const supabaseClient = createClient(
 );
 
 const Battle = () => {
-
-  const {battle, setBattle} = useBattle();
-
+  const router = useRouter()
+  const { user, setUser } = useUser()
+  const { battle, setBattle } = useBattle();
   const [funcName, setFuncName] = useState('foo');
   const [templateCode, setTemplateCode] = useState('')
   const [prompt, setPrompt] = useState('Loading...');
@@ -42,27 +49,47 @@ const Battle = () => {
     }
   } 
 
-  const getBattleState = async () => {
-    try {
-      const { data, error } = await supabaseClient
-        .from('battle_state')
-        .select('*')
-        .eq('user1_id', '')
-    }
-    catch (error) {
-      console.log(error)
-    }
-  }
-  
+  useEffect(() => {
+    
+  }, [user, battle]);
+
+  useEffect(() => {
+    const checkEverything = async () => {
+      if (!user.UID) {
+        const loggedIn = await checkAuthStatus(user, setUser);
+        if (!loggedIn) {
+          router.push('/')
+          return
+        }
+      }
+      else if (user.UID && !user.username) {
+        await retrieveUserInfo(user, setUser);
+      }
+      else if (!battle.algoPrompt) {
+        await pullBattleStateFromDB(user, battle, setBattle);
+        // console.log('result from pullBattleStateFromDB', result)
+        // console.log('use effect has updated battle state to' , battle)
+      }
+      // console.log('use effect has updated user to: ', user)
+    };
+    checkEverything();
+  }, [user])
+
+
+
+
   useEffect(() => {
     try {
-      
       getAlgoDetails()
     }
     catch (error){
       console.log(error)
     }
   }, []);
+
+  const printBattleState = () => {
+    console.log(battle)
+  }
 
 
   const socketRef = useRef<Socket | null>(null);
@@ -112,6 +139,7 @@ const Battle = () => {
       <Editor templateCode={templateCode} userCode={userCode} setUserCode={setUserCode} testCases={testCases} setResults={setResults}></Editor>
       <OpponentEditor opponentCode={opponentCode} opponentProgress={opponentProgress}></OpponentEditor>
       <TestCases prompt={prompt} testCases={testCases} results={results}></TestCases>
+      <Button onClick={printBattleState}>TEST</Button>
     </div>
     </div>
     );

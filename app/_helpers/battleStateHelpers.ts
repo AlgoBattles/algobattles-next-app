@@ -11,16 +11,18 @@ export async function pullBattleStateFromDB(user, battle, setBattle) {
         .or(`user1_id.eq.${user.UID},user2_id.eq.${user.UID}`);
     console.log(data)
     if (data && data.length >= 1) {
-        // console.log('setting battle state')
+
+        console.log('setting battle state', data)
         const dbResult = data[0]
         if (dbResult.user1_id === user.UID) {
-            setBattle(battle => ({
+            console.log ('user is leader')
+            setBattle(({
                 ...battle,
                 algoId: dbResult.algo_id,
                 algoPrompt: dbResult.algo_prompt,
                 funcName: dbResult.func_name,
                 templateCode: dbResult.template_code,
-                testCasesObj: dbResult.test_cases_obj,
+                testCasesObj: dbResult.test_cases_json,
                 userRole: 'leader',
                 userId: dbResult.user1_id,
                 opponentId: dbResult.user2_id,
@@ -32,13 +34,14 @@ export async function pullBattleStateFromDB(user, battle, setBattle) {
               }));
         }
         else if (dbResult.user2_id === user.UID) {
-            setBattle(battle => ({
+            console.log ('user is follower')
+            setBattle(({
                 ...battle,
                 algoId: dbResult.algo_id,
                 algoPrompt: dbResult.algo_prompt,
                 funcName: dbResult.func_name,
                 templateCode: dbResult.template_code,
-                testCasesObj: dbResult.test_cases_obj,
+                testCasesObj: dbResult.test_cases_json,
                 userRole: 'follower',
                 userId: dbResult.user2_id,
                 opponentId: dbResult.user1_id,
@@ -49,6 +52,7 @@ export async function pullBattleStateFromDB(user, battle, setBattle) {
                 gameStatus: dbResult.game_status,
               }));
         }
+        return true
         }
     else if (error) {
     console.log(error)

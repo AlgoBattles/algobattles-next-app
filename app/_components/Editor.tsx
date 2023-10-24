@@ -5,6 +5,9 @@ import Button from '@mui/material/Button';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { createClient } from '@supabase/supabase-js'
 import axios from 'axios'
+import { useUser } from '../_contexts/UserContext'
+import { useBattle } from '../_contexts/BattleContext'
+
 
 const supabaseClient = createClient(
   'https://jdrrftsbeohpznqghpxr.supabase.co',
@@ -21,9 +24,31 @@ type EditorProps = {
     } | null;
   };
 
-const AceEditor = ({templateCode, userCode, setUserCode, testCases, setResults}: EditorProps) => {
+const AceEditor = () => {
+
+  const { battle, setBattle } = useBattle();
+  
+  // {templateCode, userCode, setUserCode, testCases, setResults}: EditorProps
+  
+  const { 
+    algoId, 
+    algoPrompt, 
+    funcName, 
+    templateCode, 
+    testCasesObj, 
+    userRole, 
+    userId, 
+    opponentId, 
+    userCode, 
+    opponentCode, 
+    userProgress, 
+    opponentProgress, 
+    gameStatus 
+  } = battle;
+
+
   const editor1Ref = useRef();
-  const [userId , setUserId] = useState("oliver");
+  // const [userId , setUserId] = useState("oliver");
   const [testCasesArray, setTestCasesArray] = useState<any[][] | null>(null)
 
   const formatTestCases = (data) => { 
@@ -58,7 +83,7 @@ const AceEditor = ({templateCode, userCode, setUserCode, testCases, setResults}:
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        "userId": "oliver",
+        "userId": userId,
         "lang": "js"
     })
     })
@@ -73,7 +98,7 @@ const AceEditor = ({templateCode, userCode, setUserCode, testCases, setResults}:
         body: JSON.stringify({
             code: userCode,
             testCases: JSON.stringify(testCasesArray),
-            userId: "oliver",
+            userId: userId,
             funcName: "twoSum"
         })
     })
@@ -106,17 +131,18 @@ const AceEditor = ({templateCode, userCode, setUserCode, testCases, setResults}:
     // Add an event listener for the change event
     editor1.on('change', function() {
         const code = editor1.getValue();
-        setUserCode(`${code}`);
+
+        // setUserCode(`${code}`);
     });
   }, [templateCode]);
 
 
   useEffect(() => {
-    if (testCases) {
-        setTestCasesArray(formatTestCases(testCases))
+    if (testCasesObj) {
+        setTestCasesArray(formatTestCases(testCasesObj))
     } 
     // console.log('testCasesArray', testCasesArray)
-  }, [testCases])
+  }, [testCasesObj])
 
 
   return (

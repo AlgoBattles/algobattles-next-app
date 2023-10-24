@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Head from 'next/head';
 import { UserProvider } from './_contexts/UserContext';
+import { BattleProvider } from './_contexts/BattleContext';
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -18,6 +19,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
+    <BattleProvider>
     <UserProvider>
     <Head>
       <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -28,5 +30,7 @@ export default function RootLayout({
       <body className={inter.className}>{children}</body>
     </html>
     </UserProvider>
+    </BattleProvider>
+
   )
 }

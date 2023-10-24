@@ -8,7 +8,7 @@ import { useUser } from '../../_contexts/UserContext';
 import Stopwatch from '@/app/_components/Stopwatch';
 import io from 'socket.io-client';
 import { Socket } from 'socket.io-client';
-
+import { checkAuthStatus, retrieveUserInfo } from '../../_helpers/authHelpers';
 
 // import type { Database } from '@/lib/database.types'
 
@@ -26,35 +26,6 @@ export default function Home() {
   const supabase = createClientComponentClient<Database>()
   const router = useRouter()
 
-  async function checkAuthStatus() {
-    const userAuthInfo = await supabase.auth.getUser();
-    if (userAuthInfo.data.user) {
-      console.log('User is signed in:', userAuthInfo.data.user);
-      if (userAuthInfo.data.user.id) {
-        setUser(({ ...user, UID: userAuthInfo.data.user.id }));
-        return userAuthInfo.data.user.id 
-      }
-    } else {
-      router.push('/')
-    }
-  }
-  async function retrieveUserInfo() {
-    console.log('hitting retrieve user info')
-    console.log('user is', user)
-    const { data, error } = await supabase
-        .from('users')
-        .select()
-        .eq('user_id', user.UID)
-    console.log(data)
-    if (data && data.length >= 1) {
-        console.log('setting user state')
-        setUser(({ ...user, email: data[0].email, avatar: data[0].avatar, username: data[0].username, preferredLanguage: data[0].preferredLanguage, UID: data[0].user_id }));
-    }
-    else if (error) {
-    console.log(error)
-    return
-    }
-  }
 
   const retrieveInviteDetails = async () => {
     const { data, error } = await supabase
@@ -62,9 +33,9 @@ export default function Home() {
         .select()
         .eq('invitee_username', user.username)
     if (data && data.length >= 1) {
-        console.log('invite data is: ', data)
-        console.log('the invitee username is' , data[0].invitee_username)
-        console.log('my username is', user.username)
+        // console.log('invite data is: ', data)
+        // console.log('the invitee username is' , data[0].invitee_username)
+        // console.log('my username is', user.username)
         setOpponentUsername(data[0].inviter_username)
         setOpponentAvatar(data[0].inviter_avatar)
         return data
@@ -78,10 +49,10 @@ export default function Home() {
   useEffect(() => {
     const checkEverything = async () => {
       if (!user.UID) {
-        await checkAuthStatus();
+        await checkAuthStatus(user, setUser);
       }
       else if (user.UID && !user.username) {
-        await retrieveUserInfo();
+        await retrieveUserInfo(user, setUser);
       }
       else if (user.UID && user.username) {
         await retrieveInviteDetails();

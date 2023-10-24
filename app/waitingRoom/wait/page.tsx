@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import { useUser } from '../../_contexts/UserContext';
 import Stopwatch from '@/app/_components/Stopwatch';
 import { Socket } from 'socket.io-client';
+import { checkAuthStatus, retrieveUserInfo } from '../../_helpers/authHelpers';
 
 // ...
 
@@ -30,35 +31,6 @@ export default function Home() {
   const supabase = createClientComponentClient<Database>()
   const router = useRouter()
 
-  async function checkAuthStatus() {
-    const userAuthInfo = await supabase.auth.getUser();
-    if (userAuthInfo.data.user) {
-      console.log('User is signed in:', userAuthInfo.data.user);
-      if (userAuthInfo.data.user.id) {
-        setUser(({ ...user, UID: userAuthInfo.data.user.id }));
-        return userAuthInfo.data.user.id 
-      }
-    } else {
-      router.push('/')
-    }
-  }
-  async function retrieveUserInfo() {
-    console.log('hitting retrieve user info')
-    console.log('user is', user)
-    const { data, error } = await supabase
-        .from('users')
-        .select()
-        .eq('user_id', user.UID)
-    console.log(data)
-    if (data && data.length >= 1) {
-        console.log('setting user state')
-        setUser(({ ...user, email: data[0].email, avatar: data[0].avatar, username: data[0].username, preferredLanguage: data[0].preferredLanguage, UID: data[0].user_id }));
-    }
-    else if (error) {
-    console.log(error)
-    return
-    }
-  }
 
   const retrieveInviteDetails = async () => {
     const { data, error } = await supabase
@@ -67,8 +39,8 @@ export default function Home() {
         .eq('inviter_username', user.username)
     if (data && data.length >= 1) {
         console.log('invite data is: ', data)
-        console.log('the invitee username is' , data[0].invitee_username)
-        console.log('my username is', user.username)
+        // console.log('the invitee username is' , data[0].invitee_username)
+        // console.log('my username is', user.username)
         setOpponentUsername(data[0].invitee_username)
         setOpponentAvatar(data[0].invitee_avatar)
         setOpponentId(data[0].invitee)
@@ -80,13 +52,14 @@ export default function Home() {
     }
   }
 
+
   useEffect(() => {
     const checkEverything = async () => {
       if (!user.UID) {
-        await checkAuthStatus();
+        await checkAuthStatus(user, setUser);
       }
       else if (user.UID && !user.username) {
-        await retrieveUserInfo();
+        await retrieveUserInfo(user, setUser);
       }
       else if (user.UID && user.username && !opponentUsername) {
         await retrieveInviteDetails();
@@ -128,7 +101,7 @@ export default function Home() {
     socket.on('message', async ({message, action}) => {
         console.log('Received message:', message);
         console.log('Received action:', action);
-        console.log('confirming back')
+        console.log('opponent id in socket receiver is', opponentId)
         if (action === 'confirm battle'){
             setReady(true)
             socket.emit('message', {room: `${currRoomId}`, action: 'confirmation 2', message: `${'confirmed'}`});  
@@ -142,7 +115,7 @@ export default function Home() {
       socket.disconnect();
     };
     
-  }, []);
+  }, [opponentId]);
 
   const handleStartBattle = async () => {
     console.log('starting battle')
@@ -155,11 +128,17 @@ export default function Home() {
             .eq('id', 1)
     if (algoData && algoData.length >= 1) {
         // then add battle to db
+        console.log('adding battle to db')
+        console.log('algo data is', algoData)
         const { data, error } = await supabase
             .from('battle_state')
             .insert([
                 {
                     algo_id: algoNum,
+                    algo_prompt: algoData[0].prompt,
+                    func_name: algoData[0].func_name,
+                    template_code: algoData[0].template_code,
+                    test_cases_json: algoData[0].test_cases_json,
                     user1_id: user.UID,
                     user2_id: opponentId,
                     user1_code: algoData[0].template_code,
@@ -176,6 +155,10 @@ export default function Home() {
             router.push('/battle')
         }
     }
+  }
+
+  const handleTestButton = async () => {
+    console.log('opponent id is', opponentId)
   }
 
 
@@ -198,10 +181,10 @@ export default function Home() {
             <div>
                 <Stopwatch seconds={seconds} />
             </div>
-            {/* { ready && <Button onClick={handleStartBattle} variant='outlined' className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 w-[100%] rounded-3xl">
-                Ready
-            </Button>
-            } */}
+            {/* <Button onClick={handleTestButton} variant='outlined' className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 w-[100%] rounded-3xl">
+                Test
+            </Button> */}
+            
       </div>
       </div>
     </div>
