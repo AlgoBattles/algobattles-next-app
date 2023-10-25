@@ -14,8 +14,6 @@ import { checkAuthStatus, retrieveUserInfo } from '../_helpers/authHelpers';
 import { pullBattleStateFromDB, pushBattleStateToDB } from '../_helpers/battleStateHelpers';
 
 
-
-
 const supabaseClient = createClient(
   'https://jdrrftsbeohpznqghpxr.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpkcnJmdHNiZW9ocHpucWdocHhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTM0OTQ5NzIsImV4cCI6MjAwOTA3MDk3Mn0.3ZXOev203HqvH3X7UWE_B9X7NGYu0Z6tlmFyAi0ii4k'
@@ -76,8 +74,6 @@ const Battle = () => {
   }, [user])
 
 
-
-
   useEffect(() => {
     try {
       getAlgoDetails()
@@ -136,9 +132,9 @@ const Battle = () => {
     <div className="flex flex-col min-h-screen items-center justify-center bg-black">
     <h1 style={{fontFamily: 'LuckiestGuy', fontSize: '50px', textAlign: 'left', width: '100%', marginTop: '20px', marginLeft: '20px'}} >AlgoBattles</h1>
     <div className="grid grid-cols-2 grid-rows-2 gap-4 p-4 w-full">
-      <Editor templateCode={templateCode} userCode={userCode} setUserCode={setUserCode} testCases={testCases} setResults={setResults}></Editor>
-      <OpponentEditor opponentCode={opponentCode} opponentProgress={opponentProgress}></OpponentEditor>
-      <TestCases prompt={prompt} testCases={testCases} results={results}></TestCases>
+      <Editor></Editor>
+      <OpponentEditor></OpponentEditor>
+      <TestCases></TestCases>
       <Button onClick={printBattleState}>TEST</Button>
     </div>
     </div>

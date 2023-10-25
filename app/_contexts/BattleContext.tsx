@@ -1,17 +1,21 @@
 "use client"
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 
+import { Result, TestCase } from '../_types/battleTypes';
+
 interface Battle {
   algoId: number;
   algoPrompt: string;
   funcName: string;
   templateCode: string;
-  testCasesObj: string;
+  testCasesObj: { [key: string]: TestCase } | null;
   userRole: string;
   userId: string;
   opponentId: string;
   userCode: string;
   opponentCode: string;
+  userResults: Result[] | null;
+  opponentResults: Result[] | null;
   userProgress: number;
   opponentProgress: number;
   gameStatus: string;
@@ -32,12 +36,14 @@ const defaultBattleContext: BattleContextType = {
       algoPrompt: '',
       funcName: '',
       templateCode: '',
-      testCasesObj: '',
+      testCasesObj: null,
       userRole: '',
       userId: '',
       opponentId: '',
       userCode: '',
       opponentCode: '',
+      userResults: null,
+      opponentResults: null,
       userProgress: 0,
       opponentProgress: 0,
       gameStatus: '',

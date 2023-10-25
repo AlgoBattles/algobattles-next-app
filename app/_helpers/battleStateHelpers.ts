@@ -30,6 +30,8 @@ export async function pullBattleStateFromDB(user, battle, setBattle) {
                 opponentCode: dbResult.user2_code,
                 userProgress: dbResult.user1_progress,
                 opponentProgress: dbResult.user2_progress,
+                userResults: dbResult.user1_results,
+                opponentResults: dbResult.user2_results,
                 gameStatus: dbResult.game_status,
               }));
         }
@@ -49,6 +51,8 @@ export async function pullBattleStateFromDB(user, battle, setBattle) {
                 opponentCode: dbResult.user1_code,
                 userProgress: dbResult.user2_progress,
                 opponentProgress: dbResult.user1_progress,
+                userResults: dbResult.user2_results,
+                opponentResults: dbResult.user1_results,
                 gameStatus: dbResult.game_status,
               }));
         }
@@ -59,15 +63,15 @@ export async function pullBattleStateFromDB(user, battle, setBattle) {
     return false
     }
   }
-
   
-export async function pushBattleStateToDB(user, battle, setBattle) {
+export async function pushBattleStateToDB(user, battle) {
     if (battle.userRole === 'leader') {
         const { data, error } = await supabase
             .from('battle_state')
             .update({
                 user1_code: battle.userCode,
                 user1_progress: battle.userProgress,
+                user1_results: battle.userResults,
             })
             .eq('user1_id', user.UID)
             if (data && data.length >= 1) {
@@ -83,6 +87,7 @@ export async function pushBattleStateToDB(user, battle, setBattle) {
             .update({
                 user2_code: battle.userCode,
                 user2_progress: battle.userProgress,
+                user2_results: battle.userResults,
             }) 
             .eq('user2_id', user.UID)
         if (data && data.length >= 1) {

@@ -7,6 +7,8 @@ import { createClient } from '@supabase/supabase-js'
 import axios from 'axios'
 import { useUser } from '../_contexts/UserContext'
 import { useBattle } from '../_contexts/BattleContext'
+import { TestCase } from '../_types/battleTypes';
+import { pushBattleStateToDB } from '../_helpers/battleStateHelpers';
 
 
 const supabaseClient = createClient(
@@ -14,18 +16,9 @@ const supabaseClient = createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpkcnJmdHNiZW9ocHpucWdocHhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTM0OTQ5NzIsImV4cCI6MjAwOTA3MDk3Mn0.3ZXOev203HqvH3X7UWE_B9X7NGYu0Z6tlmFyAi0ii4k'
 );
 
-type EditorProps = {
-    templateCode: string | null;
-    userCode: string | null;
-    setUserCode: (code: string) => void | Dispatch<SetStateAction<null>>;
-    setResults: (code: string) => void;
-    testCases: {
-        [key: string]: any;
-    } | null;
-  };
-
 const AceEditor = () => {
 
+  const { user } = useUser();
   const { battle, setBattle } = useBattle();
   
   // {templateCode, userCode, setUserCode, testCases, setResults}: EditorProps
@@ -47,11 +40,11 @@ const AceEditor = () => {
   } = battle;
 
 
-  const editor1Ref = useRef();
+  const editor1Ref = useRef<HTMLDivElement | null>(null);
   // const [userId , setUserId] = useState("oliver");
   const [testCasesArray, setTestCasesArray] = useState<any[][] | null>(null)
 
-  const formatTestCases = (data) => { 
+  const formatTestCases = (data: { [key: string]: TestCase }) => { 
     const result = Object.values(data).map(key => {
     const inputValues = [key.input.nums, key.input.target];
     const expectedOutput = key.output.expected;
@@ -60,21 +53,21 @@ const AceEditor = () => {
     return result;
     };
 
-  const checkIfActiveSession = async () => {
-    const { data, error } = await supabaseClient
-          .from('battle_sessions')
-          .select('*')
-          .eq('user_id', userId)
-    // console.log('data', data)
-    if (data && data.length > 0) {
-        // console.log('hit active session')
-        return
-    }
-    else {
-        // console.log('creating session')
-        await createUserContainer()
-    }
-  } 
+  // const checkIfActiveSession = async () => {
+  //   const { data, error } = await supabaseClient
+  //         .from('battle_sessions')
+  //         .select('*')
+  //         .eq('user_id', userId)
+  //   // console.log('data', data)
+  //   if (data && data.length > 0) {
+  //        console.log('hit active session')
+  //       return
+  //   }
+  //   else {
+  //        console.log('creating session')
+  //       await createUserContainer()
+  //   }
+  // } 
   
   const createUserContainer = async () => {
     fetch('http://localhost:8080/create', {
@@ -98,24 +91,31 @@ const AceEditor = () => {
         body: JSON.stringify({
             code: userCode,
             testCases: JSON.stringify(testCasesArray),
-            userId: userId,
+            userId: 'oliver',
             funcName: "twoSum"
         })
     })
-    // console.log('result is' + result)
+
+    // sync the state with dbanytime someone runs code
     const data = await result.json()
-    // console.log(data)
-    setResults(data)
+    // console.log('result is', data)
+    setBattle(prevBattle => {
+      const updatedBattle = {...prevBattle, userResults: data};
+      pushBattleStateToDB(user, updatedBattle); // push updated state to DB
+      return updatedBattle;
+  });
+
   }
 
-  useEffect(() => {
-    try {
-    checkIfActiveSession()
-    }
-    catch (error){
-      console.log(error)
-    }
-  }, []);
+  // useEffect(() => {
+  //   try {
+  //   setTimeout(() => {}, 1000)
+  //   checkIfActiveSession()
+  //   }
+  //   catch (error){
+  //     console.log(error)
+  //   }
+  // }, []);
 
   useEffect(() => {
     const ace = require('ace-builds/src-noconflict/ace');
@@ -131,14 +131,13 @@ const AceEditor = () => {
     // Add an event listener for the change event
     editor1.on('change', function() {
         const code = editor1.getValue();
-
-        // setUserCode(`${code}`);
+        setBattle(prevBattle => ({...prevBattle, userCode: `${code}`}));
     });
   }, [templateCode]);
 
 
   useEffect(() => {
-    if (testCasesObj) {
+    if (!testCasesArray && testCasesObj) {
         setTestCasesArray(formatTestCases(testCasesObj))
     } 
     // console.log('testCasesArray', testCasesArray)
@@ -152,7 +151,7 @@ const AceEditor = () => {
             fontSize: '12px',
             fontFamily: 'arial',
             }}>Run code</Button>
-        <ProgressBar percentage={70} />
+        <ProgressBar percentage={userProgress} />
     </div>
     <div id="editor1" ref={editor1Ref} className="w-full h-[87%] rounded-[3px]" />
     </div>

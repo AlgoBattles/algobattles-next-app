@@ -1,29 +1,13 @@
 "use client";
 import React, { useState } from 'react';
 import TestCaseDetails from './TestCaseDetails';
+import { useBattle } from '../_contexts/BattleContext';
 
-type TestCase = {
-    input: {
-      [key: string]: any;
-    };
-    output: {
-      [key: string]: any;
-    };
-  };
 
-type TabComponentProps = {
-    prompt: string;
-    testCases: {
-        [key: string]: TestCase;
-    } | null;
-    results: {
-        [key: string]: any;
-    } | null;
-}
-
-function TabComponent({ prompt, testCases, results }: TabComponentProps) {
+function TabComponent() {
   const [activeTab, setActiveTab] = useState('Task');
-  const [activeTestCase, setActiveTestCase] = useState(0);
+  const { battle, setBattle } = useBattle();
+  const { algoPrompt }: { algoPrompt: string } = battle
 
   return (
     <div className="bg-gray-900 p-4 rounded-lg w-full">
@@ -45,14 +29,14 @@ function TabComponent({ prompt, testCases, results }: TabComponentProps) {
       {activeTab === 'Task' && (
         <div className="text-gray-300">
           {/* Task content here... */}
-          <p>{prompt}</p>
+          <p>{algoPrompt}</p>
           {/* ... */}
         </div>
       )}
 
       {activeTab === 'Test-cases' && (
         <div className="text-gray-300">
-          <TestCaseDetails testCases={testCases} results={results}/>
+          <TestCaseDetails/>
         </div>
       )}
     </div>
