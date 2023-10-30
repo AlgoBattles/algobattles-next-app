@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import Editor from '../_components/Editor';
 import OpponentEditor from '../_components/OpponentEditor';
 import TestCases from '../_components/TestCases';
+import GameOver from '../_components/GameOverModal';
 import { createClient } from '@supabase/supabase-js'
 import io from 'socket.io-client';
 import { Socket } from 'socket.io-client';
@@ -27,12 +28,8 @@ const Battle = () => {
   const [templateCode, setTemplateCode] = useState('')
   const [prompt, setPrompt] = useState('Loading...');
   const [testCases, setTestCases] = useState(null);
-  const [results, setResults] = useState(null);
-  const [progress, setProgress] = useState(0);
-  const [userCode, setUserCode] = useState(null);
-  const [opponentCode, setOpponentCode] = useState('Loading...');
-  const [opponentProgress, setOpponentProgress] = useState(0);
 
+  const { userCode } = battle;
 
   const getAlgoDetails = async () => {
     const { data, error } = await supabaseClient
@@ -132,6 +129,7 @@ const Battle = () => {
     <div className="flex flex-col min-h-screen items-center justify-center bg-black">
     <h1 style={{fontFamily: 'LuckiestGuy', fontSize: '50px', textAlign: 'left', width: '100%', marginTop: '20px', marginLeft: '20px'}} >AlgoBattles</h1>
     <div className="grid grid-cols-2 grid-rows-2 gap-4 p-4 w-full">
+      <GameOver show={true} winner={false}></GameOver>
       <Editor></Editor>
       <OpponentEditor></OpponentEditor>
       <TestCases></TestCases>

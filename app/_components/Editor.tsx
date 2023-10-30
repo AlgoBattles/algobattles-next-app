@@ -81,7 +81,6 @@ const AceEditor = () => {
     })
     })
   }
-
   const runCode = async (code: string) => {
     const result = await fetch('http://localhost:8080/runCode', {
         method: 'POST',
@@ -96,15 +95,20 @@ const AceEditor = () => {
         })
     })
 
-    // sync the state with dbanytime someone runs code
+    // sync the state with db and update user progress anytime someone runs code
     const data = await result.json()
-    // console.log('result is', data)
+    console.log('result is', data)
+    let passed = 0
+    data.forEach((result: any) => {
+      if (JSON.stringify(result.expected) === JSON.stringify(result.received)) {
+        passed++
+      }
+    })
     setBattle(prevBattle => {
-      const updatedBattle = {...prevBattle, userResults: data};
-      pushBattleStateToDB(user, updatedBattle); // push updated state to DB
+      const updatedBattle = {...prevBattle, userResults: data, userProgress: (passed / data.length) * 100};
+      pushBattleStateToDB(user, updatedBattle);
       return updatedBattle;
   });
-
   }
 
   // useEffect(() => {
