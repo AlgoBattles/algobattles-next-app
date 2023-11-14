@@ -1,5 +1,7 @@
 "use client"
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
+import router from 'next/router'
+import { checkAuthStatus, retrieveUserInfo } from '../_helpers/authHelpers';
 
 interface User {
   email: string;
@@ -33,6 +35,22 @@ export const UserContext = createContext<UserContextType>(defaultUserContext);
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User>(defaultUserContext.user);
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      if (!user.UID) {
+        const loggedIn = await checkAuthStatus(user, setUser);
+        if (!loggedIn) {
+          router.push('/')
+          return
+        }
+      }
+      else if (user.UID && !user.username) {
+        await retrieveUserInfo(user, setUser);
+      }
+    };
+    getUserInfo();
+  }, [user])
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

@@ -4,7 +4,7 @@ import ProgressBar from './ProgressBar';
 import Button from '@mui/material/Button';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { createClient } from '@supabase/supabase-js'
-import axios from 'axios'
+
 import { useUser } from '../_contexts/UserContext'
 import { useBattle } from '../_contexts/BattleContext'
 import { TestCase } from '../_types/battleTypes';
@@ -53,21 +53,6 @@ const AceEditor = () => {
     return result;
     };
 
-  // const checkIfActiveSession = async () => {
-  //   const { data, error } = await supabaseClient
-  //         .from('battle_sessions')
-  //         .select('*')
-  //         .eq('user_id', userId)
-  //   // console.log('data', data)
-  //   if (data && data.length > 0) {
-  //        console.log('hit active session')
-  //       return
-  //   }
-  //   else {
-  //        console.log('creating session')
-  //       await createUserContainer()
-  //   }
-  // } 
   
   const createUserContainer = async () => {
     fetch('http://localhost:8080/create', {
@@ -76,7 +61,7 @@ const AceEditor = () => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        "userId": userId,
+        "userId": user.username,
         "lang": "js"
     })
     })
@@ -111,16 +96,6 @@ const AceEditor = () => {
   });
   }
 
-  // useEffect(() => {
-  //   try {
-  //   setTimeout(() => {}, 1000)
-  //   checkIfActiveSession()
-  //   }
-  //   catch (error){
-  //     console.log(error)
-  //   }
-  // }, []);
-
   useEffect(() => {
     const ace = require('ace-builds/src-noconflict/ace');
     require('ace-builds/src-noconflict/theme-chaos');
@@ -128,7 +103,7 @@ const AceEditor = () => {
     const editor1 = ace.edit(editor1Ref.current);
     editor1.setTheme("ace/theme/chaos");
     editor1.session.setMode("ace/mode/javascript");
-    userCode ? editor1.setValue(`${userCode}`) : editor1.setValue(`${templateCode}`);
+    userCode.length > 1 ? editor1.setValue(`${userCode}`) : editor1.setValue(`${templateCode}`);
     editor1.setOptions({
         fontSize: "10pt" 
       });

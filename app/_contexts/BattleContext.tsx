@@ -1,7 +1,8 @@
 "use client"
-import React, { createContext, useState, useContext, ReactNode } from 'react';
-
+import React, { createContext, useEffect, useState, useContext, ReactNode } from 'react';
 import { Result, TestCase } from '../_types/battleTypes';
+import { useUser } from '../_contexts/UserContext';
+import { pullBattleStateFromDB } from '../_helpers/battleStateHelpers';
 
 interface Battle {
   algoId: number;
@@ -55,6 +56,7 @@ export const BattleContext = createContext<BattleContextType>(defaultBattleConte
 
 export const BattleProvider: React.FC<BattleProviderProps> = ({ children }) => {
   const [battle, setBattle] = useState<Battle>(defaultBattleContext.battle);
+  const { user } = useUser();
 
   return (
     <BattleContext.Provider value={{ battle, setBattle }}>

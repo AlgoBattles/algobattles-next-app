@@ -24,56 +24,22 @@ const Battle = () => {
   const router = useRouter()
   const { user, setUser } = useUser()
   const { battle, setBattle } = useBattle();
-  const [funcName, setFuncName] = useState('foo');
-  const [templateCode, setTemplateCode] = useState('')
-  const [prompt, setPrompt] = useState('Loading...');
-  const [testCases, setTestCases] = useState(null);
-
   const { userCode } = battle;
-
-  const getAlgoDetails = async () => {
-    const { data, error } = await supabaseClient
-          .from('algos')
-          .select('*')
-          .eq('id', 1)
-    if (data) {
-      setFuncName(data[0].func_name)
-      setTemplateCode(data[0].template_code)
-      setPrompt(data[0].prompt)
-      setTestCases(data[0].test_cases_json) 
-    }
-  } 
+ 
 
   useEffect(() => {
-    
-  }, [user, battle]);
-
-  useEffect(() => {
-    const checkEverything = async () => {
-      if (!user.UID) {
-        const loggedIn = await checkAuthStatus(user, setUser);
-        if (!loggedIn) {
-          router.push('/')
-          return
-        }
-      }
-      else if (user.UID && !user.username) {
-        await retrieveUserInfo(user, setUser);
-      }
-      else if (!battle.algoPrompt) {
+    const setBattleState = async () => {
+      if (user.UID && !battle.algoPrompt) {
         await pullBattleStateFromDB(user, battle, setBattle);
-        // console.log('result from pullBattleStateFromDB', result)
-        // console.log('use effect has updated battle state to' , battle)
-      }
-      // console.log('use effect has updated user to: ', user)
+      } 
     };
-    checkEverything();
+    setBattleState();
   }, [user])
 
 
   useEffect(() => {
     try {
-      getAlgoDetails()
+      // getAlgoDetails()
     }
     catch (error){
       console.log(error)
@@ -103,6 +69,9 @@ const Battle = () => {
     socket.on('message', ({message, action}) => {
       console.log('Received message:', message);
       console.log('Received action:', action);
+      if (action === 'opponent code') {
+        setBattle(prevBattle => ({...prevBattle, opponentCode: message}));
+      }
     });
 
     socketRef.current = socket;
@@ -129,7 +98,7 @@ const Battle = () => {
     <div className="flex flex-col min-h-screen items-center justify-center bg-black">
     <h1 style={{fontFamily: 'LuckiestGuy', fontSize: '50px', textAlign: 'left', width: '100%', marginTop: '20px', marginLeft: '20px'}} >AlgoBattles</h1>
     <div className="grid grid-cols-2 grid-rows-2 gap-4 p-4 w-full">
-      <GameOver show={true} winner={false}></GameOver>
+      {/* <GameOver show={true} winner={false}></GameOver> */}
       <Editor></Editor>
       <OpponentEditor></OpponentEditor>
       <TestCases></TestCases>

@@ -84,8 +84,6 @@ export default function Home() {
         console.log('user data is: ')
         console.log(userData)
 
-
-
         const { data: inviteData, error: inviteError } = await supabase
             .from('battle_invites')
             .upsert([
@@ -113,7 +111,6 @@ export default function Home() {
     }
   }
 
-  
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     router.push('/')
