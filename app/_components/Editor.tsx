@@ -67,6 +67,8 @@ const AceEditor = () => {
     })
   }
   const runCode = async (code: string) => {
+    console.log('test cases are')
+    console.log(testCasesArray)
     const result = await fetch('http://localhost:8080/runCode', {
         method: 'POST',
         headers: {

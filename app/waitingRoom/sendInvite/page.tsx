@@ -16,50 +16,7 @@ export default function Home() {
 
   const supabase = createClientComponentClient<Database>()
   const router = useRouter()
-
-  async function checkAuthStatus() {
-    const userAuthInfo = await supabase.auth.getUser();
-    if (userAuthInfo.data.user) {
-      console.log('User is signed in:', userAuthInfo.data.user);
-      if (userAuthInfo.data.user.id) {
-        setUser(({ ...user, UID: userAuthInfo.data.user.id }));
-        return userAuthInfo.data.user.id 
-      }
-    } else {
-      router.push('/')
-    }
-  }
-  async function retrieveUserInfo() {
-    console.log('hitting retrieve user info')
-    console.log('user is', user)
-    const { data, error } = await supabase
-        .from('users')
-        .select()
-        .eq('user_id', user.UID)
-    console.log(data)
-    if (data && data.length >= 1) {
-        console.log('setting user state')
-        setUser(({ ...user, email: data[0].email, avatar: data[0].avatar, username: data[0].username, preferredLanguage: data[0].preferredLanguage, UID: data[0].user_id }));
-    }
-    else if (error) {
-    console.log(error)
-    return
-    }
-  }
-
-  useEffect(() => {
-    const checkEverything = async () => {
-      if (!user.UID) {
-        await checkAuthStatus();
-      }
-      else if (user.UID && !user.username) {
-        await retrieveUserInfo();
-      } 
-      console.log('use effect has updated user to: ', user)
-    };
-    checkEverything();
-  }, [user])
-
+  
   const handleOpponentInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setOpponent(event.target.value);
   }

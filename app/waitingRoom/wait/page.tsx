@@ -8,13 +8,6 @@ import Button from '@mui/material/Button';
 import { useUser } from '../../_contexts/UserContext';
 import Stopwatch from '@/app/_components/Stopwatch';
 import { Socket } from 'socket.io-client';
-import { checkAuthStatus, retrieveUserInfo } from '../../_helpers/authHelpers';
-
-// ...
-
-
-
-// import type { Database } from '@/lib/database.types'
 
 export default function Home() {
   const { user, setUser } = useUser();
@@ -52,16 +45,9 @@ export default function Home() {
     }
   }
 
-
   useEffect(() => {
     const checkEverything = async () => {
-      if (!user.UID) {
-        await checkAuthStatus(user, setUser);
-      }
-      else if (user.UID && !user.username) {
-        await retrieveUserInfo(user, setUser);
-      }
-      else if (user.UID && user.username && !opponentUsername) {
+      if (user.UID && user.username && !opponentUsername) {
         await retrieveInviteDetails();
       }
       console.log('use effect has updated user to: ', user)

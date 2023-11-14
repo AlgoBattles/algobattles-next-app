@@ -8,7 +8,6 @@ import { useUser } from '../../_contexts/UserContext';
 import Stopwatch from '@/app/_components/Stopwatch';
 import io from 'socket.io-client';
 import { Socket } from 'socket.io-client';
-import { checkAuthStatus, retrieveUserInfo } from '../../_helpers/authHelpers';
 
 // import type { Database } from '@/lib/database.types'
 
@@ -33,9 +32,6 @@ export default function Home() {
         .select()
         .eq('invitee_username', user.username)
     if (data && data.length >= 1) {
-        // console.log('invite data is: ', data)
-        // console.log('the invitee username is' , data[0].invitee_username)
-        // console.log('my username is', user.username)
         setOpponentUsername(data[0].inviter_username)
         setOpponentAvatar(data[0].inviter_avatar)
         return data
@@ -48,13 +44,7 @@ export default function Home() {
 
   useEffect(() => {
     const checkEverything = async () => {
-      if (!user.UID) {
-        await checkAuthStatus(user, setUser);
-      }
-      else if (user.UID && !user.username) {
-        await retrieveUserInfo(user, setUser);
-      }
-      else if (user.UID && user.username) {
+      if (user.UID && user.username) {
         await retrieveInviteDetails();
       }
       console.log('use effect has updated user to: ', user)
