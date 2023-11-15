@@ -24,19 +24,10 @@ const AceEditor = () => {
   // {templateCode, userCode, setUserCode, testCases, setResults}: EditorProps
   
   const { 
-    algoId, 
-    algoPrompt, 
-    funcName, 
     templateCode, 
     testCasesObj, 
-    userRole, 
-    userId, 
-    opponentId, 
     userCode, 
-    opponentCode, 
     userProgress, 
-    opponentProgress, 
-    gameStatus 
   } = battle;
 
 
@@ -53,7 +44,6 @@ const AceEditor = () => {
     return result;
     };
 
-  
   const createUserContainer = async () => {
     fetch('http://localhost:8080/create', {
       method: 'POST',
@@ -67,8 +57,6 @@ const AceEditor = () => {
     })
   }
   const runCode = async (code: string) => {
-    console.log('test cases are')
-    console.log(testCasesArray)
     const result = await fetch('http://localhost:8080/runCode', {
         method: 'POST',
         headers: {
@@ -77,34 +65,39 @@ const AceEditor = () => {
         body: JSON.stringify({
             code: userCode,
             testCases: JSON.stringify(testCasesArray),
-            userId: 'oliver',
-            funcName: "twoSum"
+            userId: user.username,
+            funcName: battle.funcName
         })
     })
-
-    // sync the state with db and update user progress anytime someone runs code
-    const data = await result.json()
-    console.log('result is', data)
-    let passed = 0
-    data.forEach((result: any) => {
-      if (JSON.stringify(result.expected) === JSON.stringify(result.received)) {
-        passed++
-      }
-    })
-    setBattle(prevBattle => {
-      const updatedBattle = {...prevBattle, userResults: data, userProgress: (passed / data.length) * 100};
-      pushBattleStateToDB(user, updatedBattle);
-      return updatedBattle;
-  });
+      // sync the state with db and update user progress anytime someone runs code
+      const data = await result.json()
+      console.log('result is', data)
+      let passed = 0
+      data.forEach((result: any) => {
+        if (JSON.stringify(result.expected) === JSON.stringify(result.received)) {
+          passed++
+        }
+      })
+      setBattle(prevBattle => {
+        const updatedBattle = {...prevBattle, userResults: data, userProgress: Math.round((passed / data.length) * 100)};
+        pushBattleStateToDB(user, updatedBattle);
+        return updatedBattle;
+    });
   }
 
   useEffect(() => {
     const ace = require('ace-builds/src-noconflict/ace');
     require('ace-builds/src-noconflict/theme-chaos');
     require('ace-builds/src-noconflict/mode-javascript');
+    require('ace-builds/src-noconflict/mode-python')
     const editor1 = ace.edit(editor1Ref.current);
     editor1.setTheme("ace/theme/chaos");
-    editor1.session.setMode("ace/mode/javascript");
+    if (user.preferredLanguage === 'python') {
+      editor1.session.setMode("ace/mode/python");
+    }
+    else if (user.preferredLanguage === 'javascript') {
+      editor1.session.setMode("ace/mode/javascript");
+    }
     userCode.length > 1 ? editor1.setValue(`${userCode}`) : editor1.setValue(`${templateCode}`);
     editor1.setOptions({
         fontSize: "10pt" 
@@ -121,7 +114,6 @@ const AceEditor = () => {
     if (!testCasesArray && testCasesObj) {
         setTestCasesArray(formatTestCases(testCasesObj))
     } 
-    // console.log('testCasesArray', testCasesArray)
   }, [testCasesObj])
 
 

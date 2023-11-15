@@ -19,7 +19,7 @@ interface Battle {
   opponentResults: Result[] | null;
   userProgress: number;
   opponentProgress: number;
-  gameStatus: string;
+  gameOver: boolean;
 }
 
 interface BattleContextType {
@@ -47,7 +47,7 @@ const defaultBattleContext: BattleContextType = {
       opponentResults: null,
       userProgress: 0,
       opponentProgress: 0,
-      gameStatus: '',
+      gameOver: false,
     },
     setBattle: () => {},
   };

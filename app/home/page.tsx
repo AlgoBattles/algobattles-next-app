@@ -34,23 +34,13 @@ export default function Home() {
   }
 
   useEffect(() => {
-    const checkEverything = async () => {
-      // if (!user.UID) {
-      //   const loggedIn = await checkAuthStatus(user, setUser);
-      //   if (!loggedIn) {
-      //     router.push('/')
-      //     return
-      //   }
-      // }
-      // else if (user.UID && !user.username) {
-      //   await retrieveUserInfo(user, setUser);
-      // }
+    const checkForInvite = async () => {
       if (user.UID && user.username) {
         await retrieveInviteDetails();
       }
-      console.log('use effect has updated user to: ', user)
+      // console.log('use effect has updated user to: ', user)
     };
-    checkEverything();
+    checkForInvite();
   }, [user])
 
   const handleSignOut = async () => {

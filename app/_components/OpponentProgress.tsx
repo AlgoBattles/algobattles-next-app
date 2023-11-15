@@ -1,6 +1,10 @@
 import React from 'react';
 
-const ProgressBar = ({ percentage }) => {
+interface ProgressBarProps {
+  percentage: number;
+}
+
+const ProgressBar: React.FC<ProgressBarProps> = ({ percentage }) => {
   return (
     <div className="flex flex-col items-center bg-black text-white p-2 rounded-lg w-60">
       <div className="flex w-full items-center">

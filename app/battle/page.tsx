@@ -11,8 +11,8 @@ import { Socket } from 'socket.io-client';
 import { useRouter } from 'next/navigation'
 import { useUser } from '../_contexts/UserContext';
 import { useBattle } from '../_contexts/BattleContext';
-import { checkAuthStatus, retrieveUserInfo } from '../_helpers/authHelpers';
 import { pullBattleStateFromDB, pushBattleStateToDB } from '../_helpers/battleStateHelpers';
+import { truncate } from 'fs/promises';
 
 
 const supabaseClient = createClient(
@@ -24,32 +24,25 @@ const Battle = () => {
   const router = useRouter()
   const { user, setUser } = useUser()
   const { battle, setBattle } = useBattle();
-  const { userCode } = battle;
+  const [battleWinner, setWinner] = useState<boolean>(false);
  
 
   useEffect(() => {
     const setBattleState = async () => {
       if (user.UID && !battle.algoPrompt) {
-        await pullBattleStateFromDB(user, battle, setBattle);
+        const result = await pullBattleStateFromDB(user, battle, setBattle);
+        if (!result) {
+          router.push('/home')
+        }
       } 
     };
     setBattleState();
   }, [user])
 
 
-  useEffect(() => {
-    try {
-      // getAlgoDetails()
-    }
-    catch (error){
-      console.log(error)
-    }
-  }, []);
-
   const printBattleState = () => {
     console.log(battle)
   }
-
 
   const socketRef = useRef<Socket | null>(null);
   const currRoomId = 'room1';
@@ -72,6 +65,12 @@ const Battle = () => {
       if (action === 'opponent code') {
         setBattle(prevBattle => ({...prevBattle, opponentCode: message}));
       }
+      if (action === 'opponent progress') {
+        setBattle(prevBattle => ({...prevBattle, opponentProgress: message}));
+        if (message === 100) {
+          setBattle(prevBattle => ({...prevBattle, gameOver: true}));
+        }
+      }
     });
 
     socketRef.current = socket;
@@ -88,17 +87,28 @@ const Battle = () => {
     }
   }
 
+  const sendProgress = (message: number) => {
+    if (socketRef.current) {
+      socketRef.current.emit('message', {room: `${currRoomId}`, action: 'opponent progress', message: message});
+    }
+  }
+
   useEffect(() => {
     // emit to socket server
-    console.log('userCode', userCode)
-    userCode && sendCode(userCode);
-  }, [userCode]); 
+    battle.userCode && sendCode(battle.userCode);
+  }, [battle.userCode]); 
+
+  useEffect(() => {
+    sendProgress(battle.userProgress);
+  }, [battle.userProgress])
+
+  
 
   return (
     <div className="flex flex-col min-h-screen items-center justify-center bg-black">
     <h1 style={{fontFamily: 'LuckiestGuy', fontSize: '50px', textAlign: 'left', width: '100%', marginTop: '20px', marginLeft: '20px'}} >AlgoBattles</h1>
     <div className="grid grid-cols-2 grid-rows-2 gap-4 p-4 w-full">
-      {/* <GameOver show={true} winner={false}></GameOver> */}
+      <GameOver show={battle.gameOver} winner={battleWinner}></GameOver> 
       <Editor></Editor>
       <OpponentEditor></OpponentEditor>
       <TestCases></TestCases>

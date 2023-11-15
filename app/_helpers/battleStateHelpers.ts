@@ -11,7 +11,6 @@ export async function pullBattleStateFromDB(user, battle, setBattle) {
         .or(`user1_id.eq.${user.UID},user2_id.eq.${user.UID}`);
     console.log(data)
     if (data && data.length >= 1) {
-
         console.log('setting battle state', data)
         const dbResult = data[0]
         if (dbResult.user1_id === user.UID) {
