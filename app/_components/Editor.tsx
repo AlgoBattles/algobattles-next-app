@@ -57,6 +57,13 @@ const AceEditor = () => {
     })
   }
   const runCode = async (code: string) => {
+    // console.log('request body is')
+    // console.log({
+    //   code: userCode,
+    //   testCases: JSON.stringify(testCasesArray),
+    //   userId: user.username,
+    //   funcName: battle.funcName})
+
     const result = await fetch('http://localhost:8080/runCode', {
         method: 'POST',
         headers: {

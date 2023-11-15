@@ -2,25 +2,7 @@
 import React, { createContext, useEffect, useState, useContext, ReactNode } from 'react';
 import { Result, TestCase } from '../_types/battleTypes';
 import { useUser } from '../_contexts/UserContext';
-import { pullBattleStateFromDB } from '../_helpers/battleStateHelpers';
-
-interface Battle {
-  algoId: number;
-  algoPrompt: string;
-  funcName: string;
-  templateCode: string;
-  testCasesObj: { [key: string]: TestCase } | null;
-  userRole: string;
-  userId: string;
-  opponentId: string;
-  userCode: string;
-  opponentCode: string;
-  userResults: Result[] | null;
-  opponentResults: Result[] | null;
-  userProgress: number;
-  opponentProgress: number;
-  gameOver: boolean;
-}
+import { Battle } from '../_types/battleTypes';
 
 interface BattleContextType {
   battle: Battle;
@@ -33,6 +15,7 @@ interface BattleProviderProps {
 
 const defaultBattleContext: BattleContextType = {
     battle: {
+      battleId: 0,
       algoId: 0,
       algoPrompt: '',
       funcName: '',
@@ -56,8 +39,6 @@ export const BattleContext = createContext<BattleContextType>(defaultBattleConte
 
 export const BattleProvider: React.FC<BattleProviderProps> = ({ children }) => {
   const [battle, setBattle] = useState<Battle>(defaultBattleContext.battle);
-  const { user } = useUser();
-
   return (
     <BattleContext.Provider value={{ battle, setBattle }}>
       {children}

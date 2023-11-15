@@ -31,9 +31,6 @@ export default function Home() {
         .select()
         .eq('inviter_username', user.username)
     if (data && data.length >= 1) {
-        console.log('invite data is: ', data)
-        // console.log('the invitee username is' , data[0].invitee_username)
-        // console.log('my username is', user.username)
         setOpponentUsername(data[0].invitee_username)
         setOpponentAvatar(data[0].invitee_avatar)
         setOpponentId(data[0].invitee)
@@ -131,22 +128,29 @@ export default function Home() {
                     user2_code: algoData[0].template_code,
                     user1_progress: 0,
                     user2_progress: 0,
-                    game_status: 'active'
+                    game_over: false
                 }
             ])
             .select()
         if (data && data.length >= 1) {
             console.log('battle added to db')
+            deleteInvite()
             socketRef.current && socketRef.current.emit('message', {room: `${currRoomId}`, action: 'start battle', message: `${'start'}`});
             router.push('/battle')
         }
     }
   }
 
+  const deleteInvite = async () => {
+    const { data, error } = await supabase
+      .from ('battle_invites')
+      .delete()
+      .eq('inviter_username', user.username)
+  }
+
   const handleTestButton = async () => {
     console.log('opponent id is', opponentId)
   }
-
 
   return (
     <div className="flex flex-col h-screen bg-black">

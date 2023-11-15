@@ -1,11 +1,12 @@
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { User } from '../_types/userTypes'
 
 const supabase = createClientComponentClient()
 
-export async function checkAuthStatus(user, setUser) {
+export async function checkAuthStatus(user: User, setUser: (user: User) => void) {
     const userAuthInfo = await supabase.auth.getUser();
     if (userAuthInfo.data.user) {
-      // console.log('User is signed in:', userAuthInfo.data.user);
+      console.log('User is signed in:', userAuthInfo.data.user);
       if (userAuthInfo.data.user.id) {
         setUser(({ ...user, UID: userAuthInfo.data.user.id }));
         return true 

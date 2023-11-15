@@ -1,8 +1,11 @@
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
+import { Battle } from '../_types/battleTypes'
+import { User } from '../_types/userTypes'
+
 const supabase = createClientComponentClient()
 
-export async function pullBattleStateFromDB(user, battle, setBattle) {
+export async function pullBattleStateFromDB(user: User, battle: Battle, setBattle: (battle: Battle) => void) {
     console.log('setting battle')
     // console.log('battle', battle)
     const { data, error } = await supabase
@@ -17,6 +20,7 @@ export async function pullBattleStateFromDB(user, battle, setBattle) {
             console.log ('user is leader')
             setBattle(({
                 ...battle,
+                battleId: dbResult.id,
                 algoId: dbResult.algo_id,
                 algoPrompt: dbResult.algo_prompt,
                 funcName: dbResult.func_name,
@@ -31,13 +35,14 @@ export async function pullBattleStateFromDB(user, battle, setBattle) {
                 opponentProgress: dbResult.user2_progress,
                 userResults: dbResult.user1_results,
                 opponentResults: dbResult.user2_results,
-                gameStatus: dbResult.game_status,
+                gameOver: dbResult.game_over,
               }));
         }
         else if (dbResult.user2_id === user.UID) {
             console.log ('user is follower')
             setBattle(({
                 ...battle,
+                battleId: dbResult.id,
                 algoId: dbResult.algo_id,
                 algoPrompt: dbResult.algo_prompt,
                 funcName: dbResult.func_name,
@@ -52,7 +57,7 @@ export async function pullBattleStateFromDB(user, battle, setBattle) {
                 opponentProgress: dbResult.user1_progress,
                 userResults: dbResult.user2_results,
                 opponentResults: dbResult.user1_results,
-                gameStatus: dbResult.game_status,
+                gameOver: dbResult.game_over,
               }));
         }
         return true

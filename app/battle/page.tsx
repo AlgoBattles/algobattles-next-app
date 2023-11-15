@@ -13,19 +13,15 @@ import { useUser } from '../_contexts/UserContext';
 import { useBattle } from '../_contexts/BattleContext';
 import { pullBattleStateFromDB, pushBattleStateToDB } from '../_helpers/battleStateHelpers';
 import { truncate } from 'fs/promises';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
-
-const supabaseClient = createClient(
-  'https://jdrrftsbeohpznqghpxr.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpkcnJmdHNiZW9ocHpucWdocHhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTM0OTQ5NzIsImV4cCI6MjAwOTA3MDk3Mn0.3ZXOev203HqvH3X7UWE_B9X7NGYu0Z6tlmFyAi0ii4k'
-);
+const supabase = createClientComponentClient<Database>()
 
 const Battle = () => {
   const router = useRouter()
   const { user, setUser } = useUser()
   const { battle, setBattle } = useBattle();
   const [battleWinner, setWinner] = useState<boolean>(false);
- 
 
   useEffect(() => {
     const setBattleState = async () => {
@@ -91,6 +87,33 @@ const Battle = () => {
     if (socketRef.current) {
       socketRef.current.emit('message', {room: `${currRoomId}`, action: 'opponent progress', message: message});
     }
+    if (message === 100) {
+      // display game over modal
+      setWinner(true);
+      // set game over
+      setBattle(prevBattle => ({...prevBattle, gameOver: true}));
+      // delete battle from db
+      deleteBattle()
+    }
+  }
+
+  const deleteBattle = async () => {
+    console.log('deleting battle') 
+    console.log('battle id is ', battle.battleId)
+    const { data, error } = await supabase
+        .from('battle_state')
+        .delete()
+        .eq('id', battle.battleId)
+    if (error) {
+      console.log('error deleting battle')
+      console.log(error)
+      return false
+    }
+    else if (data) {
+      console.log('battle deleted')
+      console.log(data)
+      return true
+    }
   }
 
   useEffect(() => {
@@ -101,8 +124,6 @@ const Battle = () => {
   useEffect(() => {
     sendProgress(battle.userProgress);
   }, [battle.userProgress])
-
-  
 
   return (
     <div className="flex flex-col min-h-screen items-center justify-center bg-black">
