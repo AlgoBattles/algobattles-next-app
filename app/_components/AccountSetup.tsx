@@ -13,10 +13,10 @@ function SignupComponent() {
   const { user, setUser } = useUser();
   const [avatar, setAvatar] = useState<string | null>();
   const [username, setUsername] = useState<string | null>(null);
-  const [email, setEmail] = useState<string | null>(null);
   const [preferredLanguage, setLang] = useState<string | null>(null);
-  const [UID, setUID] = useState<string | null>(null);
   const [error, setError] = useState('')
+  
+  const { UID, email} = user
 
   const router = useRouter()
   const supabase = createClientComponentClient<Database>()
@@ -26,6 +26,7 @@ function SignupComponent() {
   }
 
   const handleFinish = async () => {
+    console.log('user is', user)
     if (email && avatar && username && preferredLanguage && UID) {
       setUser(({ ...user, email, avatar, username, preferredLanguage, UID }));
       console.log('user is: ', user)
@@ -47,6 +48,7 @@ function SignupComponent() {
     }
     else {
       setError('Please fill out all fields')
+      console.log()
     }
   }
 
@@ -62,10 +64,10 @@ function SignupComponent() {
        <div className="mb-6">
         <label className="text-white mb-2 block font-semibold">Avatar</label>
         <div className="flex gap-2">
-        <button onClick={() => setAvatar('dog.jpg')} className={`px-4 py-2 text-[10pt] font-semibold rounded-3xl ${avatar === 'dog.jpg' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-blue-500'}`}>
+        <button onClick={() => setAvatar('dog.jpg')} className={`px-2 py-2 text-[10pt] font-semibold rounded-xl ${avatar === 'dog.jpg' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-blue-500'}`}>
           <Image src="/dog.jpg" width={40} height={40} alt="dog" />
         </button>
-        <button onClick={() => setAvatar('cat.jpg')} className={`px-4 py-2 text-[10pt] font-semibold rounded-3xl ${avatar === 'cat.jpg' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-blue-500'}`}>
+        <button onClick={() => setAvatar('cat.jpg')} className={`px-2 py-2 text-[10pt] font-semibold rounded-xl ${avatar === 'cat.jpg' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-blue-500'}`}>
           <Image src="/cat.jpg" width={40} height={40} alt="dog" />
         </button>
         </div>

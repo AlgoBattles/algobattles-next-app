@@ -7,8 +7,8 @@ export async function checkAuthStatus(user: User, setUser: (user: User) => void)
     const userAuthInfo = await supabase.auth.getUser();
     if (userAuthInfo.data.user) {
       console.log('User is signed in:', userAuthInfo.data.user);
-      if (userAuthInfo.data.user.id) {
-        setUser(({ ...user, UID: userAuthInfo.data.user.id }));
+      if (userAuthInfo.data.user.id && userAuthInfo.data.user.email) {
+        setUser(({ ...user, UID: userAuthInfo.data.user.id, email: userAuthInfo.data.user.email  }));
         return true 
       }
     } else {
@@ -16,7 +16,7 @@ export async function checkAuthStatus(user: User, setUser: (user: User) => void)
     }
   }
 
-export async function retrieveUserInfo(user, setUser) {
+export async function retrieveUserInfo(user: User, setUser: (user: User) => void ) {
     // console.log('hitting retrieve user info')
     // console.log('user is', user)
     const { data, error } = await supabase
