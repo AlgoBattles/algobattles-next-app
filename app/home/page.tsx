@@ -33,6 +33,18 @@ export default function Home() {
     }
   }
 
+
+const channels = supabase.channel('custom-all-channel')
+.on(
+  'postgres_changes',
+  { event: '*', schema: 'public', table: 'battle_invites' },
+  (payload) => {
+    console.log('Change received!', payload)
+    retrieveInviteDetails();
+  }
+)
+.subscribe()
+
   useEffect(() => {
     const checkForInvite = async () => {
       if (user.UID && user.username) {
