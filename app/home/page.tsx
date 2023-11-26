@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter } from 'next/navigation'
 import { useUser } from '../_contexts/UserContext';
-import { checkAuthStatus, retrieveUserInfo } from '../_helpers/authHelpers';
+import { useHeaderHeight } from '../_contexts/HeaderContext';
 
 // import type { Database } from '@/lib/database.types'
 
@@ -13,6 +13,9 @@ export default function Home() {
   const { user, setUser } = useUser();
   const [inviteUsername, setInviteUsername] = useState<string | null>(null);
   const [inviteAvatar, setInviteAvatar] = useState<string | null>(null);
+  const [divHeight, setDivHeight] = useState(0);
+
+  const headerHeight = useHeaderHeight();
 
   const supabase = createClientComponentClient<Database>()
   const router = useRouter()
@@ -33,7 +36,6 @@ export default function Home() {
     }
   }
 
-
 const channels = supabase.channel('custom-all-channel')
 .on(
   'postgres_changes',
@@ -49,8 +51,7 @@ const channels = supabase.channel('custom-all-channel')
     const checkForInvite = async () => {
       if (user.UID && user.username) {
         await retrieveInviteDetails();
-      }
-      // console.log('use effect has updated user to: ', user)
+      } 
     };
     checkForInvite();
   }, [user])
@@ -60,24 +61,38 @@ const channels = supabase.channel('custom-all-channel')
     router.push('/')
   }
 
+  useEffect(() => {
+    const calculateDivHeight = () => {
+      const screenHeight = window.innerHeight;
+      const calculatedHeight = screenHeight - headerHeight;
+      setDivHeight(calculatedHeight);
+    };
+
+    calculateDivHeight();
+    window.addEventListener('resize', calculateDivHeight);
+
+    return () => {
+      window.removeEventListener('resize', calculateDivHeight);
+    };
+  }, [headerHeight]);
+
   return (
-    <div className="flex flex-col h-screen bg-black">
-      <h1 style={{fontFamily: 'LuckiestGuy', fontSize: '50px', textAlign: 'left', width: '100%', marginTop: '20px', marginLeft: '20px'}} >AlgoBattles</h1>
+    <div className="flex flex-col" style={{ height: `${divHeight}px`, backgroundColor: 'black' }}>
       <div className="absolute top-0 right-0 flex justify-center items-center">
         {inviteUsername && inviteAvatar && <div className="flex flex-row bg-gray-800 w-[400px] h-[100px] p-6 rounded-lg border-[1px] border-gray-700">
             <div>{inviteAvatar}</div>
             <div>{inviteUsername}</div>
-            <Link href={'/waitingRoom/join'}>
+            <Link href={'home/waitingRoom/join'}>
               <Button variant="outlined" className="ml-3 border border-gray-300 px-4 py-2 text-white">Review Challenge</Button>
             </Link>
         </div>
         }
       </div>
       <div className="flex justify-center items-center flex-grow">
-        <Link href="/battle">
+        <Link href="home/battle">
           <Button variant="outlined" className="mr-3 border border-gray-300 px-4 py-2 text-white">Play Random</Button>
         </Link>
-        <Link href="/waitingRoom/sendInvite">
+        <Link href="home/waitingRoom/sendInvite">
         <Button variant="outlined" className="mr-3 border border-gray-300 px-4 py-2 text-white">Play A Friend</Button>
         </Link>
       </div>

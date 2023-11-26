@@ -1,17 +1,17 @@
 "use client"
 import React, { useEffect, useRef, useState } from 'react';
 import Button from '@mui/material/Button';
-import Editor from '../_components/Editor';
-import OpponentEditor from '../_components/OpponentEditor';
-import TestCases from '../_components/TestCases';
-import GameOver from '../_components/GameOverModal';
+import Editor from '../../_components/Editor';
+import OpponentEditor from '../../_components/OpponentEditor';
+import TestCases from '../../_components/TestCases';
+import GameOver from '../../_components/GameOverModal';
 import { createClient } from '@supabase/supabase-js'
 import io from 'socket.io-client';
 import { Socket } from 'socket.io-client';
 import { useRouter } from 'next/navigation'
-import { useUser } from '../_contexts/UserContext';
-import { useBattle } from '../_contexts/BattleContext';
-import { pullBattleStateFromDB, pushBattleStateToDB } from '../_helpers/battleStateHelpers';
+import { useUser } from '../../_contexts/UserContext';
+import { useBattle } from '../../_contexts/BattleContext';
+import { pullBattleStateFromDB, pushBattleStateToDB } from '../../_helpers/battleStateHelpers';
 import { truncate } from 'fs/promises';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 

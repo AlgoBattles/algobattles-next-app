@@ -4,7 +4,7 @@ import { Inter } from 'next/font/google'
 import Head from 'next/head';
 import { UserProvider } from './_contexts/UserContext';
 import { BattleProvider } from './_contexts/BattleContext';
-
+import { InvitesProvider } from './_contexts/InvitesContext';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -18,7 +18,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
   return (
+    <InvitesProvider>
     <BattleProvider>
     <UserProvider>
     <Head>
@@ -31,6 +33,6 @@ export default function RootLayout({
     </html>
     </UserProvider>
     </BattleProvider>
-
+    </InvitesProvider>
   )
 }

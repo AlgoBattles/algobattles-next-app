@@ -66,7 +66,6 @@ function SignupComponent() {
           <input type="password" onChange={handlePasswordInput} placeholder="Password" className="w-full p-2 bg-gray-900 text-white rounded focus:outline-none" />
           <label className="text-red-500 text-sm mt-2 mb-2 block">{error}</label>
       </div>
-      <button onClick={setStateObj} className="bg-orange-500 text-white w-full py-2 rounded">test state</button>
       <button onClick={handleSignUp} className="bg-orange-500 text-white w-full py-2 rounded">CONTINUE</button>
     </div>
     )

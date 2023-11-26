@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Button from '@mui/material/Button';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter } from 'next/navigation'
-import { useUser } from '../../_contexts/UserContext';
+import { useUser } from '../../../_contexts/UserContext';
 
 // import type { Database } from '@/lib/database.types'
 
@@ -32,10 +32,16 @@ export default function Home() {
         console.log(error)
         return
     }
+    else if (userData[0].username == user.username) {
+      setError('You cannot invite yourself')
+      setSuccess(null)
+      return
+    }
     else if (userData.length == 0) {
       console.log('hit user data length 0')
       setError('User not found')
       setSuccess(null)
+      return
     }
     else if (userData.length >= 1) {
         console.log('user data is: ')
@@ -75,7 +81,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col h-screen bg-black">
-      <h1 style={{fontFamily: 'LuckiestGuy', fontSize: '50px', textAlign: 'left', width: '100%', marginTop: '20px', marginLeft: '20px'}} >AlgoBattles</h1>
+
       <div className="flex justify-center items-center flex-grow">
       <div className="bg-gray-800 w-[400px] h-[400px] p-6 rounded-lg border-[1px] border-gray-700">
             <div className="mb-6 mt-6">
