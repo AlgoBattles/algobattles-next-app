@@ -24,23 +24,34 @@
 }
 
 html {
+  background: radial-gradient(ellipse at center,
+      rgba(52, 60, 131, 1) 0%,
+      rgba(0, 0, 0, 1) 100%);
+  min-height: 100vh;
+  margin: 0;
+}
+
+/* body, */
+html {
   height: 100%;
+  margin: 0;
+  background-attachment: fixed;
 }
 
 body {
   height: 100%;
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
+  /* background: linear-gradient(
       to bottom,
       transparent,
       rgb(var(--background-end-rgb))
     )
-    rgb(var(--background-start-rgb));
+    rgb(var(--background-start-rgb)); */
 }
 
-.bg-gold-gradient {
+/* .bg-gold-gradient {
   background-image: radial-gradient(circle at center bottom, #47311d, transparent, black);
   border-radius: 50% 50% 0 0; /* Semi-circle at the bottom */
-  height: 0;
-  padding-bottom: 50%; /* This gives the element its height, making it a half-circle */
-}
+  /* height: 0;
+  padding-bottom: 50%;  */
+/* } */ 

@@ -72,7 +72,6 @@ function SignupComponent() {
         </button>
         </div>
       </div>
-
       <div className="mb-6">
         <label className="text-white mb-2 block font-semibold">Username</label>
         <div className="flex items-center bg-gray-900 p-2 rounded">
