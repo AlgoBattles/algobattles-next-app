@@ -126,8 +126,7 @@ const Battle = () => {
   }, [battle.userProgress])
 
   return (
-    <div className="flex flex-col min-h-screen items-center justify-center bg-black">
-    <h1 style={{fontFamily: 'LuckiestGuy', fontSize: '50px', textAlign: 'left', width: '100%', marginTop: '20px', marginLeft: '20px'}} >AlgoBattles</h1>
+    <div className="flex flex-col min-h-screen items-center justify-center"> 
     <div className="grid grid-cols-2 grid-rows-2 gap-4 p-4 w-full">
       <GameOver show={battle.gameOver} winner={battleWinner}></GameOver> 
       <Editor></Editor>

@@ -1,13 +1,15 @@
 "use client"
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+
 import io from 'socket.io-client';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import Button from '@mui/material/Button';
 import { useUser } from '../../../_contexts/UserContext';
 import Stopwatch from '@/app/_components/Stopwatch';
 import { Socket } from 'socket.io-client';
+import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation'
 
 export default function Home() {
   const { user, setUser } = useUser();
@@ -23,17 +25,27 @@ export default function Home() {
 
   const supabase = createClientComponentClient<Database>()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const id = searchParams && searchParams.get('id')
 
+  console.log('lobby id is', id)
+  
 
   const retrieveInviteDetails = async () => {
     const { data, error } = await supabase
         .from('battle_invites')
         .select()
-        .eq('inviter_username', user.username)
+        .eq('id', id)
     if (data && data.length >= 1) {
-        setOpponentUsername(data[0].invitee_username)
-        setOpponentAvatar(data[0].invitee_avatar)
-        setOpponentId(data[0].invitee)
+        setOpponentId(data[0].recipient)
+        const { data: userData, error: userError } = await supabase
+            .from('users')
+            .select()
+            .eq('user_id', data[0].recipient)
+        if (userData && userData.length >= 1) {
+            setOpponentUsername(userData[0].username)
+            setOpponentAvatar(userData[0].avatar)
+        }
         return data
     }
     else if (error) {
@@ -153,7 +165,7 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-black">
+    <div className="flex flex-col h-screen">
 
       <div className="flex justify-center items-center flex-grow">
       <div className="bg-gray-800 w-[400px] h-[400px] p-6 rounded-lg border-[1px] border-gray-700">

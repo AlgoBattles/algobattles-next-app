@@ -1,6 +1,7 @@
 "use client"
 import React, { createContext, useContext, useState, useEffect, useRef, ReactNode } from 'react';
-import { Header } from '../_components/Header';
+
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 interface HeaderContextProps {
   headerHeight: number;

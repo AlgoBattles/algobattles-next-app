@@ -2,70 +2,96 @@
 import React, { useState, useEffect } from 'react';
 import { FaEnvelope, FaUser } from 'react-icons/fa';
 import { useUser } from '../_contexts/UserContext';
+import { useInvites } from '../_contexts/InvitesContext';
 import { useRouter } from 'next/navigation'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { Button } from '@mui/material';
+import Link from 'next/link'
+
+import { getUserInfo } from '../_helpers/userHelpers';
 
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+const supabase = createClientComponentClient<Database>()
+
+type UserData = {
+    id: number;
+    username: string;
+    avatar: string;
+    // Add any other properties of the user data here
+  };
 
 const Header = () => {
   const [showMailComponent, setShowMailComponent] = useState(false);
   const [showProfileComponent, setShowProfileComponent] = useState(false);
   const { user } = useUser();
+  const { invites } = useInvites();
   const router = useRouter()
-  const supabase = createClientComponentClient<Database>()
-
-
-//   const retrieveInviteDetails = async () => {
-//     const { data, error } = await supabase
-//         .from('battle_invites')
-//         .select()
-//         .eq('invitee_username', user.username)
-//     if (data && data.length >= 1) {
-//         setInviteUsername(data[0].inviter_username)
-//         setInviteAvatar(data[0].inviter_avatar)
-//         return data
-//     }
-//     else if (error) {
-//     console.log(error)
-//     return
-//     }
-//   }
-
-// const channels = supabase.channel('custom-all-channel')
-// .on(
-//   'postgres_changes',
-//   { event: '*', schema: 'public', table: 'battle_invites' },
-//   (payload) => {
-//     console.log('Change received!', payload)
-//     retrieveInviteDetails();
-//   }
-// )
-// .subscribe()
-
-//   useEffect(() => {
-//     const checkForInvite = async () => {
-//       if (user.UID && user.username) {
-//         await retrieveInviteDetails();
-//       } 
-//     };
-//     checkForInvite();
-//   }, [user])
 
 const MailComponent = () => {
-  return (
-    <div
-      onMouseEnter={() => setShowMailComponent(true)}
-      onMouseLeave={() => setShowMailComponent(false)}
-    >
-      <div className="absolute top-2/3 right-10 w-64 h-96 bg-white border border-red-300 rounded-lg p-4">
-        Mail Component
-      </div>
-    
-    </div>
-  );
-};
+    const [mailData, setMailData] = useState<{ id: number, sender: UserData }[]>([]);
+    useEffect(() => {
+        const fetchData = async () => {
+          const data = await Promise.all(
+            invites.map(async (invite) => {
+              const sender = await getUserInfo(invite.sender);
+              return {
+                id: invite.id,
+                sender: sender
+              };
+            })
+          );
+          setMailData(data);
+        };
+        if (invites && invites.length >= 1) {
+          fetchData();
+        }
+      }, [invites]);
+
+      const [showJoinButton, setShowJoinButton] = useState(false);
+
+      return (
+        <div
+          onMouseEnter={() => setShowMailComponent(true)}
+          onMouseLeave={() => setShowMailComponent(false)}
+        >
+          <div className="absolute top-2/3 right-10 w-64 h-96 bg-gray-800 border border-gray-700 rounded-lg p-4">
+            {mailData.map((item) => (
+            <div
+            className="flex flex-row items-center"
+            style={{ position: 'relative' }}
+            onMouseEnter={(e) => {
+                if ((e.target as HTMLElement).clientWidth / 2 < e.nativeEvent.offsetX) {
+                  setShowJoinButton(true);
+                }
+              }}
+              onMouseLeave={(e) => {
+                if ((e.target as HTMLElement).clientWidth / 2 > e.nativeEvent.offsetX) {
+                  setShowJoinButton(false);
+                }
+              }
+            }
+          >
+              <img src={item.sender && item.sender.avatar} alt="avatar" className="w-10 h-10 rounded-full mr-2" />
+              <div className="flex flex-col">
+                <div className="font-bold">{item.sender && item.sender.username}</div>
+                <div className="text-sm text-gray-500">invited you to a battle</div>
+              </div>
+              {showJoinButton && (
+                <Link href={`home/waitingRoom/lobby?id=${item.id}`}>
+                <button
+                  style={{ position: 'absolute', top: '50%', right: 0, transform: 'translateY(-50%)' }}
+                >
+                  Join Lobby
+                </button>
+                </Link>
+              )}
+            </div>
+            ))}
+          </div>
+        </div>
+      );
+    };
 
 const ProfileComponent = () => {
   return (
@@ -94,10 +120,11 @@ const handleSignOut = async () => {
         AlgoBattles
       </h1>
       <div style={{ position: 'absolute', top: 0, right: 0, display: 'flex', alignItems: 'center', height: '100%' }}>
-        <div className="mr-4 cursor-pointer flex">
+        <div 
+        onMouseEnter={() => setShowMailComponent(true)}
+        onMouseLeave={() => setShowMailComponent(false)}
+        className="mr-4 cursor-pointer flex">
         <FaEnvelope 
-          onMouseEnter={() => setShowMailComponent(true)}
-          onMouseLeave={() => setShowMailComponent(false)}
         />
         </div>
         <div className="mr-4 cursor-pointer flex flex-row items-center"
@@ -112,6 +139,7 @@ const handleSignOut = async () => {
     </div>
   );
 };
+
 
 
 

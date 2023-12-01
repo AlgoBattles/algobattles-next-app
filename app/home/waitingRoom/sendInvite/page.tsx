@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link'
 import Button from '@mui/material/Button';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { useRouter } from 'next/navigation'
+// import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 import { useUser } from '../../../_contexts/UserContext';
 
 // import type { Database } from '@/lib/database.types'
@@ -32,12 +33,12 @@ export default function Home() {
         console.log(error)
         return
     }
-    else if (userData[0].username == user.username) {
+    else if (userData[0].username === user.username) {
       setError('You cannot invite yourself')
       setSuccess(null)
       return
     }
-    else if (userData.length == 0) {
+    else if (userData.length === 0) {
       console.log('hit user data length 0')
       setError('User not found')
       setSuccess(null)
@@ -49,15 +50,12 @@ export default function Home() {
 
         const { data: inviteData, error: inviteError } = await supabase
             .from('battle_invites')
-            .upsert([
+            .insert([
                 {
-                    user_id: user.UID,
-                    inviter_username: user.username,
-                    inviter_avatar: user.avatar,
-                    invitee: userData[0].user_id,
-                    invitee_username: userData[0].username,
-                    invitee_avatar: userData[0].avatar,
-                    socket_room: 'room1'
+                    sender_id: user.UID,
+                    recipient_id: userData[0].user_id,
+                    sender_ready: false,
+                    recipient_ready: false,
                 }
             ])
             .select()
@@ -66,10 +64,9 @@ export default function Home() {
             console.log(error)
             return
         }
-        else if (inviteData){
-            console.log(inviteData)
+        else if (inviteData[0] && inviteData[0].id){
             setSuccess('Invite sent!')
-            router.push('/waitingRoom/wait')
+            router.push(`/home/waitingRoom/lobby?id=${inviteData[0].id}`);
         }
     }
   }
