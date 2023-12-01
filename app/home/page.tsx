@@ -20,11 +20,6 @@ export default function Home() {
   const supabase = createClientComponentClient<Database>()
   const router = useRouter()
 
-  const ws = new WebSocket(`ws://localhost:9001?uuid=1234`);
-  
-      ws.onopen = () => {
-        console.log('connected to ws server in homepage');
-      };
 
 
   useEffect(() => {

@@ -22,14 +22,12 @@ export default function Home() {
   const [seconds, setSeconds] = useState<number>(0);
   const [ready, setReady] = useState<boolean>(false);
 
-
   const supabase = createClientComponentClient<Database>()
   const router = useRouter()
   const searchParams = useSearchParams()
   const id = searchParams && searchParams.get('id')
 
   console.log('lobby id is', id)
-  
 
   const retrieveInviteDetails = async () => {
     const { data, error } = await supabase
@@ -59,34 +57,33 @@ export default function Home() {
       if (user.UID && user.username && !opponentUsername) {
         await retrieveInviteDetails();
       }
-      console.log('use effect has updated user to: ', user)
+      // console.log('use effect has updated user to: ', user)
     };
     checkEverything();
   }, [user])
 
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    router.push('/')
-  }
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setSeconds(seconds => seconds + 1);
-    }, 1000);
-    // Clean up function
-    return () => clearInterval(intervalId);
-  }, []);
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     setSeconds(seconds => seconds + 1);
+  //   }, 1000);
+  //   // Clean up function
+  //   return () => clearInterval(intervalId);
+  // }, []);
 
 
   const socketRef = useRef<Socket | null>(null);
-  const currRoomId = 'room1';
+  const lobbyRoomId: string = 'l' + id;
+
+  console.log('lobby room id is', lobbyRoomId)
 
   useEffect(() => {
     // connect to socket server
     const serverURL = 'http://localhost:8081';
     const socket = io(serverURL, {
       query: {
-        roomId: currRoomId,
+        roomId: lobbyRoomId,
+        userId: user.UID
     }
     });
     socket.on('connect', () => {
@@ -96,11 +93,10 @@ export default function Home() {
     socket.on('message', async ({message, action}) => {
         console.log('Received message:', message);
         console.log('Received action:', action);
-        console.log('opponent id in socket receiver is', opponentId)
-        if (action === 'confirm battle'){
-            setReady(true)
-            socket.emit('message', {room: `${currRoomId}`, action: 'confirmation 2', message: `${'confirmed'}`});  
-            await handleStartBattle()
+        // console.log('opponent id in socket receiver is', opponentId)
+        if (action === 'start battle'){
+          const { battle_id, algo_id } = message;
+          router.push(`/home/battle?id=${battle_id}`)
         }
     });
 
@@ -112,56 +108,11 @@ export default function Home() {
     
   }, [opponentId]);
 
-  const handleStartBattle = async () => {
-    console.log('starting battle')
 
-    // first determine algo and fetch template code
-    const algoNum = 1
-    const { data: algoData, error: algoError } = await supabase
-            .from('algos')
-            .select('*')
-            .eq('id', 1)
-    if (algoData && algoData.length >= 1) {
-        // then add battle to db
-        console.log('adding battle to db')
-        console.log('algo data is', algoData)
-        const { data, error } = await supabase
-            .from('battle_state')
-            .insert([
-                {
-                    algo_id: algoNum,
-                    algo_prompt: algoData[0].prompt,
-                    func_name: algoData[0].func_name,
-                    template_code: algoData[0].template_code,
-                    test_cases_json: algoData[0].test_cases_json,
-                    user1_id: user.UID,
-                    user2_id: opponentId,
-                    user1_code: algoData[0].template_code,
-                    user2_code: algoData[0].template_code,
-                    user1_progress: 0,
-                    user2_progress: 0,
-                    game_over: false
-                }
-            ])
-            .select()
-        if (data && data.length >= 1) {
-            console.log('battle added to db')
-            deleteInvite()
-            socketRef.current && socketRef.current.emit('message', {room: `${currRoomId}`, action: 'start battle', message: `${'start'}`});
-            router.push('/battle')
-        }
-    }
-  }
-
-  const deleteInvite = async () => {
-    const { data, error } = await supabase
-      .from ('battle_invites')
-      .delete()
-      .eq('inviter_username', user.username)
-  }
-
-  const handleTestButton = async () => {
-    console.log('opponent id is', opponentId)
+  const handleReadyUp = async () => {
+    console.log('readying up')
+    socketRef.current && socketRef.current.emit('message', {room: `${lobbyRoomId}`, action: 'player ready', message: 'ready'});
+    setReady(true)
   }
 
   return (
@@ -183,9 +134,9 @@ export default function Home() {
             <div>
                 <Stopwatch seconds={seconds} />
             </div>
-            {/* <Button onClick={handleTestButton} variant='outlined' className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 w-[100%] rounded-3xl">
-                Test
-            </Button> */}
+            <Button onClick={handleReadyUp} variant='outlined' className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 w-[100%] rounded-3xl">
+                Ready Up
+            </Button>
             
       </div>
       </div>

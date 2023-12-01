@@ -72,13 +72,13 @@ const MailComponent = () => {
               }
             }
           >
-              <img src={item.sender && item.sender.avatar} alt="avatar" className="w-10 h-10 rounded-full mr-2" />
+              <img src={item.sender && `/${item.sender.avatar}`} alt="avatar" className="w-10 h-10 rounded-full mr-2" />
               <div className="flex flex-col">
                 <div className="font-bold">{item.sender && item.sender.username}</div>
                 <div className="text-sm text-gray-500">invited you to a battle</div>
               </div>
               {showJoinButton && (
-                <Link href={`home/waitingRoom/lobby?id=${item.id}`}>
+                <Link href={`/home/waitingRoom/lobby?id=${item.id}`}>
                 <button
                   style={{ position: 'absolute', top: '50%', right: 0, transform: 'translateY(-50%)' }}
                 >
@@ -116,7 +116,7 @@ const handleSignOut = async () => {
 
   return (
     <div style={{ borderBottom: '1px solid #ccc', position: 'relative' }}>
-      <h1 style={{ fontFamily: 'LuckiestGuy', fontSize: '40px', textAlign: 'left', width: '100%', marginTop: '20px', marginLeft: '20px' }}>
+      <h1 style={{ fontFamily: 'LuckiestGuy', fontSize: '40px', textAlign: 'left', width: '50%', marginTop: '20px', marginLeft: '20px' }}>
         AlgoBattles
       </h1>
       <div style={{ position: 'absolute', top: 0, right: 0, display: 'flex', alignItems: 'center', height: '100%' }}>

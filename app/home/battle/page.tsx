@@ -14,6 +14,7 @@ import { useBattle } from '../../_contexts/BattleContext';
 import { pullBattleStateFromDB, pushBattleStateToDB } from '../../_helpers/battleStateHelpers';
 import { truncate } from 'fs/promises';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { useSearchParams } from 'next/navigation'
 
 const supabase = createClientComponentClient<Database>()
 
@@ -22,6 +23,9 @@ const Battle = () => {
   const { user, setUser } = useUser()
   const { battle, setBattle } = useBattle();
   const [battleWinner, setWinner] = useState<boolean>(false);
+
+  const searchParams = useSearchParams()
+  const battleId = searchParams && searchParams.get('id')
 
   useEffect(() => {
     const setBattleState = async () => {
@@ -35,20 +39,19 @@ const Battle = () => {
     setBattleState();
   }, [user])
 
-
   const printBattleState = () => {
     console.log(battle)
   }
 
   const socketRef = useRef<Socket | null>(null);
-  const currRoomId = 'room1';
+  const battleRoomId: string = 'b' + battleId;
 
   useEffect(() => {
     // connect to socket server
     const serverURL = 'http://localhost:8081';
     const socket = io(serverURL, {
       query: {
-        roomId: currRoomId,
+        roomId: battleRoomId
     }
     });
     socket.on('connect', () => {
@@ -58,7 +61,7 @@ const Battle = () => {
     socket.on('message', ({message, action}) => {
       console.log('Received message:', message);
       console.log('Received action:', action);
-      if (action === 'opponent code') {
+      if (action === 'player code') {
         setBattle(prevBattle => ({...prevBattle, opponentCode: message}));
       }
       if (action === 'opponent progress') {
@@ -79,13 +82,14 @@ const Battle = () => {
 
   const sendCode = (message: string) => {
     if (socketRef.current) {
-      socketRef.current.emit('message', {room: `${currRoomId}`, action: 'opponent code', message: `${message}`});
+      console.log('sending code')
+      socketRef.current.emit('message', {room: `${battleRoomId}`, action: 'player code', message: `${message}`});
     }
   }
 
   const sendProgress = (message: number) => {
     if (socketRef.current) {
-      socketRef.current.emit('message', {room: `${currRoomId}`, action: 'opponent progress', message: message});
+      socketRef.current.emit('message', {room: `${battleRoomId}`, action: 'opponent progress', message: message});
     }
     if (message === 100) {
       // display game over modal
