@@ -44,25 +44,9 @@ const AceEditor = () => {
     return result;
     };
 
-  const createUserContainer = async () => {
-    fetch('http://localhost:8080/create', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        "userId": user.username,
-        "lang": "js"
-    })
-    })
-  }
+
   const runCode = async (code: string) => {
-    // console.log('request body is')
-    // console.log({
-    //   code: userCode,
-    //   testCases: JSON.stringify(testCasesArray),
-    //   userId: user.username,
-    //   funcName: battle.funcName})
+
 
     const result = await fetch('http://localhost:8081/execute', {
         method: 'POST',
@@ -73,23 +57,15 @@ const AceEditor = () => {
             code: userCode,
             testCases: JSON.stringify(testCasesArray), 
             funcName: battle.funcName,
-            language: user.preferredLanguage
+            language: user.preferredLanguage,
+            battleId: battle.battleId,
+            userNumber: battle.userRole,
         })
     })
       // sync the state with db and update user progress anytime someone runs code
       const data = await result.json()
       console.log('result is', data)
-      let passed = 0
-      data.forEach((result: any) => {
-        if (JSON.stringify(result.expected) === JSON.stringify(result.received)) {
-          passed++
-        }
-      })
-      setBattle(prevBattle => {
-        const updatedBattle = {...prevBattle, userResults: data, userProgress: Math.round((passed / data.length) * 100)};
-        pushBattleStateToDB(user, updatedBattle);
-        return updatedBattle;
-    });
+      
   }
 
   useEffect(() => {

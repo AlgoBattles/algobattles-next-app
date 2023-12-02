@@ -46,6 +46,7 @@ const Battle = () => {
   const socketRef = useRef<Socket | null>(null);
   const battleRoomId: string = 'b' + battleId;
 
+  
   useEffect(() => {
     // connect to socket server
     const serverURL = 'http://localhost:8081';
@@ -73,12 +74,16 @@ const Battle = () => {
     });
 
     socketRef.current = socket;
-
     return () => {
       socket.disconnect();
     };
     
   }, []);
+
+  useEffect(() => {
+    // emit code changes to socket server
+    battle.userCode && sendCode(battle.userCode);
+  }, [battle.userCode]); 
 
   const sendCode = (message: string) => {
     if (socketRef.current) {
@@ -86,48 +91,6 @@ const Battle = () => {
       socketRef.current.emit('message', {room: `${battleRoomId}`, action: 'player code', message: `${message}`});
     }
   }
-
-  const sendProgress = (message: number) => {
-    if (socketRef.current) {
-      socketRef.current.emit('message', {room: `${battleRoomId}`, action: 'opponent progress', message: message});
-    }
-    if (message === 100) {
-      // display game over modal
-      setWinner(true);
-      // set game over
-      setBattle(prevBattle => ({...prevBattle, gameOver: true}));
-      // delete battle from db
-      deleteBattle()
-    }
-  }
-
-  const deleteBattle = async () => {
-    console.log('deleting battle') 
-    console.log('battle id is ', battle.battleId)
-    const { data, error } = await supabase
-        .from('battle_state')
-        .delete()
-        .eq('id', battle.battleId)
-    if (error) {
-      console.log('error deleting battle')
-      console.log(error)
-      return false
-    }
-    else if (data) {
-      console.log('battle deleted')
-      console.log(data)
-      return true
-    }
-  }
-
-  useEffect(() => {
-    // emit to socket server
-    battle.userCode && sendCode(battle.userCode);
-  }, [battle.userCode]); 
-
-  useEffect(() => {
-    sendProgress(battle.userProgress);
-  }, [battle.userProgress])
 
   return (
     <div className="flex flex-col min-h-screen items-center justify-center"> 

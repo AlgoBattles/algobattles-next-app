@@ -75,8 +75,6 @@ export default function Home() {
   const socketRef = useRef<Socket | null>(null);
   const lobbyRoomId: string = 'l' + id;
 
-  console.log('lobby room id is', lobbyRoomId)
-
   useEffect(() => {
     // connect to socket server
     const serverURL = 'http://localhost:8081';

@@ -26,7 +26,7 @@ export async function pullBattleStateFromDB(user: User, battle: Battle, setBattl
                 funcName: dbResult.func_name,
                 templateCode: dbResult.template_code,
                 testCasesObj: dbResult.test_cases_json,
-                userRole: 'leader',
+                userRole: 'p1',
                 userId: dbResult.user1_id,
                 opponentId: dbResult.user2_id,
                 userCode: dbResult.user1_code,
@@ -48,7 +48,7 @@ export async function pullBattleStateFromDB(user: User, battle: Battle, setBattl
                 funcName: dbResult.func_name,
                 templateCode: dbResult.template_code,
                 testCasesObj: dbResult.test_cases_json,
-                userRole: 'follower',
+                userRole: 'p2',
                 userId: dbResult.user2_id,
                 opponentId: dbResult.user1_id,
                 userCode: dbResult.user2_code,
@@ -69,7 +69,7 @@ export async function pullBattleStateFromDB(user: User, battle: Battle, setBattl
   }
   
 export async function pushBattleStateToDB(user, battle) {
-    if (battle.userRole === 'leader') {
+    if (battle.userRole === 'p1') {
         const { data, error } = await supabase
             .from('battle_state')
             .update({
@@ -85,7 +85,7 @@ export async function pushBattleStateToDB(user, battle) {
                 return false
             }
     }
-    else if (battle.userRole === 'follower') {
+    else if (battle.userRole === 'p2') {
         const { data, error } = await supabase
             .from('battle_state')
             .update({
