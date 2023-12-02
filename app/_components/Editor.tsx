@@ -64,16 +64,16 @@ const AceEditor = () => {
     //   userId: user.username,
     //   funcName: battle.funcName})
 
-    const result = await fetch('http://localhost:8080/runCode', {
+    const result = await fetch('http://localhost:8081/execute', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
           },
         body: JSON.stringify({
             code: userCode,
-            testCases: JSON.stringify(testCasesArray),
-            userId: user.username,
-            funcName: battle.funcName
+            testCases: JSON.stringify(testCasesArray), 
+            funcName: battle.funcName,
+            language: user.preferredLanguage
         })
     })
       // sync the state with db and update user progress anytime someone runs code
