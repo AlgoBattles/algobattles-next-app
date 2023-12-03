@@ -39,21 +39,13 @@ export default function Home() {
 
   return (
     <div className="flex flex-col" style={{ height: `${divHeight}px`}}>
-      <div className="absolute top-0 right-0 flex justify-center items-center">
-        {inviteUsername && inviteAvatar && <div className="flex flex-row bg-gray-800 w-[400px] h-[100px] p-6 rounded-lg border-[1px] border-gray-700">
-            <div>{inviteAvatar}</div>
-            <div>{inviteUsername}</div>
-            <Link href={'home/waitingRoom/join'}>
-              <Button variant="outlined" className="ml-3 border border-gray-300 px-4 py-2 text-white">Review Challenge</Button>
-            </Link>
-        </div>
-        }
+      <div className="absolute top-0 right-0 flex justify-center items-center"> 
       </div>
       <div className="flex justify-center items-center flex-grow">
         <Link href="home/battle">
           <Button variant="outlined" className="mr-3 border border-gray-300 px-4 py-2 text-white">Play Random</Button>
         </Link>
-        <Link href="home/waitingRoom/sendInvite">
+        <Link href="/home/waitingRoom/sendInvite">
         <Button variant="outlined" className="mr-3 border border-gray-300 px-4 py-2 text-white">Play A Friend</Button>
         </Link>
       </div>

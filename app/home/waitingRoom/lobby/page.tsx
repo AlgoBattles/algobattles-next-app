@@ -94,6 +94,7 @@ export default function Home() {
         // console.log('opponent id in socket receiver is', opponentId)
         if (action === 'start battle'){
           const { battle_id, algo_id } = message;
+          localStorage.clear();
           router.push(`/home/battle?id=${battle_id}`)
         }
     });

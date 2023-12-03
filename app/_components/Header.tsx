@@ -116,9 +116,11 @@ const handleSignOut = async () => {
 
   return (
     <div style={{ borderBottom: '1px solid #ccc', position: 'relative' }}>
-      <h1 style={{ fontFamily: 'LuckiestGuy', fontSize: '40px', textAlign: 'left', width: '50%', marginTop: '20px', marginLeft: '20px' }}>
+      <Link href="/home">
+      <h1 style={{ fontFamily: 'LuckiestGuy', fontSize: '40px', textAlign: 'left', width: '25%', marginTop: '20px', marginLeft: '20px' }}>
         AlgoBattles
       </h1>
+      </Link>
       <div style={{ position: 'absolute', top: 0, right: 0, display: 'flex', alignItems: 'center', height: '100%' }}>
         <div 
         onMouseEnter={() => setShowMailComponent(true)}
