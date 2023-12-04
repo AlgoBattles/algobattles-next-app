@@ -60,16 +60,29 @@ const AceEditor = () => {
             language: user.preferredLanguage,
             battleId: battle.battleId,
             userNumber: battle.userRole,
+            userId: user.UID,
         })
     })
     const data = await result.json()
-      // update test case results in state 
+      // if no errors, update test case results in state 
       if (data.run.code === 0) {
-        const output = JSON.parse(data.run.output.replace(/'/g, '"').replace(/undefined/g, 'null'))
-        const results = output.map((item: any, index: number) => {
-          return item[0]
-        })
-        setBattle(prevBattle => ({...prevBattle, userResults: results, userProgress: data.progress, testOutput: output[0][0].toString()}))
+        // check for game over
+        if (data.progress < 100) {
+          const output = JSON.parse(data.run.output.replace(/'/g, '"').replace(/undefined/g, 'null'))
+          const results = output.map((item: any, index: number) => {
+            return item[0]
+          })
+          setBattle(prevBattle => ({...prevBattle, userResults: results, userProgress: data.progress, testOutput: output[0][0].toString()}))
+        }
+        // game over
+        else if (data.progress === 100) {
+          console.log('setting game over')
+          const output = JSON.parse(data.run.output.replace(/'/g, '"').replace(/undefined/g, 'null'))
+          const results = output.map((item: any, index: number) => {
+            return item[0]
+          }) 
+          setBattle(prevBattle => ({...prevBattle, gameOver: true, userWon: true, battleuserResults: results, userProgress: data.progress, testOutput: output[0][0].toString()})) 
+        }
       }
       // set error text in state
       else if (data.run.code === 1) {

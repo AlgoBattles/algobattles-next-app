@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter } from 'next/navigation'
 import { useUser } from '../_contexts/UserContext';
+import { useInvites } from '../_contexts/InvitesContext';
 import { useHeaderHeight } from '../_contexts/HeaderContext';
 
 // import type { Database } from '@/lib/database.types'
@@ -19,6 +20,8 @@ export default function Home() {
 
   const supabase = createClientComponentClient<Database>()
   const router = useRouter()
+
+  const invites = useInvites();
 
 
 

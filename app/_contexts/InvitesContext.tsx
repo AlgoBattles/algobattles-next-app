@@ -6,18 +6,20 @@ import { useUser } from './UserContext';
 interface Invite {
   id: string;
   sender: string;
+  senderUsername: string;
+  senderAvatar: string;
   recipient: string;
 }
 
 interface InvitesContextProps {
   invites: Invite[];
-  addInvite: (id: string, sender:string, recipient: string) => void;
+  addInvite: (id: string, sender:string, recipient: string, senderUsername: string, senderAvatar: string) => void;
   removeInvite: (id: string) => void;
 }
 
 interface InvitesProviderProps {
     children: ReactNode;
-  }
+}
 
 export const InvitesContext = createContext<InvitesContextProps>({
   invites: [],
@@ -38,10 +40,18 @@ export const InvitesProvider: React.FC<InvitesProviderProps> = ({ children }) =>
           .select()
           .eq('recipient_id', userAuthInfo.data.user.id)
       if (data && data.length >= 1) {
-          data.forEach((invite) => {
-            addInvite(invite.id, invite.sender_id, invite.recipient_id)
+          data.forEach(async (invite, index) => {
+            const { data: userData, error: userError } = await supabase
+              .from('users')
+              .select()
+              .eq('user_id', invite.sender_id)
+            if (userError) {
+              return
+            }
+            else if (userData && userData.length >= 1) {
+              addInvite(invite.id, invite.sender_id, invite.recipient_id, userData[0].username, userData[0].avatar)
+            }
           })
-          return data
       }
       else if (error) {
       console.log(error)
@@ -53,16 +63,13 @@ export const InvitesProvider: React.FC<InvitesProviderProps> = ({ children }) =>
 
   useEffect(() => {
     console.log('user is' + user)
-    
       console.log('user is inside' + user)
-      // pull invites from server / redis
+      // pull invites from postgres
       const checkForInvite = async () => {
           await retrieveInviteDetails();
       };
       checkForInvite();
-  
       // connect to socket server to listen for real time invites
-  
       const channels = supabase.channel('custom-all-channel')
       .on(
         'postgres_changes',
@@ -73,19 +80,15 @@ export const InvitesProvider: React.FC<InvitesProviderProps> = ({ children }) =>
         }
       )
       .subscribe()
-  
-  
-      // const ws = new WebSocket(`ws://localhost:9001?uuid=1234`);
-  
-      // ws.onopen = () => {
-      //   console.log('connected to ws server');
-      // };
-    
-    
   }, [user]);
 
-  const addInvite = (id: string, sender:string, recipient: string) => {
-    setInvites([...invites, { id, sender, recipient }]);
+  const addInvite = (id: string, sender:string, recipient: string, senderUsername: string, senderAvatar: string) => {
+    setInvites((prevInvites) => {
+      if (!prevInvites.some((invite) => invite.id === id)) {
+        return [...prevInvites, { id, sender, recipient, senderUsername, senderAvatar }];
+      }
+      return prevInvites;
+    });
   };
 
   const removeInvite = (inviteId: string) => {

@@ -71,7 +71,7 @@ const Battle = () => {
         if (action === 'opponent progress') {
           setBattle(prevBattle => ({...prevBattle, opponentProgress: message}));
           if (message === 100) {
-            setBattle(prevBattle => ({...prevBattle, gameOver: true}));
+            setBattle(prevBattle => ({...prevBattle, gameOver: true, userWon: false}));
           }
         }
       });
@@ -99,7 +99,7 @@ const Battle = () => {
   return (
     <div className="flex flex-col min-h-screen items-center justify-center"> 
     <div className="grid grid-cols-2 grid-rows-2 gap-4 p-4 w-full">
-      <GameOver show={battle.gameOver} winner={battleWinner}></GameOver> 
+      <GameOver show={battle.gameOver} userWon={battle.userWon}></GameOver> 
       <Editor></Editor>
       <OpponentEditor></OpponentEditor>
       <TestCases></TestCases>

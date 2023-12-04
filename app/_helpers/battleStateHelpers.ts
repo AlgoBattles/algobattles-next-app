@@ -6,18 +6,15 @@ import { User } from '../_types/userTypes'
 const supabase = createClientComponentClient()
 
 export async function pullBattleStateFromDB(user: User, battle: Battle, setBattle: (battle: Battle) => void, battleId: number) {
-    console.log('setting battle')
-    // console.log('battle', battle)
     const { data, error } = await supabase
         .from('battle_state')
         .select()
         .eq('id', battleId);
-    console.log(data)
+
     if (data && data.length >= 1) {
         console.log('setting battle state', data)
         const dbResult = data[0]
         if (dbResult.user1_id === user.UID) {
-            console.log ('user is leader')
             setBattle(({
                 ...battle,
                 battleId: dbResult.id,
@@ -35,11 +32,11 @@ export async function pullBattleStateFromDB(user: User, battle: Battle, setBattl
                 opponentProgress: dbResult.user2_progress,
                 userResults: dbResult.user1_results,
                 opponentResults: dbResult.user2_results,
-                gameOver: dbResult.game_over,
+                gameOver: dbResult.battle_active ? false : true,
+                userWon: dbResult.battle_winner === user.UID ? true : false
               }));
         }
         else if (dbResult.user2_id === user.UID) {
-            console.log ('user is follower')
             setBattle(({
                 ...battle,
                 battleId: dbResult.id,
@@ -57,7 +54,8 @@ export async function pullBattleStateFromDB(user: User, battle: Battle, setBattl
                 opponentProgress: dbResult.user1_progress,
                 userResults: dbResult.user2_results,
                 opponentResults: dbResult.user1_results,
-                gameOver: dbResult.game_over,
+                gameOver: dbResult.battle_active ? false : true,
+                userWon: dbResult.battle_winner === user.UID ? true : false
               }));
         }
         return true

@@ -29,24 +29,7 @@ const Header = () => {
   const router = useRouter()
 
 const MailComponent = () => {
-    const [mailData, setMailData] = useState<{ id: number, sender: UserData }[]>([]);
-    useEffect(() => {
-        const fetchData = async () => {
-          const data = await Promise.all(
-            invites.map(async (invite) => {
-              const sender = await getUserInfo(invite.sender);
-              return {
-                id: invite.id,
-                sender: sender
-              };
-            })
-          );
-          setMailData(data);
-        };
-        if (invites && invites.length >= 1) {
-          fetchData();
-        }
-      }, [invites]);
+
 
       const [showJoinButton, setShowJoinButton] = useState(false);
 
@@ -56,8 +39,9 @@ const MailComponent = () => {
           onMouseLeave={() => setShowMailComponent(false)}
         >
           <div className="absolute top-2/3 right-10 w-64 h-96 bg-gray-800 border border-gray-700 rounded-lg p-4">
-            {mailData.map((item) => (
+            {invites && invites.map((item) => (
             <div
+            key={item.id + 1000}
             className="flex flex-row items-center"
             style={{ position: 'relative' }}
             onMouseEnter={(e) => {
@@ -72,9 +56,9 @@ const MailComponent = () => {
               }
             }
           >
-              <img src={item.sender && `/${item.sender.avatar}`} alt="avatar" className="w-10 h-10 rounded-full mr-2" />
+              <img src={item.sender && `/${item.senderAvatar}`} alt="avatar" className="w-10 h-10 rounded-full mr-2" />
               <div className="flex flex-col">
-                <div className="font-bold">{item.sender && item.sender.username}</div>
+                <div className="font-bold">{item.sender && item.senderUsername}</div>
                 <div className="text-sm text-gray-500">invited you to a battle</div>
               </div>
               {showJoinButton && (
@@ -117,9 +101,11 @@ const handleSignOut = async () => {
   return (
     <div style={{ borderBottom: '1px solid #ccc', position: 'relative' }}>
       <Link href="/home">
+      <div className='max-w-20' style={{ display: 'inline-block' }}>
       <h1 style={{ fontFamily: 'LuckiestGuy', fontSize: '40px', textAlign: 'left', width: '25%', marginTop: '20px', marginLeft: '20px' }}>
         AlgoBattles
       </h1>
+      </div>
       </Link>
       <div style={{ position: 'absolute', top: 0, right: 0, display: 'flex', alignItems: 'center', height: '100%' }}>
         <div 

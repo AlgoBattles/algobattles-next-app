@@ -29,4 +29,5 @@ export interface Battle {
   userProgress: number;
   opponentProgress: number;
   gameOver: boolean;
+  userWon: boolean | null;
 }

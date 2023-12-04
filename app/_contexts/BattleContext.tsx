@@ -1,7 +1,5 @@
 "use client"
 import React, { createContext, useEffect, useState, useContext, ReactNode } from 'react';
-import { Result, TestCase } from '../_types/battleTypes';
-import { useUser } from '../_contexts/UserContext';
 import { Battle } from '../_types/battleTypes';
 
 interface BattleContextType {
@@ -28,9 +26,11 @@ const defaultBattleContext: BattleContextType = {
       opponentCode: '',
       userResults: null,
       opponentResults: null,
+      testOutput: null,
       userProgress: 0,
       opponentProgress: 0,
       gameOver: false,
+      userWon: null,
     },
     setBattle: () => {},
   };
