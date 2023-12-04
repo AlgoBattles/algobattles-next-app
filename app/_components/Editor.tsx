@@ -62,13 +62,20 @@ const AceEditor = () => {
             userNumber: battle.userRole,
         })
     })
+    const data = await result.json()
       // update test case results in state 
-      const data = await result.json()
-      const output = JSON.parse(data.run.output.replace(/undefined/g, 'null'))
-      const results = output.map((item: any, index: number) => {
-        return item[0]
-      })
-      setBattle(prevBattle => ({...prevBattle, userResults: results, userProgress: data.progress}))
+      if (data.run.code === 0) {
+        const output = JSON.parse(data.run.output.replace(/'/g, '"').replace(/undefined/g, 'null'))
+        const results = output.map((item: any, index: number) => {
+          return item[0]
+        })
+        setBattle(prevBattle => ({...prevBattle, userResults: results, userProgress: data.progress, testOutput: output[0][0].toString()}))
+      }
+      // set error text in state
+      else if (data.run.code === 1) {
+        const results = null;
+        setBattle(prevBattle => ({...prevBattle, userResults: results, userProgress: 0, testOutput: data.run.stderr}))
+      }
   }
 
   useEffect(() => {

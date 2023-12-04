@@ -24,6 +24,7 @@ export interface Battle {
   userCode: string;
   opponentCode: string;
   userResults: Result[] | null;
+  testOutput: string | null,
   opponentResults: Result[] | null;
   userProgress: number;
   opponentProgress: number;

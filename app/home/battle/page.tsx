@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import Editor from '../../_components/Editor';
 import OpponentEditor from '../../_components/OpponentEditor';
 import TestCases from '../../_components/TestCases';
+import OutputConsole from '@/app/_components/Output';
 import GameOver from '../../_components/GameOverModal';
 import { createClient } from '@supabase/supabase-js'
 import io from 'socket.io-client';
@@ -102,7 +103,8 @@ const Battle = () => {
       <Editor></Editor>
       <OpponentEditor></OpponentEditor>
       <TestCases></TestCases>
-      <Button onClick={printBattleState}>TEST</Button>
+      <OutputConsole></OutputConsole>
+      {/* <Button onClick={printBattleState}>TEST</Button> */}
     </div>
     </div>
     );
