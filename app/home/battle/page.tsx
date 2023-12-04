@@ -30,7 +30,7 @@ const Battle = () => {
   useEffect(() => {
     const setBattleState = async () => {
       if (user.UID && !battle.algoPrompt) {
-        const result = await pullBattleStateFromDB(user, battle, setBattle);
+        const result = await pullBattleStateFromDB(user, battle, setBattle, Number(battleId));
         if (!result) {
           router.push('/home')
         }
@@ -52,7 +52,8 @@ const Battle = () => {
     const serverURL = 'http://localhost:8081';
     const socket = io(serverURL, {
       query: {
-        roomId: battleRoomId
+        roomId: battleRoomId,
+        userId: user.UID
     }
     });
     socket.on('connect', () => {

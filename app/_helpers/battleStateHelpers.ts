@@ -5,13 +5,13 @@ import { User } from '../_types/userTypes'
 
 const supabase = createClientComponentClient()
 
-export async function pullBattleStateFromDB(user: User, battle: Battle, setBattle: (battle: Battle) => void) {
+export async function pullBattleStateFromDB(user: User, battle: Battle, setBattle: (battle: Battle) => void, battleId: number) {
     console.log('setting battle')
     // console.log('battle', battle)
     const { data, error } = await supabase
         .from('battle_state')
         .select()
-        .or(`user1_id.eq.${user.UID},user2_id.eq.${user.UID}`);
+        .eq('id', battleId);
     console.log(data)
     if (data && data.length >= 1) {
         console.log('setting battle state', data)
