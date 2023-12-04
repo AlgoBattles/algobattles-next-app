@@ -62,10 +62,13 @@ const AceEditor = () => {
             userNumber: battle.userRole,
         })
     })
-      // sync the state with db and update user progress anytime someone runs code
+      // update test case results in state 
       const data = await result.json()
-      console.log('result is', data)
-      
+      const output = JSON.parse(data.run.output.replace(/undefined/g, 'null'))
+      const results = output.map((item: any, index: number) => {
+        return item[0]
+      })
+      setBattle(prevBattle => ({...prevBattle, userResults: results, userProgress: data.progress}))
   }
 
   useEffect(() => {

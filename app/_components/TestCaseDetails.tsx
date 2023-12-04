@@ -46,7 +46,7 @@ const TabComponent = () => {
         <div className="">
             <label className="text-white text-sm">received =</label>
         </div>
-        <div className="p-2 w-full rounded-md bg-gray-800 text-white">{userResults && JSON.stringify(userResults[Number(selectedTab.slice(-1)) - 1].received)}</div>
+        <div className="p-2 w-full rounded-md bg-gray-800 text-white">{userResults && JSON.stringify(userResults[Number(selectedTab.slice(-1)) - 1])}</div>
       </div>
     </div>
     }

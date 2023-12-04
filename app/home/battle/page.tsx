@@ -48,38 +48,40 @@ const Battle = () => {
 
   
   useEffect(() => {
-    // connect to socket server
-    const serverURL = 'http://localhost:8081';
-    const socket = io(serverURL, {
-      query: {
-        roomId: battleRoomId,
-        userId: user.UID
-    }
-    });
-    socket.on('connect', () => {
-      console.log('connected to socket server');
-    });
-
-    socket.on('message', ({message, action}) => {
-      console.log('Received message:', message);
-      console.log('Received action:', action);
-      if (action === 'player code') {
-        setBattle(prevBattle => ({...prevBattle, opponentCode: message}));
+    if (user.UID) {
+      // connect to socket server
+      const serverURL = 'http://localhost:8081';
+      const socket = io(serverURL, {
+        query: {
+          roomId: battleRoomId,
+          userId: user.UID
       }
-      if (action === 'opponent progress') {
-        setBattle(prevBattle => ({...prevBattle, opponentProgress: message}));
-        if (message === 100) {
-          setBattle(prevBattle => ({...prevBattle, gameOver: true}));
+      });
+      socket.on('connect', () => {
+        console.log('connected to socket server');
+      });
+  
+      socket.on('message', ({message, action}) => {
+        console.log('Received message:', message);
+        console.log('Received action:', action);
+        if (action === 'player code') {
+          setBattle(prevBattle => ({...prevBattle, opponentCode: message}));
         }
-      }
-    });
-
-    socketRef.current = socket;
-    return () => {
-      socket.disconnect();
-    };
+        if (action === 'opponent progress') {
+          setBattle(prevBattle => ({...prevBattle, opponentProgress: message}));
+          if (message === 100) {
+            setBattle(prevBattle => ({...prevBattle, gameOver: true}));
+          }
+        }
+      });
+  
+      socketRef.current = socket;
+      return () => {
+        socket.disconnect();
+      };
+    }
     
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     // emit code changes to socket server
