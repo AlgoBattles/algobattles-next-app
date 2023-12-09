@@ -22,10 +22,6 @@ const theme = createTheme({
   },
 });
 
-
-
-import { getUserInfo } from '../_helpers/userHelpers';
-
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 const supabase = createClientComponentClient<Database>()
@@ -56,7 +52,7 @@ const MailComponent = () => {
           <div style={{
             width: 0,
             height: 0,
-            marginLeft: '46%',
+            marginLeft: '81%',
             marginTop: '5px',
             borderLeft: '15px solid transparent',
             borderRight: '15px solid transparent',
@@ -100,9 +96,9 @@ const InviteComponent = ({item}: {item: Invite}) => {
                 {showDeclineButton && (
                 <Link href={`/home/waitingRoom/lobby?id=${item.id}`}>
                   <Collapse in={showDeclineButton}>
-                    <Button className="bg-red-500 right-0 hover:bg-red-700 text-white font-bold font-md py-2.5 px-4 w-[100%] rounded-3xl">
+                    <button className="bg-red-500 right-0 hover:bg-red-700 text-white font-bold font-md py-2.5 px-4 w-[100%] rounded-3xl">
                   Decline
-                  </Button>
+                  </button>
                 </Collapse>
                 </Link>
               )}
@@ -115,14 +111,12 @@ const InviteComponent = ({item}: {item: Invite}) => {
                 ref={joinButtonRef}
                 >
                 {showJoinButton && (
-                
-                <Link href={`/home/waitingRoom/lobby?id=${item.id}`}>
-                
+                <Link href={`/home/waitingRoom/lobby?id=${item.id}`}>  
                 <Collapse in={showJoinButton}>
-                <Button className="bg-blue-500 right-0 hover:bg-blue-700 text-white font-bold font-md py-2.5 px-4 w-[100%] rounded-3xl"
+                <button className="bg-blue-500 right-0 hover:bg-blue-700 text-white font-bold font-md py-2.5 px-4 w-[100%] rounded-3xl"
                 >
                   Join
-                </Button>
+                </button>
                 </Collapse>
                 </Link>
               )}
@@ -133,6 +127,40 @@ const InviteComponent = ({item}: {item: Invite}) => {
 }
 
 const ProfileComponent = () => {
+  const { user, setUser } = useUser();
+  const setLang = async (newLanguage: string) => {
+   
+
+    const { data, error } = await supabase
+      .from('users')
+      .update(
+        { 
+        preferredLanguage: newLanguage
+        }
+      )
+      .eq('email', user.email)
+      .select()
+
+    if (data && data.length > 0) {
+      
+      setUser({ ...user, preferredLanguage: data[0].preferredLanguage })
+    }
+    else if (error) {
+      console.log(error)
+      return
+    }
+    
+
+
+    // const { data: testData, error: testError } = await supabase
+    //   .from('users')
+    //   .select()
+    // if (testData && testData.length > 0) {
+    //   console.log('test data is: ', testData)
+    // }
+
+  }
+
   return (
     <div
       onMouseEnter={() => setShowProfileComponent(true)}
@@ -142,16 +170,24 @@ const ProfileComponent = () => {
       <div style={{
             width: 0,
             height: 0,
-            marginLeft: '60%',
+            marginLeft: '80%',
             marginTop: '5px',
             borderLeft: '15px solid transparent',
             borderRight: '15px solid transparent',
             borderBottom: '20px solid #2d3748' // color equivalent to gray-800 in Tailwind
           }} />
       <div className="w-64 h-96 bg-gray-800 border border-gray-700 rounded-lg p-4">
-        {/* <div className="w-5 h-5 border-solid border-t-4 border-l-4 border-r-4 bg-red"></div> */}
-        <Button onClick={handleSignOut} variant='outlined' className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 w-[100%] rounded-3xl">
-          Sign Out </Button>
+        
+        <div className="flex flex-col items-center">
+          <img src={'/' + user.avatar} className="h-[100px] rounded-3xl"/>
+          <div className="text-2xl font-semibold mt-2">{user.username}</div>
+        </div>
+        <div className="mt-5 ml-3 flex gap-2">
+        <button onClick={async () => setLang('javascript')} className={`px-4 py-2 text-[10pt] font-semibold rounded-3xl ${user.preferredLanguage === 'javascript' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-blue-500'}`}>JavaScript</button>
+        <button onClick={async () => setLang('python')} className={`px-4 py-2 text-[10pt] font-semibold rounded-3xl ${user.preferredLanguage === 'python' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-blue-500'}`}>Python</button>
+        </div>
+        <button onClick={handleSignOut} className="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 w-[100%] rounded-3xl mt-10">
+          Sign Out </button>
       </div>
     </div>
   );
@@ -177,14 +213,14 @@ const handleSignOut = async () => {
         onMouseEnter={() => setShowMailComponent(true)}
         onMouseLeave={() => setShowMailComponent(false)}
         className="mr-4 cursor-pointer flex">
-        <FaEnvelope 
+        <FaEnvelope size={20}
         />
         </div>
         <div className="mr-4 cursor-pointer flex flex-row items-center"
           onMouseEnter={() => setShowProfileComponent(true)}
           onMouseLeave={() => setShowProfileComponent(false)}>
-        <FaUser className="mr-2"/>
-        <div style={{ width: '100px', height: '20px', marginBottom: '4px'}}>{user.username.length > 1 && user.username || <Skeleton baseColor="#202020" highlightColor='#808080' borderRadius={0}/>}</div>
+        <div className='mr-2'>{user.avatar ? <img src={'/' + user.avatar} className="h-[25px] rounded-3xl"/>: <Skeleton baseColor="#202020" highlightColor='#808080' circle={true} height={25} width={25} />}</div>
+        {/* <div style={{ width: '100px', height: '20px', marginBottom: '7px', marginLeft: '2px', fontSize: 18, fontWeight: 'semibold'}}>{user.username.length > 1 && user.username || <Skeleton baseColor="#202020" highlightColor='#808080' borderRadius={0}/>}</div> */}
         </div>
       </div>
       {showMailComponent && <MailComponent />}
