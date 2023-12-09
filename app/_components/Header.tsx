@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FaEnvelope, FaUser } from 'react-icons/fa';
 import { useUser } from '../_contexts/UserContext';
 import { useInvites } from '../_contexts/InvitesContext';
@@ -9,6 +9,20 @@ import { Button } from '@mui/material';
 import { Invite } from '../_types/inviteTypes'
 import Link from 'next/link'
 import { v4 as uuidv4 } from 'uuid';
+import Collapse from '@mui/material/Collapse';
+import Slide from '@mui/material/Slide';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const theme = createTheme({
+  transitions: {
+    easing: {
+      easeIn: 'cubic-bezier(0.4, 0, 1, 1)',
+      easeOut: 'cubic-bezier(0.0, 0, 0.2, 1)',
+    },
+  },
+});
+
+
 
 import { getUserInfo } from '../_helpers/userHelpers';
 
@@ -32,6 +46,7 @@ const Header = () => {
 
 const MailComponent = () => {
       return (
+        <ThemeProvider theme={theme}>
         <div
           key={uuidv4()}
           onMouseEnter={() => setShowMailComponent(true)}
@@ -53,6 +68,7 @@ const MailComponent = () => {
             ))}
           </div>
         </div>
+        </ThemeProvider>
       );
     };
 
@@ -60,11 +76,14 @@ const InviteComponent = ({item}: {item: Invite}) => {
   const [showJoinButton, setShowJoinButton] = useState(false);
   const [showDeclineButton, setShowDeclineButton] = useState(false);
 
+  const joinButtonRef = useRef(null);
+  const declineButtonRef = useRef(null);
+
   return (
     <div
             key={uuidv4()}
             className="flex flex-row items-center"
-            style={{ position: 'relative' }}
+            style={{ position: 'relative', marginBottom: '10px'}}
           >
               <img src={item.sender && `/${item.senderAvatar}`} alt="avatar" className="w-10 h-10 rounded-full mr-2" />
               <div className="flex flex-col">
@@ -76,13 +95,15 @@ const InviteComponent = ({item}: {item: Invite}) => {
                 onMouseLeave={() => setShowDeclineButton(false)}
                 className="absolute left-0 h-full w-1/2"
                 style={{ top: '50%', transform: 'translateY(-50%)' }}
+                ref={declineButtonRef}
                 >
                 {showDeclineButton && (
                 <Link href={`/home/waitingRoom/lobby?id=${item.id}`}>
-                <button
-                >
+                  <Collapse in={showDeclineButton}>
+                    <Button className="bg-red-500 right-0 hover:bg-red-700 text-white font-bold font-md py-2.5 px-4 w-[100%] rounded-3xl">
                   Decline
-                </button>
+                  </Button>
+                </Collapse>
                 </Link>
               )}
               </div>
@@ -91,13 +112,18 @@ const InviteComponent = ({item}: {item: Invite}) => {
                 onMouseLeave={() => setShowJoinButton(false)}
                 className="absolute right-0 h-full w-1/2"
                 style={{ top: '50%', transform: 'translateY(-50%)' }}
+                ref={joinButtonRef}
                 >
                 {showJoinButton && (
+                
                 <Link href={`/home/waitingRoom/lobby?id=${item.id}`}>
-                <button
+                
+                <Collapse in={showJoinButton}>
+                <Button className="bg-blue-500 right-0 hover:bg-blue-700 text-white font-bold font-md py-2.5 px-4 w-[100%] rounded-3xl"
                 >
-                  Join Lobby
-                </button>
+                  Join
+                </Button>
+                </Collapse>
                 </Link>
               )}
               </div>

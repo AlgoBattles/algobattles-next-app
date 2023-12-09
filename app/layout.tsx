@@ -6,6 +6,7 @@ import { UserProvider } from './_contexts/UserContext';
 import { BattleProvider } from './_contexts/BattleContext';
 import { InvitesProvider } from './_contexts/InvitesContext';
 
+
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -20,6 +21,7 @@ export default function RootLayout({
 }) {
 
   return (
+    
     <InvitesProvider>
     <BattleProvider>
     <UserProvider>
@@ -34,5 +36,6 @@ export default function RootLayout({
     </UserProvider>
     </BattleProvider>
     </InvitesProvider>
+    
   )
 }

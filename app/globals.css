@@ -49,6 +49,31 @@ body {
     rgb(var(--background-start-rgb)); */
 }
 
+/* .ribbon {
+  transform: rotate(-45deg);
+  transform-origin: 0 0;
+}
+
+.ribbon:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  width: 100%;
+  height: 10px;
+  background: inherit;
+}
+
+.ribbon:after {
+  content: '';
+  position: absolute;
+  right: -10px;
+  top: 0;
+  width: 10px;
+  height: 100%;
+  background: inherit;
+} */
+
 /* .bg-gold-gradient {
   background-image: radial-gradient(circle at center bottom, #47311d, transparent, black);
   border-radius: 50% 50% 0 0; /* Semi-circle at the bottom */
