@@ -58,10 +58,10 @@ const MailComponent = () => {
             borderRight: '15px solid transparent',
             borderBottom: '20px solid #2d3748' // color equivalent to gray-800 in Tailwind
           }} />
-          <div className="w-64 h-96 bg-gray-800 border border-gray-700 rounded-lg p-4 overflow-y-scroll">
-            {invites && invites.map((item) => (
+          <div className="w-64 h-90 bg-gray-800 border border-gray-700 rounded-lg p-4">
+            {invites.length > 0 ? invites.map((item) => (
               <InviteComponent key={uuidv4()} item={item} />
-            ))}
+            )) : <div className="text-white">No invites yet...</div>}
           </div>
         </div>
         </ThemeProvider>
@@ -74,6 +74,24 @@ const InviteComponent = ({item}: {item: Invite}) => {
 
   const joinButtonRef = useRef(null);
   const declineButtonRef = useRef(null);
+
+  const { invites, removeInvite } = useInvites();
+
+  const declineInviteHandler = async (id: number) => {
+    const { data, error } = await supabase
+      .from('battle_invites')
+      .delete()
+      .eq('id', id)
+      .select()
+    if (data) {
+      removeInvite(id)
+      console.log('invite declined')
+    }
+    else if (error) {
+      console.log(error)
+      return
+    }
+  }
 
   return (
     <div
@@ -94,13 +112,11 @@ const InviteComponent = ({item}: {item: Invite}) => {
                 ref={declineButtonRef}
                 >
                 {showDeclineButton && (
-                <Link href={`/home/waitingRoom/lobby?id=${item.id}`}>
                   <Collapse in={showDeclineButton}>
-                    <button className="bg-red-500 right-0 hover:bg-red-700 text-white font-bold font-md py-2.5 px-4 w-[100%] rounded-3xl">
+                    <button onClick={() => declineInviteHandler(item.id)} className="bg-red-500 right-0 hover:bg-red-700 text-white font-bold font-md py-2.5 px-4 w-[100%] rounded-3xl">
                   Decline
                   </button>
                 </Collapse>
-                </Link>
               )}
               </div>
               <div 
@@ -149,16 +165,6 @@ const ProfileComponent = () => {
       console.log(error)
       return
     }
-    
-
-
-    // const { data: testData, error: testError } = await supabase
-    //   .from('users')
-    //   .select()
-    // if (testData && testData.length > 0) {
-    //   console.log('test data is: ', testData)
-    // }
-
   }
 
   return (
@@ -176,7 +182,7 @@ const ProfileComponent = () => {
             borderRight: '15px solid transparent',
             borderBottom: '20px solid #2d3748' // color equivalent to gray-800 in Tailwind
           }} />
-      <div className="w-64 h-96 bg-gray-800 border border-gray-700 rounded-lg p-4">
+      <div className="w-64 h-90 bg-gray-800 border border-gray-700 rounded-lg p-4">
         
         <div className="flex flex-col items-center">
           <img src={'/' + user.avatar} className="h-[100px] rounded-3xl"/>

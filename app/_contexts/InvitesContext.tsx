@@ -4,7 +4,7 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useUser } from './UserContext';
 
 interface Invite {
-  id: string;
+  id: number;
   sender: string;
   senderUsername: string;
   senderAvatar: string;
@@ -13,8 +13,8 @@ interface Invite {
 
 interface InvitesContextProps {
   invites: Invite[];
-  addInvite: (id: string, sender:string, recipient: string, senderUsername: string, senderAvatar: string) => void;
-  removeInvite: (id: string) => void;
+  addInvite: (id: number, sender:string, recipient: string, senderUsername: string, senderAvatar: string) => void;
+  removeInvite: (id: number) => void;
 }
 
 interface InvitesProviderProps {
@@ -60,10 +60,7 @@ export const InvitesProvider: React.FC<InvitesProviderProps> = ({ children }) =>
 
     } 
   }
-
   useEffect(() => {
-    console.log('user is' + user)
-      console.log('user is inside' + user)
       // pull invites from postgres
       const checkForInvite = async () => {
           await retrieveInviteDetails();
@@ -82,7 +79,7 @@ export const InvitesProvider: React.FC<InvitesProviderProps> = ({ children }) =>
       .subscribe()
   }, [user]);
 
-  const addInvite = (id: string, sender:string, recipient: string, senderUsername: string, senderAvatar: string) => {
+  const addInvite = (id: number, sender:string, recipient: string, senderUsername: string, senderAvatar: string) => {
     setInvites((prevInvites) => {
       if (!prevInvites.some((invite) => invite.id === id)) {
         return [...prevInvites, { id, sender, recipient, senderUsername, senderAvatar }];
@@ -91,7 +88,7 @@ export const InvitesProvider: React.FC<InvitesProviderProps> = ({ children }) =>
     });
   };
 
-  const removeInvite = (inviteId: string) => {
+  const removeInvite = (inviteId: number) => {
     setInvites(invites.filter((invite) => invite.id !== inviteId));
   };
 

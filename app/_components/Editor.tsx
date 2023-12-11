@@ -20,9 +20,7 @@ const AceEditor = () => {
 
   const { user } = useUser();
   const { battle, setBattle } = useBattle();
-  
-  // {templateCode, userCode, setUserCode, testCases, setResults}: EditorProps
-  
+
   const { 
     templateCode, 
     testCasesObj, 
@@ -46,8 +44,6 @@ const AceEditor = () => {
 
 
   const runCode = async (code: string) => {
-
-
     const result = await fetch('http://localhost:8081/execute', {
         method: 'POST',
         headers: {

@@ -1,7 +1,5 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link'
-import Button from '@mui/material/Button';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 // import { useRouter } from 'next/navigation'
 import { useRouter } from 'next/navigation';
@@ -71,11 +69,6 @@ export default function Home() {
     }
   }
 
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    router.push('/')
-  }
-
   return (
     <div className="flex flex-col h-screen">
       <div className="flex justify-center items-center flex-grow">
@@ -91,7 +84,7 @@ export default function Home() {
               {error && !success && <div className="text-red-500 text-sm block">{error}</div>}
               {success && <div className="text-green-500 text-sm block">{success}</div>}
             </div>
-              <button onClick={handleSendInvite} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 w-[100%] rounded-3xl">
+              <button onClick={handleSendInvite} className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 w-[100%] rounded-3xl">
                   Send Invite
               </button>
       </div>

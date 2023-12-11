@@ -1,5 +1,5 @@
 export interface Invite {
-    id: string;
+    id: number;
     sender: string;
     senderUsername: string;
     senderAvatar: string;
