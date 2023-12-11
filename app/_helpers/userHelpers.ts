@@ -3,7 +3,7 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 const supabase = createClientComponentClient()
 
 export async function getUserInfo(userId: string) {
-    console.log('making call to supabase to retrieve user data')
+    
     const { data: userData, error: userError } = await supabase
             .from('users')
             .select()

@@ -20,7 +20,7 @@ export async function retrieveUserInfo(user: User, setUser: (user: User) => void
         .from('users')
         .select()
         .eq('user_id', user.UID)
-    console.log(data)
+    
     if (data && data.length >= 1) {
         setUser(({ ...user, email: data[0].email, avatar: data[0].avatar, username: data[0].username, preferredLanguage: data[0].preferredLanguage, UID: data[0].user_id }));
     }

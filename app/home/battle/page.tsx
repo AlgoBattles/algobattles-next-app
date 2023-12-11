@@ -1,6 +1,5 @@
 "use client"
 import React, { useEffect, useRef, useState } from 'react';
-import Button from '@mui/material/Button';
 import Editor from '../../_components/Editor';
 import OpponentEditor from '../../_components/OpponentEditor';
 import TestCases from '../../_components/TestCases';
@@ -59,12 +58,12 @@ const Battle = () => {
       }
       });
       socket.on('connect', () => {
-        console.log('connected to socket server');
+        // console.log('connected to socket server');
       });
   
       socket.on('message', ({message, action}) => {
-        console.log('Received message:', message);
-        console.log('Received action:', action);
+        // console.log('Received message:', message);
+        // console.log('Received action:', action);
         if (action === 'player code') {
           setBattle(prevBattle => ({...prevBattle, opponentCode: message}));
         }
@@ -91,7 +90,6 @@ const Battle = () => {
 
   const sendCode = (message: string) => {
     if (socketRef.current) {
-      console.log('sending code')
       socketRef.current.emit('message', {room: `${battleRoomId}`, action: 'player code', message: `${message}`});
     }
   }
@@ -103,8 +101,7 @@ const Battle = () => {
       <Editor></Editor>
       <OpponentEditor></OpponentEditor>
       <TestCases></TestCases>
-      <OutputConsole></OutputConsole>
-      {/* <Button onClick={printBattleState}>TEST</Button> */}
+      <OutputConsole></OutputConsole> 
     </div>
     </div>
     );

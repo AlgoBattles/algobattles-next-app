@@ -59,8 +59,6 @@ export default function Home() {
         }
       }
       }
-
-
   return (
     <div className="flex flex-col h-screen">
       <h1 style={{fontFamily: 'LuckiestGuy', fontSize: '50px', textAlign: 'left', width: '100%', marginTop: '20px', marginLeft: '20px'}} >AlgoBattles</h1>

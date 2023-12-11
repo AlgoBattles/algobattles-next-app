@@ -11,8 +11,7 @@ export async function pullBattleStateFromDB(user: User, battle: Battle, setBattl
         .select()
         .eq('id', battleId);
 
-    if (data && data.length >= 1) {
-        console.log('setting battle state', data)
+    if (data && data.length >= 1) { 
         const dbResult = data[0]
         if (dbResult.user1_id === user.UID) {
             setBattle(({

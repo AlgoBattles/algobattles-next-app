@@ -68,7 +68,7 @@ const AceEditor = () => {
           const results = output.map((item: any, index: number) => {
             return item[0]
           })
-          setBattle(prevBattle => ({...prevBattle, userResults: results, userProgress: data.progress, testOutput: output[0][0].toString()}))
+          setBattle(prevBattle => ({...prevBattle, userResults: results, userProgress: data.progress, testOutput: output[0][0] && output[0][0].toString()}))
         }
         // game over
         else if (data.progress === 100) {
@@ -77,7 +77,7 @@ const AceEditor = () => {
           const results = output.map((item: any, index: number) => {
             return item[0]
           }) 
-          setBattle(prevBattle => ({...prevBattle, gameOver: true, userWon: true, battleuserResults: results, userProgress: data.progress, testOutput: output[0][0].toString()})) 
+          setBattle(prevBattle => ({...prevBattle, gameOver: true, userWon: true, battleuserResults: results, userProgress: data.progress, testOutput: output[0][0] && output[0][0].toString()})) 
         }
       }
       // set error text in state
