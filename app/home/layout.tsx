@@ -1,5 +1,5 @@
 import '../globals.css'
-import Header from '../_components/Header';
+import Header from '../_components/Header'
 import React from 'react'
 
 export default function RootLayout ({
