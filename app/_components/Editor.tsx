@@ -31,7 +31,7 @@ const AceEditor = (): React.ReactElement => {
     return result
   }
 
-  const runCode = async (code: string) => {
+  const runCode = async (code: string): Promise<void> => {
     const result = await fetch('http://localhost:8081/execute', {
       method: 'POST',
       headers: {
@@ -39,7 +39,7 @@ const AceEditor = (): React.ReactElement => {
       },
       body: JSON.stringify({
         code: userCode,
-        testCases: JSON.stringify(testCasesArray), 
+        testCases: JSON.stringify(testCasesArray),
         funcName: battle.funcName,
         language: user.preferredLanguage,
         battleId: battle.battleId,

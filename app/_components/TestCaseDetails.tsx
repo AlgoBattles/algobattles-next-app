@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { useBattle } from '../_contexts/BattleContext';
 import type { TestCase, Result } from '../_types/battleTypes';
 
-const TabComponent = () => {
+const TabComponent = (): React.ReactElement => {
   const [selectedTab, setSelectedTab] = useState<number>(0);
   const { battle } = useBattle();
   const { testCasesObj, userResults }: { testCasesObj: Record<string, TestCase> | null, userResults: Result[] | null } = battle;
-
   return (
     <div>
     {testCasesObj !== null &&
@@ -23,28 +22,18 @@ const TabComponent = () => {
       ))}
       </div>
       <div>
-        <div className="mt-4">
-            <label className="text-grey text-med font-bold">Input</label>
-        </div>
+        <div className="mt-4 text-grey text-med font-bold">Input</div>
         {Object.keys(testCasesObj[`case${selectedTab + 1}`].input).map((key, index) => (
             <div key={index}>
-                <div className="">
-                    <label className="text-white text-sm">{`${key} =`}</label>
-                </div> 
+                <div className="text-white text-sm">{`${key} =`}</div>
                 <div className="p-2 w-full rounded-md bg-gray-800 text-white">{JSON.stringify(testCasesObj[`case${selectedTab + 1}`].input[key])}</div>
             </div>
         ))}
-        <div className="mt-4">
-            <label className="text-grey text-med font-bold">Output</label>
-        </div>
-        <div className="">
-            <label className="text-white text-sm">expected =</label>
-        </div>
+        <div className="mt-4 text-grey text-med font-bold">Output</div>
+        <div className="text-white text-sm">expected =</div>
         <div className="p-2 w-full rounded-md bg-gray-800 text-white">{JSON.stringify(testCasesObj[`case${selectedTab + 1}`].output.expected)}</div>
-        <div className="">
-            <label className="text-white text-sm">received =</label>
-        </div>
-        <div className="p-2 w-full rounded-md bg-gray-800 text-white">{userResults && JSON.stringify(userResults[selectedTab])}</div>
+        <div className="text-white text-sm">received =</div>
+        <div className="p-2 w-full rounded-md bg-gray-800 text-white">{userResults !== null && JSON.stringify(userResults[selectedTab])}</div>
       </div>
     </div>
     }

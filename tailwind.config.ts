@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        'luckiest-guy': ['"Luckiest Guy"', 'cursive'],
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
@@ -19,8 +22,7 @@ const config: Config = {
       },
       transitionProperty: {
         'transform': 'transform',
-      },
-      
+      } 
     },
   },
   plugins: [],

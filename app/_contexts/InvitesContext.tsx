@@ -32,54 +32,46 @@ export const InvitesProvider: React.FC<InvitesProviderProps> = ({ children }) =>
   const supabase = createClientComponentClient()
   const { user } = useUser();
 
-  const retrieveInviteDetails = async () => {
+  const retrieveInviteDetails = async (): Promise<void> => {
     const userAuthInfo = await supabase.auth.getUser();
-    if (userAuthInfo.data.user && userAuthInfo.data.user.id) {
-      const { data, error } = await supabase
-          .from('battle_invites')
-          .select()
-          .eq('recipient_id', userAuthInfo.data.user.id)
-      if (data && data.length >= 1) {
-          data.forEach(async (invite, index) => {
-            const { data: userData, error: userError } = await supabase
-              .from('users')
-              .select()
-              .eq('user_id', invite.sender_id)
-            if (userError) {
-              return
-            }
-            else if (userData && userData.length >= 1) {
-              addInvite(invite.id, invite.sender_id, invite.recipient_id, userData[0].username, userData[0].avatar)
-            }
-          })
+    if (userAuthInfo?.data?.user?.id) {
+      const { data } = await supabase
+        .from('battle_invites')
+        .select()
+        .eq('recipient_id', userAuthInfo.data.user.id)
+      if (data !== null && data.length >= 1) {
+        for (const invite of data) {
+          const { data: userData } = await supabase
+            .from('users')
+            .select()
+            .eq('user_id', invite.sender_id)
+          if (userData !== null && userData.length >= 1) {
+            addInvite(invite.id, invite.sender_id, invite.recipient_id, userData[0].username, userData[0].avatar)
+          }
+        }
       }
-      else if (error) {
-      console.log(error)
-      return
-      }
-
-    } 
+    }
   }
   useEffect(() => {
-      // pull invites from postgres
-      const checkForInvite = async () => {
-          await retrieveInviteDetails();
-      };
-      checkForInvite();
-      // connect to socket server to listen for real time invites
-      const channels = supabase.channel('custom-all-channel')
+    // pull invites from postgres
+    const checkForInvite = async (): Promise<void> => {
+      await retrieveInviteDetails();
+    };
+    checkForInvite().catch(console.error);
+    // connect to socket server to listen for real time invites
+    const channels = supabase.channel('custom-all-channel')
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'battle_invites' },
         (payload) => {
           console.log('Change received!', payload)
-          retrieveInviteDetails();
+          retrieveInviteDetails().catch(console.error)
         }
       )
       .subscribe()
   }, [user]);
 
-  const addInvite = (id: number, sender:string, recipient: string, senderUsername: string, senderAvatar: string) => {
+  const addInvite = (id: number, sender: string, recipient: string, senderUsername: string, senderAvatar: string) => {
     setInvites((prevInvites) => {
       if (!prevInvites.some((invite) => invite.id === id)) {
         return [...prevInvites, { id, sender, recipient, senderUsername, senderAvatar }];

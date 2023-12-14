@@ -38,7 +38,7 @@ const Header = (): React.ReactElement => {
           key={uuidv4()}
           onMouseEnter={() => { setShowMailComponent(true) }}
           onMouseLeave={() => { setShowMailComponent(false) }}
-          className='absolute top-12 right-10 w-64 h-96'>
+          className='absolute top-11 right-10 w-64 h-96'>
           <div style={{
             width: 0,
             height: 0,
@@ -146,7 +146,7 @@ const Header = (): React.ReactElement => {
     <div
       onMouseEnter={() => { setShowProfileComponent(true) }}
       onMouseLeave={() => { setShowProfileComponent(false) }}
-      className='absolute top-12 right-0 w-64 h-96'
+      className='absolute top-11 right-0 w-64 h-96'
     >
       <div style={{
         width: 0,
@@ -181,13 +181,13 @@ const Header = (): React.ReactElement => {
   return (
     <div className="border-b border-gray-300 relative">
       <Link href="/home">
-      <div className='max-w-20' style={{ display: 'inline-block' }}>
-      <h1 style={{ fontFamily: 'LuckiestGuy', fontSize: '40px', textAlign: 'left', width: '25%', marginTop: '20px', marginLeft: '20px' }}>
-        AlgoBattles
-      </h1>
-      </div>
+        <div className="max-w-20 inline-block">
+          <h1 className="font-luckiest-guy text-4xl text-left w-1/4 mt-5 ml-5 mb-2" style={{ fontFamily: 'LuckiestGuy' }}>
+            AlgoBattles
+          </h1>
+        </div>
       </Link>
-      <div style={{ position: 'absolute', top: 0, right: 0, display: 'flex', alignItems: 'center', height: '100%' }}>
+      <div className="absolute top-0 right-0 flex items-center h-full">
         <div
         onMouseEnter={() => { setShowMailComponent(true) }}
         onMouseLeave={() => { setShowMailComponent(false) }}

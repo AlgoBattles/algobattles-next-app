@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300&display=swap');
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -60,37 +63,3 @@ body {
       rgb(131, 109, 52) 0%,
       rgba(0, 0, 0, 1) 100%);
 }
-
-/* .ribbon {
-  transform: rotate(-45deg);
-  transform-origin: 0 0;
-}
-
-.ribbon:before {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: -10px;
-  width: 100%;
-  height: 10px;
-  background: inherit;
-}
-
-.ribbon:after {
-  content: '';
-  position: absolute;
-  right: -10px;
-  top: 0;
-  width: 10px;
-  height: 100%;
-  background: inherit;
-} */
-
-/* .bg-gold-gradient {
-  background-image: radial-gradient(circle at center bottom, #47311d, transparent, black);
-  border-radius: 50% 50% 0 0; /* Semi-circle at the bottom */
-  /* height: 0;
-  padding-bottom: 50%;  */
-/* } */ 
-
-

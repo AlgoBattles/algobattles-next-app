@@ -11,7 +11,7 @@ const ProgressBar = ({ percentage }: { percentage: number }) => {
         </div>
         </div>
         <div className="flex-1 h-3.5 bg-gray-800 rounded-xl relative overflow-hidden">
-          <div 
+          <div
             className="absolute inset-y-0 left-0 bg-blue-500 rounded-xl" 
             style={{ width: `${percentage}%` }}
           ></div>
