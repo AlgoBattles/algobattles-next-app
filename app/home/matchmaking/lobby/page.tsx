@@ -15,7 +15,6 @@ export default function Lobby (): React.ReactElement {
   const [opponentJoined, setOpponentJoined] = useState<boolean>(false);
   const [opponentReady, setOpponentReady] = useState<boolean>(false);
   const [opponentLanguage, setOpponentLanguage] = useState<string | null>(null);
-
   const [ready, setReady] = useState<boolean>(false);
 
   const supabase = createClientComponentClient()
@@ -31,7 +30,7 @@ export default function Lobby (): React.ReactElement {
     if (data !== null && data.length >= 1) {
       console.log('data is', data)
       const tempOpponentId = data[0].recipient_id === user.UID ? data[0].sender_id : data[0].recipient_id
-      const { data: userData, error: userError } = await supabase
+      const { data: userData } = await supabase
         .from('users')
         .select()
         .eq('user_id', tempOpponentId)

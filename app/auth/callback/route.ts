@@ -19,32 +19,14 @@ export async function GET(request: NextRequest) {
   return NextResponse.redirect(requestUrl.origin + '/signup/final')
 }
 
-// export async function POST(req: NextRequest) {
-//     const cookieStore = cookies()
-//     const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
-  
-//     // Check if we have a session
-//     const {
-//       data: { session },
-//     } = await supabase.auth.getSession()
-  
-//     if (session) {
-//       await supabase.auth.signOut()
-//     }
-  
-//     return NextResponse.redirect(new URL('/', req.url), {
-//       status: 302,
-//     })
-//   }
+export async function POST(request: Request) {
+  const requestUrl = new URL(request.url)
+  const cookieStore = cookies()
+  const supabase = createRouteHandlerClient<Database>({ cookies: () => cookieStore })
 
-  export async function POST(request: Request) {
-    const requestUrl = new URL(request.url)
-    const cookieStore = cookies()
-    const supabase = createRouteHandlerClient<Database>({ cookies: () => cookieStore })
-  
-    await supabase.auth.signOut()
-  
-    return NextResponse.redirect(`${requestUrl.origin}/login`, {
-      status: 301,
-    })
-  }
+  await supabase.auth.signOut()
+
+  return NextResponse.redirect(`${requestUrl.origin}/login`, {
+    status: 301,
+  })
+}
