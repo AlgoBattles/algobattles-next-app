@@ -2,12 +2,9 @@
 import Head from 'next/head';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link'
-import Button from '@mui/material/Button';
-import { Email } from '@mui/icons-material';
 
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter } from 'next/navigation'
-import type { Database } from '@/lib/database.types'
 
 export default function Home (): React.ReactElement {
   const [selected, setSelected] = useState('signup')
@@ -15,7 +12,7 @@ export default function Home (): React.ReactElement {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const router = useRouter()
-  const supabase = createClientComponentClient<Database>()
+  const supabase = createClientComponentClient()
 
   const handleEmailInput = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setEmail(event.target.value)

@@ -21,7 +21,7 @@ const Battle = () => {
   const battleId = searchParams.get('id')
 
   useEffect(() => {
-    const setBattleState = async () => {
+    const setBattleState = async (): Promise<void> => {
       if (user.UID !== '' && battle.algoPrompt !== '') {
         const result = await pullBattleStateFromDB(user, battle, setBattle, Number(battleId));
         if (result === null) {
@@ -58,7 +58,6 @@ const Battle = () => {
           }
         }
       });
-  
       socketRef.current = socket;
       return () => {
         socket.disconnect();

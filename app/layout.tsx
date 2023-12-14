@@ -2,25 +2,20 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Head from 'next/head';
+import React from 'react'
 import { UserProvider } from './_contexts/UserContext';
 import { BattleProvider } from './_contexts/BattleContext';
 import { InvitesProvider } from './_contexts/InvitesContext';
-
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'AlgoBattles',
-  description: 'Destroy your friends',
+  description: 'Destroy your friends'
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-
-  return ( 
+export default function RootLayout ({ children }: { children: React.ReactNode }): JSX.Element {
+  return (
     <InvitesProvider>
     <BattleProvider>
     <UserProvider>
