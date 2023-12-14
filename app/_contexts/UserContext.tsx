@@ -1,8 +1,8 @@
-"use client"
-import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
+'use client'
+import React, { createContext, useState, useContext, useEffect, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation'
 import { checkAuthStatus, retrieveUserInfo } from '../_helpers/authHelpers';
-import { User } from '../_types/userTypes';
+import type { User } from '../_types/userTypes';
 
 interface UserContextType {
   user: User;
@@ -19,7 +19,7 @@ const defaultUserContext: UserContextType = {
     username: '',
     preferredLanguage: '',
     avatar: '',
-    UID: '',
+    UID: ''
   },
   setUser: () => {},
 };
@@ -32,14 +32,12 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
   useEffect(() => {
     const getUserInfo = async () => {
-      if (!user.UID) {
+      if (user.UID === '') {
         const loggedIn = await checkAuthStatus(user, setUser);
-        if (!loggedIn) {
+        if (!loggedIn || loggedIn === null) {
           router.push('/')
-          return
         }
-      }
-      else if (user.UID && !user.username) {
+      } else if (user.UID !== null && user.username !== null) {
         await retrieveUserInfo(user, setUser);
       }
     };
@@ -53,6 +51,6 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   );
 };
 
-export const useUser = () => {
+export const useUser = (): UserContextType => {
   return useContext(UserContext);
 };

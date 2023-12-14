@@ -1,28 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useBattle } from '../_contexts/BattleContext';
-import { TestCase, Result } from '../_types/battleTypes';
-
+import type { TestCase, Result } from '../_types/battleTypes';
 
 const TabComponent = () => {
   const [selectedTab, setSelectedTab] = useState<number>(0);
-  const { battle, setBattle } = useBattle();
-  const { testCasesObj, userResults }: { testCasesObj: { [key: string]: TestCase } | null, userResults: Result[] | null } = battle;
+  const { battle } = useBattle();
+  const { testCasesObj, userResults }: { testCasesObj: Record<string, TestCase> | null, userResults: Result[] | null } = battle;
 
   return (
     <div>
-    {testCasesObj && 
+    {testCasesObj !== null &&
     <div className="bg-black p-6 rounded-md w-[100%] h-[350px] overflow-x-auto">
       <div className="flex flex-row space-x-4">
       {Object.keys(testCasesObj).map((key, index) => (
           <button
             key={key}
-            onClick={() => setSelectedTab(index)}
+            onClick={() => { setSelectedTab(index) }}
             className={`py-2 px-4 rounded-md text-sm font-medium ${selectedTab === index ? 'bg-gray-800' : 'bg-gray-700'}`}
           >
             {`Case ${index + 1}`}
           </button>
-        ))}
-        
+      ))}
       </div>
       <div>
         <div className="mt-4">

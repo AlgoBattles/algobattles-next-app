@@ -64,7 +64,7 @@ export default function Home() {
         }
         else if (inviteData[0] && inviteData[0].id){
             setSuccess('Invite sent!')
-            router.push(`/home/waitingRoom/lobby?id=${inviteData[0].id}`);
+            router.push(`/home/matchmaking/lobby?id=${inviteData[0].id}`);
         }
     }
   }

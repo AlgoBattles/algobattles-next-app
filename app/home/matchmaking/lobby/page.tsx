@@ -2,9 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-
 import { useUser } from '../../../_contexts/UserContext';
-import Stopwatch from '@/app/_components/Stopwatch';
 import { Socket } from 'socket.io-client';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation'
@@ -19,9 +17,6 @@ export default function Home() {
   const [opponentReady, setOpponentReady] = useState<boolean>(false);
   const [opponentLanguage, setOpponentLanguage] = useState<string | null>(null);
 
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-  const [seconds, setSeconds] = useState<number>(0);
   const [ready, setReady] = useState<boolean>(false);
 
   const supabase = createClientComponentClient<Database>()
@@ -64,16 +59,6 @@ export default function Home() {
     };
     checkEverything();
   }, [user])
-
-
-  // useEffect(() => {
-  //   const intervalId = setInterval(() => {
-  //     setSeconds(seconds => seconds + 1);
-  //   }, 1000);
-  //   // Clean up function
-  //   return () => clearInterval(intervalId);
-  // }, []);
-
 
   const socketRef = useRef<Socket | null>(null);
   const lobbyRoomId: string = 'l' + id;

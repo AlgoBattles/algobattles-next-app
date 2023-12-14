@@ -5,14 +5,12 @@ import OpponentEditor from '../../_components/OpponentEditor';
 import TestCases from '../../_components/TestCases';
 import OutputConsole from '@/app/_components/Output';
 import GameOver from '../../_components/GameOverModal';
-import { createClient } from '@supabase/supabase-js'
 import io from 'socket.io-client';
 import { Socket } from 'socket.io-client';
 import { useRouter } from 'next/navigation'
 import { useUser } from '../../_contexts/UserContext';
 import { useBattle } from '../../_contexts/BattleContext';
 import { pullBattleStateFromDB, pushBattleStateToDB } from '../../_helpers/battleStateHelpers';
-import { truncate } from 'fs/promises';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useSearchParams } from 'next/navigation'
 
@@ -22,7 +20,6 @@ const Battle = () => {
   const router = useRouter()
   const { user, setUser } = useUser()
   const { battle, setBattle } = useBattle();
-  const [battleWinner, setWinner] = useState<boolean>(false);
 
   const searchParams = useSearchParams()
   const battleId = searchParams && searchParams.get('id')
@@ -58,12 +55,9 @@ const Battle = () => {
       }
       });
       socket.on('connect', () => {
-        // console.log('connected to socket server');
       });
   
-      socket.on('message', ({message, action}) => {
-        // console.log('Received message:', message);
-        // console.log('Received action:', action);
+      socket.on('message', ({message, action}) => {  
         if (action === 'player code') {
           setBattle(prevBattle => ({...prevBattle, opponentCode: message}));
         }

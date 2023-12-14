@@ -1,6 +1,6 @@
 export type TestCase = {
-    input: {
-      [key: string]: any;
+  input: {
+    [key: string]: any;
     };
     output: {
       [key: string]: any;

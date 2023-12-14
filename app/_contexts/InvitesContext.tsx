@@ -1,5 +1,5 @@
-"use client"
-import React, { useEffect, useRef, createContext, useContext, useState, ReactNode } from 'react';
+'use client'
+import React, { useEffect, createContext, useContext, useState, type ReactNode } from 'react';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useUser } from './UserContext';
 
@@ -13,12 +13,12 @@ interface Invite {
 
 interface InvitesContextProps {
   invites: Invite[];
-  addInvite: (id: number, sender:string, recipient: string, senderUsername: string, senderAvatar: string) => void;
+  addInvite: (id: number, sender: string, recipient: string, senderUsername: string, senderAvatar: string) => void;
   removeInvite: (id: number) => void;
 }
 
 interface InvitesProviderProps {
-    children: ReactNode;
+  children: ReactNode;
 }
 
 export const InvitesContext = createContext<InvitesContextProps>({
@@ -29,7 +29,7 @@ export const InvitesContext = createContext<InvitesContextProps>({
 
 export const InvitesProvider: React.FC<InvitesProviderProps> = ({ children }) => {
   const [invites, setInvites] = useState<Invite[]>([]);
-  const supabase = createClientComponentClient<Database>()
+  const supabase = createClientComponentClient()
   const { user } = useUser();
 
   const retrieveInviteDetails = async () => {
