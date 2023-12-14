@@ -49,6 +49,18 @@ body {
     rgb(var(--background-start-rgb)); */
 }
 
+.bg-green-gradient {
+  background: radial-gradient(ellipse at center,
+      rgb(52, 131, 72) 0%,
+      rgba(0, 0, 0, 1) 100%);
+}
+
+.bg-gold-gradient {
+  background: radial-gradient(ellipse at center,
+      rgb(131, 109, 52) 0%,
+      rgba(0, 0, 0, 1) 100%);
+}
+
 /* .ribbon {
   transform: rotate(-45deg);
   transform-origin: 0 0;
@@ -80,3 +92,5 @@ body {
   /* height: 0;
   padding-bottom: 50%;  */
 /* } */ 
+
+
