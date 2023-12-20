@@ -35,6 +35,7 @@ const Battle = () => {
   const socketRef = useRef<Socket | null>(null);
   const battleRoomId: string = 'b' + battleId;
 
+
   useEffect(() => {
     if (user.UID !== '') {
       // connect to socket server
@@ -46,7 +47,10 @@ const Battle = () => {
         }
       });
       socket.on('connect', () => {
+        // interesting that connecting doensn't have an action...
+        // sockets are cool though! I remember building battleship way back when!
       });
+
       socket.on('message', ({message, action}) => {
         if (action === 'player code') {
           setBattle(prevBattle => ({ ...prevBattle, opponentCode: message }));
@@ -58,17 +62,19 @@ const Battle = () => {
           }
         }
       });
+
       socketRef.current = socket;
       return () => {
         socket.disconnect();
       };
     }
+
   }, [user]);
 
   useEffect(() => {
     // emit code changes to socket server
-    battle.userCode !== '' && sendCode(battle.userCode);
-  }, [battle.userCode]); 
+    battle.userCode && sendCode(battle.userCode);
+  }, [battle.userCode]);
 
   const sendCode = (message: string): void => {
     if (socketRef.current !== null) {
