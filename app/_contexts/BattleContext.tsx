@@ -2,6 +2,7 @@
 import React, { createContext, useState, useContext, type ReactNode } from 'react';
 import type { Battle } from '../_types/battleTypes'
 
+// file looks good (other than useEffect above is not used so it shows up for me as an unused variable)
 interface BattleContextType {
   battle: Battle;
   setBattle: React.Dispatch<React.SetStateAction<Battle>>;
@@ -48,4 +49,4 @@ export const BattleProvider: React.FC<BattleProviderProps> = ({ children }) => {
 
 export const useBattle = (): BattleContextType => {
   return useContext(BattleContext);
-}
+};
