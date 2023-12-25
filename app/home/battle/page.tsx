@@ -22,7 +22,7 @@ const Battle = () => {
 
   useEffect(() => {
     const setBattleState = async (): Promise<void> => {
-      if (user.UID !== '' && battle.algoPrompt !== '') {
+      if (user.UID !== '' && battle.algoPrompt === '') {
         const result = await pullBattleStateFromDB(user, battle, setBattle, Number(battleId));
         if (result === null) {
           router.push('/home')
@@ -47,8 +47,9 @@ const Battle = () => {
       });
       socket.on('connect', () => {
       });
-      socket.on('message', ({message, action}) => {
+      socket.on('message', ({ message, action }) => {
         if (action === 'player code') {
+          console.log('new code')
           setBattle(prevBattle => ({ ...prevBattle, opponentCode: message }));
         }
         if (action === 'opponent progress') {

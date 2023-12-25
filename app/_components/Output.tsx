@@ -9,7 +9,7 @@ const OutputConsole = (): React.ReactElement => {
         <h1 className='pl-4 pb-2 pt-2 border-b border-gray-700'>Output</h1>
         <div className="bg-black text-white font-mono text-sm rounded-lg h-80 overflow-y-scroll p-4 mt-4">
         {lines?.map((line, index) => (
-            <div key={index}>{line}</div>
+          index > 0 && <div key={index}>{line}</div>
         ))}
         </div>
     </div>

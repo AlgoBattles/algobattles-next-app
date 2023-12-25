@@ -44,7 +44,8 @@ export default function Lobby (): React.ReactElement {
   }
   useEffect(() => {
     const populateOpponentData = async (): Promise<void> => {
-      if (user.UID !== '' && user.username !== '' && opponentUsername === '') {
+      if (user.UID !== '' && opponentUsername === null) {
+        console.log('retriving oppo data')
         await retrieveOpponentDetails();
       }
     };

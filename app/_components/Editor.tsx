@@ -31,7 +31,7 @@ const AceEditor = (): React.ReactElement => {
     return result
   }
 
-  const runCode = async (code: string): Promise<void> => {
+  const runCode = async (): Promise<void> => {
     const result = await fetch('http://localhost:8081/execute', {
       method: 'POST',
       headers: {
@@ -98,14 +98,14 @@ const AceEditor = (): React.ReactElement => {
 
   useEffect(() => {
     // formats test cases upon mounting
-    if (testCasesArray !== null && testCasesObj !== null) {
+    if (testCasesArray === null && testCasesObj !== null) {
       setTestCasesArray(formatTestCases(testCasesObj))
     }
   }, [testCasesObj])
 
   return (
     <div className="w-full h-[50vh] border border-blue-700 rounded-[3px]">
-    <div onClick={() => { runCode(userCode).catch(console.error) }} className="flex flex-row w-full h-[13%] rounded-[3px] bg-black justify-between">
+    <div onClick={() => { runCode().catch(console.error) }} className="flex flex-row w-full h-[13%] rounded-[3px] bg-black justify-between">
         <Button variant="contained" startIcon={<PlayArrowIcon />} className="h-8 w-30 bg-blue-500 hover:bg-blue-700 m-2 text-white" sx={{
           fontSize: '12px',
           fontFamily: 'arial'

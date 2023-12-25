@@ -86,20 +86,19 @@ const Header = (): React.ReactElement => {
         <div className="font-bold">{item.sender !== '' && item.senderUsername}</div>
         <div className="text-sm text-gray-500">invited you to a battle</div>
       </div>
+      <div onMouseEnter={() => {
+        console.log('showing decline button')
+        setShowDeclineButton(true)
+      }}
+        onMouseLeave={() => { setShowDeclineButton(false) }}>
       <div
-        onMouseEnter={() => { setShowDeclineButton(true) }}
-        onMouseLeave={() => { setShowDeclineButton(false) }}
         className="absolute left-0 h-full w-1/2"
         style={{ top: '50%', transform: 'translateY(-50%)' }}
-        ref={declineButtonRef}
         >
-        {showDeclineButton && (
-          <Collapse in={showDeclineButton}>
-            <button onClick={() => { declineInviteHandler(item.id).catch(console.error) }} className="bg-red-500 right-0 hover:bg-red-700 text-white font-bold font-md py-2.5 px-4 w-[100%] rounded-3xl">
-          Decline
-          </button>
-        </Collapse>
-        )}
+        <button onClick={() => { declineInviteHandler(item.id).catch(console.error) }} className={`bg-red-500 right-0 hover:bg-red-700 text-white font-bold font-md py-2.5 px-4 w-[100%] rounded-3xl ${showDeclineButton ? '' : 'hidden'}`}>
+        Decline
+        </button>
+      </div>
       </div>
       <div
         onMouseEnter={() => { setShowJoinButton(true) }}
@@ -110,12 +109,10 @@ const Header = (): React.ReactElement => {
         >
         {showJoinButton && (
         <Link href={`/home/matchmaking/lobby?id=${item.id}`}>
-        <Collapse in={showJoinButton}>
         <button className="bg-blue-500 right-0 hover:bg-blue-700 text-white font-bold font-md py-2.5 px-4 w-[100%] rounded-3xl"
         >
           Join
         </button>
-        </Collapse>
         </Link>
         )}
       </div>
