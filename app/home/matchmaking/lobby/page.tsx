@@ -28,7 +28,6 @@ export default function Lobby (): React.ReactElement {
       .select()
       .eq('id', id)
     if (data !== null && data.length >= 1) {
-      console.log('data is', data)
       const tempOpponentId = data[0].recipient_id === user.UID ? data[0].sender_id : data[0].recipient_id
       const { data: userData } = await supabase
         .from('users')
@@ -45,7 +44,6 @@ export default function Lobby (): React.ReactElement {
   useEffect(() => {
     const populateOpponentData = async (): Promise<void> => {
       if (user.UID !== '' && opponentUsername === null) {
-        console.log('retriving oppo data')
         await retrieveOpponentDetails();
       }
     };
