@@ -13,23 +13,19 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/WatchDogCLI/WatchDog">
+  <a href="https://github.com/AlgoBattles/algobattles-next-app">
     <img src="images/logo.png" alt="Logo" height="200">
   </a>
 
-<h3 align="center">WatchDogCLI</h3>
+<h3 align="center">AlgoBattles</h3>
 
   <p align="center">
-    A head to head algorithm competition. 
-    <br />
-    <a href="https://github.com/WatchDogCLI/WatchDog.git"><strong>Explore the docs »</strong></a>
+    A platform for head to head algorithm competition. 
     <br />
     <br />
-    <a href="https://github.com/WatchDogCLI/WatchDog">View Demo</a>
+    <a href="https://github.com/AlgoBattles/algobattles-next-app/issues">Report Bug</a>
     ·
-    <a href="https://github.com/WatchDogCLI/WatchDog/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/WatchDogCLI/WatchDog/issues">Request Feature</a>
+    <a href="https://github.com/AlgoBattles/algobattles-next-app/issues">Request Feature</a>
   </p>
 </div>
 
@@ -64,8 +60,8 @@
 
 AlgoBattles is comprised of: 
 1. A Next.js frontend (this repo) 
-2. Supabase for user management/auth as well as the supabase postgres instance to persist invites and battle state (see prerequisites)
-3. A remote code execution engine/socket server [another repo]
+2. Supabase for user management/auth & postgres instance to persist game invites and game state
+3. A socket server for realtime gameplay and remote code execution engine to execute user code [another repo pending relese]
 
 
 ### Prerequisites
@@ -74,7 +70,7 @@ AlgoBattles is comprised of:
 
 2. Define schemas for users, algos, and invites
 
-3. Clone and run the RCE/Socket server
+3. Clone and run the RCE/Socket server 
 
 
 ### Installation
@@ -93,32 +89,18 @@ AlgoBattles is comprised of:
 
 
 <!-- USAGE EXAMPLES -->
-## Usage
+## Screenshots
 
-1. List pods/containers/nodes
-   ```sh
-   watchdog --[resourcetype]
-   ```
-      <img src="images/screenshot1.png" alt="Logo" width="300" height="auto">
+<img src="public/screenshots/screenshot1.png" alt="Logo" height="400">
+<br />
+<img src="public/screenshots/screenshot1pt5.png" alt="Logo" height="400">
+<br />
+<img src="public/screenshots/screenshot5.png" alt="Logo" height="400">
+<br />
+<img src="public/screenshots/screenshot6.png" alt="Logo" height="400">
 
+<img src="public/screenshots/screenshot7.png" alt="Logo" height="400">
 
-2. Set a CPU usage alert threshold for a pod
-   ```sh
-   watchdog --cpuwatch 70
-   ```
-   <img src="images/image.png" alt="Logo" width="300" height="auto">
-
-
-3. Provide crash alerts (as well as any CPU alerts set prior with --cpuwatch)
-   ```sh
-   watchdog --watch
-   ```
-
-
-4. Get metrics for all pods
-   ```sh
-   watchdog --metrics
-   ```
 
 
 
@@ -176,16 +158,16 @@ Oliver Wendell-Braly - [@linkedIn](https://www.linkedin.com/in/oliverbraly/)
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/WatchDogCLI/WatchDog.svg?style=for-the-badge
-[contributors-url]: https://github.com/WatchDogCLI/WatchDog/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/WatchDogCLI/WatchDog.svg?style=for-the-badge
-[forks-url]: https://github.com/WatchDogCLI/WatchDog/network/members
-[stars-shield]: https://img.shields.io/github/stars/WatchDogCLI/WatchDog.svg?style=for-the-badge
-[stars-url]: https://github.com/WatchDogCLI/WatchDog/stargazers
-[issues-shield]: https://img.shields.io/github/issues/WatchDogCLI/WatchDog.svg?style=for-the-badge
-[issues-url]: https://github.com/WatchDogCLI/WatchDog/issues
-[license-shield]: https://img.shields.io/github/license/WatchDogCLI/WatchDog.svg?style=for-the-badge
-[license-url]: https://github.com/WatchDogCLI/WatchDog/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/AlgoBattles/algobattles-next-app.svg?style=for-the-badge
+[contributors-url]: https://github.com/AlgoBattles/algobattles-next-app/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/AlgoBattles/algobattles-next-app.svg?style=for-the-badge
+[forks-url]: https://github.com/AlgoBattles/algobattles-next-app/network/members
+[stars-shield]: https://img.shields.io/github/stars/AlgoBattles/algobattles-next-app.svg?style=for-the-badge
+[stars-url]: https://github.com/AlgoBattles/algobattles-next-app/stargazers
+[issues-shield]: https://img.shields.io/github/issues/AlgoBattles/algobattles-next-app.svg?style=for-the-badge
+[issues-url]: https://github.com/AlgoBattles/algobattles-next-app/issues
+[license-shield]: https://img.shields.io/github/license/AlgoBattles/algobattles-next-app.svg?style=for-the-badge
+[license-url]: https://github.com/AlgoBattles/algobattles-next-app/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/linkedin_username
 [product-screenshot]: images/screenshot.png

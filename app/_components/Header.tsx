@@ -163,7 +163,7 @@ const Header = (): React.ReactElement => {
           <button onClick={() => { setLang('javascript').catch(console.error) }} className={`px-4 py-2 text-[10pt] font-semibold rounded-3xl ${user.preferredLanguage === 'javascript' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-blue-500'}`}>JavaScript</button>
           <button onClick={() => { setLang('python').catch(console.error) }} className={`px-4 py-2 text-[10pt] font-semibold rounded-3xl ${user.preferredLanguage === 'python' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-blue-500'}`}>Python</button>
         </div>
-          <button onClick={() => handleSignOut} className="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 w-[100%] rounded-3xl mt-10">
+          <button onClick={handleSignOut} className="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 w-[100%] rounded-3xl mt-10">
           Sign Out</button>
       </div>
     </div>
