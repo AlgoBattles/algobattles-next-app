@@ -1,4 +1,3 @@
-## AlgoBattles! 
 
 <a name="readme-top"></a>
 
@@ -6,15 +5,14 @@
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
+<!-- [![MIT License][license-shield]][license-url] -->
 
 
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
   <a href="https://github.com/AlgoBattles/algobattles-next-app">
-    <img src="images/logo.png" alt="Logo" height="200">
+    <!-- <img src="images/logo.png" alt="Logo" height="200"> -->
   </a>
 
 <h3 align="center">AlgoBattles</h3>
@@ -70,7 +68,7 @@ AlgoBattles is comprised of:
 
 2. Define schemas for users, algos, and invites
 
-3. Clone and run the RCE/Socket server 
+3. Clone and run the RCE/Socket server (repo pending release)
 
 
 ### Installation
@@ -80,7 +78,7 @@ AlgoBattles is comprised of:
    npm install
    ```
 
-2. Run
+2. Run in development
    ```sh
    npm run dev
    ```
@@ -130,7 +128,7 @@ See the [open issues](https://github.com/WatchDogCLI/WatchDog/issues) for a full
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+Distributed under the MIT License.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -190,3 +188,4 @@ Oliver Wendell-Braly - [@linkedIn](https://www.linkedin.com/in/oliverbraly/)
 [Bootstrap-url]: https://getbootstrap.com
 [JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
 [JQuery-url]: https://jquery.com 
+[supabase-url]: https://supabase.com/
