@@ -66,7 +66,62 @@ AlgoBattles is comprised of:
 
 1. Set up an account on [Supabase][Supabase-url]
 
-2. Define schemas for users, algos, and invites
+2. Create tables for for users, algos, invites, and battle state
+
+```sql
+CREATE TABLE users (
+    email TEXT,
+    username TEXT,
+    avatar TEXT,
+    preferredLanguage TEXT,
+    user_id TEXT PRIMARY KEY
+);
+```
+
+```sql
+CREATE TABLE algos (
+    id BIGINT PRIMARY KEY,
+    prompt TEXT,
+    func_name TEXT,
+    template_code TEXT,
+    test_cases_json JSONB,
+    python_template TEXT
+);
+```
+
+```sql
+CREATE TABLE invites (
+    id BIGINT PRIMARY KEY,
+    created_at TIMESTAMPTZ,
+    sender_id UUID,
+    recipient_id UUID,
+    sender_ready BOOLEAN,
+    recipient_ready BOOLEAN
+);
+```
+
+```sql
+CREATE TABLE battles (
+    id BIGINT PRIMARY KEY,
+    created_at TIMESTAMPTZ,
+    algo_id INT,
+    user1_id UUID,
+    user2_id UUID,
+    user1_code TEXT,
+    user2_code TEXT,
+    user1_progress INT,
+    user2_progress INT,
+    algo_prompt TEXT,
+    func_name TEXT,
+    template_code TEXT,
+    test_cases_json JSONB,
+    user1_results JSONB,
+    user2_results JSONB,
+    battle_active BOOLEAN,
+    battle_winner TEXT
+);
+```
+
 
 3. Clone and run the RCE/Socket server (repo pending release)
 
