@@ -73,7 +73,7 @@ CREATE TABLE users (
     email TEXT,
     username TEXT,
     avatar TEXT,
-    preferredLanguage TEXT,
+    preferred_language TEXT,
     user_id TEXT PRIMARY KEY
 );
 ```
