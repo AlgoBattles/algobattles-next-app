@@ -56,13 +56,25 @@ const AceEditor = (): React.ReactElement => {
         const results = output.map((item: any, index: number) => {
           return item[0]
         })
-        setBattle(prevBattle => ({...prevBattle, userResults: results, userProgress: data.progress, testOutput: output[0][0] && output[0][0].toString()}))
+        setBattle(prevBattle => ({
+          ...prevBattle,
+          userResults: results,
+          userProgress: data.progress,
+          testOutput: data.run.stdout
+        }))
       } else if (data.progress === 100) {
         const output = JSON.parse(data.run.output.replace(/'/g, '"').replace(/undefined/g, 'null'))
         const results = output.map((item: any, index: number) => {
           return item[0]
         })
-        setBattle(prevBattle => ({ ...prevBattle, gameOver: true, userWon: true, battleuserResults: results, userProgress: data.progress, testOutput: output[0][0] && output[0][0].toString() })) 
+        setBattle(prevBattle => ({
+          ...prevBattle,
+          gameOver: true,
+          userWon: true,
+          battleuserResults: results,
+          userProgress: data.progress,
+          testOutput: output[0][0] !== null && output[0][0] !== undefined ? output[0][0].toString() : undefined
+        }))
       }
     } else if (data.run.code === 1) {
       // sets error in state to display in console

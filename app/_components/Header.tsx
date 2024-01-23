@@ -7,8 +7,6 @@ import { useRouter } from 'next/navigation'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import type { Invite } from '../_types/inviteTypes'
 import Link from 'next/link'
-import { Collapse } from '@mui/material';
-import { Button } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Skeleton from 'react-loading-skeleton'
@@ -39,7 +37,7 @@ const Header = (): React.ReactElement => {
           key={uuidv4()}
           onMouseEnter={() => { setShowMailComponent(true) }}
           onMouseLeave={() => { setShowMailComponent(false) }}
-          className='absolute top-11 right-10 w-64 h-96'>
+          className='absolute top-11 right-10 w-64 h-96 z-50'>
           <div style={{
             width: 0,
             height: 0,
@@ -49,7 +47,9 @@ const Header = (): React.ReactElement => {
             borderRight: '15px solid transparent',
             borderBottom: '20px solid #2d3748' // color equivalent to gray-800 in Tailwind
           }} />
-          <div className="w-64 h-90 bg-gray-800 border border-gray-700 rounded-lg p-4">
+          <div
+            className="w-64 h-90 bg-gray-800 border border-gray-700 rounded-lg p-4"
+          >
             {invites.length > 0
               ? invites.map((item) => (
               <InviteComponent key={uuidv4()} item={item} />
@@ -77,7 +77,7 @@ const Header = (): React.ReactElement => {
       }
     }
     return (
-    <div key={uuidv4()} className="flex flex-row items-center relative mb-2">
+    <div key={uuidv4()} style={{ zIndex: 9999 }} className="flex flex-row items-center relative mb-2 z-50">
       <img src={item.sender !== '' ? `/${item.senderAvatar}` : undefined } alt="avatar" className="w-10 h-10 rounded-full mr-2" />
       <div className="flex flex-col">
         <div className="font-bold">{item.sender !== '' && item.senderUsername}</div>
@@ -134,7 +134,7 @@ const Header = (): React.ReactElement => {
     <div
       onMouseEnter={() => { setShowProfileComponent(true) }}
       onMouseLeave={() => { setShowProfileComponent(false) }}
-      className='absolute top-11 right-0 w-64 h-96'
+      className='absolute top-11 right-0 w-64 h-96 z-50'
     >
       <div style={{
         width: 0,
