@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { FaEnvelope } from 'react-icons/fa';
 import { useUser } from '../_contexts/UserContext';
 import { useInvites } from '../_contexts/InvitesContext';
@@ -7,8 +7,9 @@ import { useRouter } from 'next/navigation'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import type { Invite } from '../_types/inviteTypes'
 import Link from 'next/link'
+import { Collapse } from '@mui/material';
+import { Button } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
-import Collapse from '@mui/material/Collapse';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -61,10 +62,6 @@ const Header = (): React.ReactElement => {
   }
 
   const InviteComponent = ({ item }: { item: Invite }): React.ReactElement => {
-    const [showJoinButton, setShowJoinButton] = useState(false);
-    const [showDeclineButton, setShowDeclineButton] = useState(false);
-    const joinButtonRef = useRef(null);
-    const declineButtonRef = useRef(null);
     const { removeInvite } = useInvites();
 
     const declineInviteHandler = async (id: number): Promise<void> => {
@@ -86,35 +83,29 @@ const Header = (): React.ReactElement => {
         <div className="font-bold">{item.sender !== '' && item.senderUsername}</div>
         <div className="text-sm text-gray-500">invited you to a battle</div>
       </div>
-      <div onMouseEnter={() => {
-        console.log('showing decline button')
-        setShowDeclineButton(true)
-      }}
-        onMouseLeave={() => { setShowDeclineButton(false) }}>
+
       <div
         className="absolute left-0 h-full w-1/2"
         style={{ top: '50%', transform: 'translateY(-50%)' }}
+      >
+        <button
+          onClick={() => { declineInviteHandler(item.id).catch(console.error) }}
+          className={'bg-red-500 right-0 hover:bg-red-700 text-white font-bold font-md py-2.5 px-4 w-[100%] rounded-3xl opacity-0 hover:opacity-100'}
+          style={{ width: '100%', height: '100%' }}
         >
-        <button onClick={() => { declineInviteHandler(item.id).catch(console.error) }} className={`bg-red-500 right-0 hover:bg-red-700 text-white font-bold font-md py-2.5 px-4 w-[100%] rounded-3xl ${showDeclineButton ? '' : 'hidden'}`}>
-        Decline
+          Decline
         </button>
       </div>
-      </div>
       <div
-        onMouseEnter={() => { setShowJoinButton(true) }}
-        onMouseLeave={() => { setShowJoinButton(false) }}
         className="absolute right-0 h-full w-1/2"
         style={{ top: '50%', transform: 'translateY(-50%)' }}
-        ref={joinButtonRef}
         >
-        {showJoinButton && (
         <Link href={`/home/matchmaking/lobby?id=${item.id}`}>
-        <button className="bg-blue-500 right-0 hover:bg-blue-700 text-white font-bold font-md py-2.5 px-4 w-[100%] rounded-3xl"
+        <button className="bg-blue-500 right-0 hover:bg-blue-700 text-white font-bold font-md py-2.5 px-4 w-[100%] rounded-3xl opacity-0 hover:opacity-100"
         >
           Join
         </button>
         </Link>
-        )}
       </div>
     </div>
     )
