@@ -81,7 +81,7 @@ const Battle = () => {
     <div className="flex flex-col min-h-screen items-center justify-center">
     <div className="grid grid-cols-2 grid-rows-2 gap-4 p-4 w-full">
       <GameOver show={battle.gameOver} userWon={battle.userWon}></GameOver>
-      <Editor></Editor>
+      <Editor sendCode={sendCode}></Editor>
       <OpponentEditor></OpponentEditor>
       <TestCases></TestCases>
       <OutputConsole></OutputConsole>

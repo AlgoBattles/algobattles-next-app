@@ -16,7 +16,8 @@ export interface Battle {
   algoId: number;
   algoPrompt: string;
   funcName: string;
-  templateCode: string;
+  templateCodeJS: string;
+  templateCodePython: string;
   testCasesObj: { [key: string]: TestCase } | null;
   userRole: string;
   userId: string;
