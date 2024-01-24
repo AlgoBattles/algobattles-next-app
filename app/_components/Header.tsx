@@ -1,16 +1,19 @@
 'use client'
 import React, { useState } from 'react';
 import { FaEnvelope } from 'react-icons/fa';
-import { useUser } from '../_contexts/UserContext';
-import { useInvites } from '../_contexts/InvitesContext';
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import type { Invite } from '../_types/inviteTypes'
 import Link from 'next/link'
 import { v4 as uuidv4 } from 'uuid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+
+// contexts and types
+import { useUser } from '../_contexts/UserContext';
+import { useInvites } from '../_contexts/InvitesContext';
+import { useWarning } from '../_contexts/WarningContext';
+import type { Invite } from '../_types/inviteTypes'
 
 const theme = createTheme({
   transitions: {
@@ -28,7 +31,9 @@ const Header = (): React.ReactElement => {
   const [showProfileComponent, setShowProfileComponent] = useState(false);
   const { user } = useUser()
   const { invites } = useInvites()
+  const { info, setInfo } = useWarning()
   const router = useRouter()
+  const pathname = usePathname()
 
   const InboxComponent = (): React.ReactElement => {
     return (
@@ -166,15 +171,26 @@ const Header = (): React.ReactElement => {
     router.push('/')
   }
 
+  const showWarningModal = (linkToRedirect: string): void => {
+    if (pathname === '/home/battle') {
+      setInfo({ ...info, isOpen: true, buttonTitle: 'Forfeit Battle', warningMessage: 'Are you sure you want to leave?', link: linkToRedirect })
+    } else if (pathname === '/home/matchmaking/lobby') {
+      setInfo({ ...info, isOpen: true, buttonTitle: 'Leave Lobby', warningMessage: 'Are you sure you want to leave?', link: linkToRedirect })
+    } else {
+      router.push('/home')
+    }
+  }
+
   return (
     <div className="border-b border-gray-300 relative">
-      <Link href="/home">
-        <div className="max-w-20 inline-block">
-          <h1 className="font-luckiest-guy text-4xl text-left w-1/4 mt-5 ml-5 mb-2" style={{ fontFamily: 'LuckiestGuy' }}>
+        <div
+          className="max-w-20 inline-block"
+          onClick={() => { showWarningModal('/home') }}
+        >
+          <h1 className="font-luckiest-guy text-4xl text-left w-1/4 mt-5 ml-5 mb-2 cursor-pointer" style={{ fontFamily: 'LuckiestGuy' }}>
             AlgoBattles
           </h1>
         </div>
-      </Link>
       <div className="absolute top-0 right-0 flex items-center h-full">
         <div
         onMouseEnter={() => { setShowMailComponent(true) }}

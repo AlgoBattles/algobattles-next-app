@@ -100,7 +100,7 @@ const AceEditor = ({ sendCode }: AceEditorProps): React.ReactElement => {
       const results = null
       setBattle(prevBattle => ({ ...prevBattle, userResults: results, userProgress: 0, testOutput: data.run.stderr }))
     }
-}
+  }
 
   useEffect(() => {
     // configure editor

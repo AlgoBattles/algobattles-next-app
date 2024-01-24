@@ -1,18 +1,23 @@
 'use client'
 import React, { useEffect, useRef } from 'react';
+import io from 'socket.io-client';
+import type { Socket } from 'socket.io-client';
+import { useRouter, useSearchParams } from 'next/navigation'
+
+// components
 import Editor from '../../_components/Editor';
 import OpponentEditor from '../../_components/OpponentEditor';
 import TestCases from '../../_components/TestCases';
 import OutputConsole from '@/app/_components/Output';
 import GameOver from '../../_components/GameOverModal';
-import io from 'socket.io-client';
-import type { Socket } from 'socket.io-client';
-import { useRouter, useSearchParams } from 'next/navigation'
+import WarningModal from '@/app/_components/WarningModal';
+
+// context
 import { useUser } from '../../_contexts/UserContext';
 import { useBattle } from '../../_contexts/BattleContext';
 import { pullBattleStateFromDB } from '../../_helpers/battleStateHelpers';
 
-const Battle = () => {
+const Battle = (): React.JSX.Element => {
   const router = useRouter()
   const { user } = useUser()
   const { battle, setBattle } = useBattle();
@@ -85,6 +90,7 @@ const Battle = () => {
       <OpponentEditor></OpponentEditor>
       <TestCases></TestCases>
       <OutputConsole></OutputConsole>
+      <WarningModal></WarningModal>
     </div>
     </div>
   );

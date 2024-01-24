@@ -6,6 +6,7 @@ import React from 'react'
 import { UserProvider } from './_contexts/UserContext';
 import { BattleProvider } from './_contexts/BattleContext';
 import { InvitesProvider } from './_contexts/InvitesContext';
+import { WarningProvider } from './_contexts/WarningContext';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,6 +17,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout ({ children }: { children: React.ReactNode }): JSX.Element {
   return (
+    <WarningProvider>
     <InvitesProvider>
     <BattleProvider>
     <UserProvider>
@@ -30,5 +32,6 @@ export default function RootLayout ({ children }: { children: React.ReactNode })
     </UserProvider>
     </BattleProvider>
     </InvitesProvider>
+    </WarningProvider>
   )
 }
