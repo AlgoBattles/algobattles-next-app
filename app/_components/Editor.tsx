@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react'
 import ProgressBar from './ProgressBar'
-import { Button, IconButton } from '@mui/material'
+import { Button, IconButton, Tooltip } from '@mui/material'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'
 import { Replay } from '@mui/icons-material'
 import { useUser } from '../_contexts/UserContext'
@@ -150,13 +150,15 @@ const AceEditor = ({ sendCode }: AceEditorProps): React.ReactElement => {
             fontSize: '12px',
             fontFamily: 'arial'
           }}>Run Code</Button>
+          <Tooltip title="Reset Code" enterDelay={100} leaveDelay={200}>
           <IconButton
             aria-label="reset code"
-            className="h-8 w-30 bg-black hover:bg-gray-700 text-white"
+            className="h-8 w-8 bg-black rounded hover:bg-gray-700 text-white"
             onClick = {() => { resetCode() }}
           >
             <Replay />
           </IconButton>
+          </Tooltip>
         </div>
         <ProgressBar percentage={userProgress} />
       </div>
