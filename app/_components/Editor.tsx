@@ -93,8 +93,7 @@ const AceEditor = (): React.ReactElement => {
     editor1.setTheme('ace/theme/chaos');
     if (user.preferredLanguage === 'python') {
       editor1.session.setMode('ace/mode/python');
-    }
-    else if (user.preferredLanguage === 'javascript') {
+    } else if (user.preferredLanguage === 'javascript') {
       editor1.session.setMode('ace/mode/javascript')
     }
     userCode.length > 1 ? editor1.setValue(`${userCode}`) : editor1.setValue(`${templateCode}`);
