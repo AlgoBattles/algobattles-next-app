@@ -29,36 +29,31 @@ export default function Home() {
   const setStateObj = () => {
     setUser(({ ...user, email}));
   }
-
   const handleSignUp = async () => {
-
-    const { data: userData, error: userError } = await supabase
-        .from('users')
-        .select()
-        .eq('email', email)
-    
-      if (userData && userData.length > 0) {
-        setError('User already exists')
+  const { data: userData, error: userError } = await supabase
+      .from('users')
+      .select()
+      .eq('email', email)
+    if (userData && userData.length > 0) {
+      setError('User already exists')
+    } else {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${location.origin}/auth/callback`,
+        },
+      })
+      if (error) {
+        setError(error.message)
+        console.log(error)
         return
       }
-      else {
-        const { data, error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: `${location.origin}/auth/callback`,
-          },
-        })
-        if (error) {
-          setError(error.message)
-          console.log(error)
-          return
-        }
-        else if (data) {
-          router.push('/signup/verify')
-        }
+      else if (data) {
+        router.push('/signup/verify')
       }
-      }
+    }
+  }
   return (
     <div className="flex flex-col h-screen">
       <h1 style={{fontFamily: 'LuckiestGuy', fontSize: '50px', textAlign: 'left', width: '100%', marginTop: '20px', marginLeft: '20px'}} >AlgoBattles</h1>

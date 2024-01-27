@@ -53,12 +53,13 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       const userAuthInfo = await supabase.auth.getUser();
       console.log(userAuthInfo)
       if (userAuthInfo?.data?.user !== null) {
-        const id = userAuthInfo.data.user.id
-        const { data, error } = await supabase
+        const { id, email } = userAuthInfo.data.user
+        const { data } = await supabase
           .from('users')
           .select()
           .eq('user_id', id)
-        if (data !== null) {
+        if (data !== null && data.length > 0) {
+          console.log('data is', data)
           const { email, username, preferredLanguage, avatar } = data[0]
           setUser(({
             UID: id,
@@ -67,6 +68,14 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
             preferredLanguage,
             avatar
           }))
+        } else {
+          if (email !== null && email !== '' && email !== undefined) {
+            setUser(({
+              ...user,
+              UID: id,
+              email
+            }))
+          }
         }
       } else {
         router.push('/')

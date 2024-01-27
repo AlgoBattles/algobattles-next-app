@@ -75,7 +75,14 @@ export default function Home (): React.ReactElement {
               </div>
           {selected === 'signup' && (
           <div className="flex flex-col items-center space-y-4 mt-[75px]">
-              <button className=" bg-white hover:bg-white-100 text-black font-bold py-2 px-4 w-[100%] rounded-3xl">
+              <button onClick={ () => {
+                supabase.auth.signInWithOAuth({
+                  provider: 'google',
+                  options: {
+                    redirectTo: 'http://localhost:3000/signup/final'
+                  }
+                }).catch(console.error)
+              }} className=" bg-white hover:bg-white-100 text-black font-bold py-2 px-4 w-[100%] rounded-3xl">
               Sign up with Google
               </button>
               <button className=" bg-white hover:bg-white-100 text-black font-bold py-2 px-4 w-[100%] rounded-3xl">
