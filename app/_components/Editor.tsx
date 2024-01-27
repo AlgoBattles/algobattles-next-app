@@ -2,8 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import ProgressBar from './ProgressBar'
 import { Button, IconButton, Tooltip } from '@mui/material'
-import PlayArrowIcon from '@mui/icons-material/PlayArrow'
-import { Replay } from '@mui/icons-material'
+import { Replay, PlayArrow } from '@mui/icons-material'
 import { useUser } from '../_contexts/UserContext'
 import { useBattle } from '../_contexts/BattleContext'
 import type { TestCase } from '../_types/battleTypes'
@@ -142,15 +141,25 @@ const AceEditor = ({ sendCode }: AceEditorProps): React.ReactElement => {
     <div className="w-full h-[50vh] border border-blue-700 rounded-[3px]">
       <div className="flex flex-row w-full h-[13%] rounded-[3px] bg-black justify-between">
         <div>
-          <Button variant="contained"
+          {/* <Button variant="contained"
           onClick={() => { runCode().catch(console.error) }}
-          startIcon={<PlayArrowIcon />}
+          startIcon={<PlayArrow />}
           className="h-8 w-30 bg-blue-500 hover:bg-blue-700 m-2 text-white" 
           sx={{
             fontSize: '12px',
             fontFamily: 'arial'
-          }}>Run Code</Button>
-          <Tooltip title="Reset Code" enterDelay={100} leaveDelay={200}>
+          }}>Run Code</Button> */}
+          <Tooltip title="Execute Code" enterDelay={100} leaveDelay={50}>
+          <IconButton
+            aria-label="execute code"
+            className="h-8 w-8 rounded bg-blue-500 hover:bg-blue-700 m-2 text-white"
+            onClick={() => { runCode().catch(console.error) }}
+          >
+            <PlayArrow />
+          </IconButton>
+          </Tooltip>
+
+          <Tooltip title="Reset Code" enterDelay={100} leaveDelay={50}>
           <IconButton
             aria-label="reset code"
             className="h-8 w-8 bg-black rounded hover:bg-gray-700 text-white"

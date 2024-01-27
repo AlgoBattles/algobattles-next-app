@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaEnvelope } from 'react-icons/fa';
 import { useRouter, usePathname } from 'next/navigation'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
@@ -15,6 +15,9 @@ import { useInvites } from '../_contexts/InvitesContext';
 import { useWarning } from '../_contexts/WarningContext';
 import type { Invite } from '../_types/inviteTypes'
 
+// components
+import WarningModal from '@/app/_components/WarningModal';
+
 const theme = createTheme({
   transitions: {
     easing: {
@@ -27,6 +30,7 @@ const theme = createTheme({
 const supabase = createClientComponentClient()
 
 const Header = (): React.ReactElement => {
+  console.log('re rendering header')
   const [showMailComponent, setShowMailComponent] = useState(false);
   const [showProfileComponent, setShowProfileComponent] = useState(false);
   const { user } = useUser()
@@ -34,6 +38,18 @@ const Header = (): React.ReactElement => {
   const { info, setInfo } = useWarning()
   const router = useRouter()
   const pathname = usePathname()
+
+  const showWarningModal = (linkToRedirect: string, warningText: string): void => {
+    console.log('executing function at all')
+    if (pathname === '/home/battle') {
+      setInfo({ ...info, isOpen: true, buttonTitle: 'Forfeit Battle', warningMessage: warningText, link: linkToRedirect })
+    } else if (pathname === '/home/matchmaking/lobby') {
+      console.log('executing lobby case')
+      setInfo({ ...info, isOpen: true, buttonTitle: 'Leave Lobby', warningMessage: warningText, link: linkToRedirect })
+    } else {
+      router.push(linkToRedirect)
+    }
+  }
 
   const InboxComponent = (): React.ReactElement => {
     return (
@@ -68,7 +84,6 @@ const Header = (): React.ReactElement => {
 
   const InviteComponent = ({ item }: { item: Invite }): React.ReactElement => {
     const { removeInvite } = useInvites();
-
     const declineInviteHandler = async (id: number): Promise<void> => {
       // delete from db
       const { data } = await supabase
@@ -88,7 +103,6 @@ const Header = (): React.ReactElement => {
         <div className="font-bold">{item.sender !== '' && item.senderUsername}</div>
         <div className="text-sm text-gray-500">invited you to a battle</div>
       </div>
-
       <div
         className="absolute left-0 h-full w-1/2"
         style={{ top: '50%', transform: 'translateY(-50%)' }}
@@ -137,9 +151,9 @@ const Header = (): React.ReactElement => {
 
     return (
     <div
+      className='absolute top-11 right-0 w-64 h-96 z-50 bg-red'
       onMouseEnter={() => { setShowProfileComponent(true) }}
       onMouseLeave={() => { setShowProfileComponent(false) }}
-      className='absolute top-11 right-0 w-64 h-96 z-50'
     >
       <div style={{
         width: 0,
@@ -159,33 +173,18 @@ const Header = (): React.ReactElement => {
           <button onClick={() => { setLang('javascript').catch(console.error) }} className={`px-4 py-2 text-[10pt] font-semibold rounded-3xl ${user.preferredLanguage === 'javascript' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-blue-500'}`}>JavaScript</button>
           <button onClick={() => { setLang('python').catch(console.error) }} className={`px-4 py-2 text-[10pt] font-semibold rounded-3xl ${user.preferredLanguage === 'python' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-blue-500'}`}>Python</button>
         </div>
-          <button onClick={handleSignOut} className="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 w-[100%] rounded-3xl mt-10">
+          <button onClick={() => { showWarningModal('/signout', 'Are you sure you want to sign out? ') }} className="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 w-[100%] rounded-3xl mt-10">
           Sign Out</button>
       </div>
     </div>
     )
   }
 
-  const handleSignOut = async (): Promise<void> => {
-    await supabase.auth.signOut()
-    router.push('/')
-  }
-
-  const showWarningModal = (linkToRedirect: string): void => {
-    if (pathname === '/home/battle') {
-      setInfo({ ...info, isOpen: true, buttonTitle: 'Forfeit Battle', warningMessage: 'Are you sure you want to leave?', link: linkToRedirect })
-    } else if (pathname === '/home/matchmaking/lobby') {
-      setInfo({ ...info, isOpen: true, buttonTitle: 'Leave Lobby', warningMessage: 'Are you sure you want to leave?', link: linkToRedirect })
-    } else {
-      router.push('/home')
-    }
-  }
-
   return (
     <div className="border-b border-gray-300 relative">
         <div
           className="max-w-20 inline-block"
-          onClick={() => { showWarningModal('/home') }}
+          onClick={() => { showWarningModal('/home', 'Are you sure you want to leave?') }}
         >
           <h1 className="font-luckiest-guy text-4xl text-left w-1/4 mt-5 ml-5 mb-2 cursor-pointer" style={{ fontFamily: 'LuckiestGuy' }}>
             AlgoBattles
@@ -207,6 +206,7 @@ const Header = (): React.ReactElement => {
       </div>
       {showMailComponent && <InboxComponent />}
       {showProfileComponent && <ProfileComponent />}
+      <WarningModal></WarningModal>
     </div>
   );
 };

@@ -3,6 +3,9 @@ import React, { createContext, useState, useContext, useEffect, type ReactNode }
 import { useRouter } from 'next/navigation'
 import { checkAuthStatus, retrieveUserInfo } from '../_helpers/authHelpers';
 import type { User } from '../_types/userTypes';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+
+const supabase = createClientComponentClient()
 
 interface UserContextType {
   user: User;
@@ -30,19 +33,48 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User>(defaultUserContext.user);
   const router = useRouter()
 
+  // useEffect(() => {
+  //   console.log('pulling user')
+  //   const getUserInfo = async (): Promise<void> => {
+  //     if (user.UID === '') {
+  //       const loggedIn = await checkAuthStatus(user, setUser);
+  //       if (!loggedIn || loggedIn === null) {
+  //         router.push('/')
+  //       }
+  //     } else if (user.UID !== null && user.username !== null) {
+  //       await retrieveUserInfo(user, setUser);
+  //     }
+  //   };
+  //   getUserInfo().catch(console.error );
+  // }, [user])
+
   useEffect(() => {
-    const getUserInfo = async () => {
-      if (user.UID === '') {
-        const loggedIn = await checkAuthStatus(user, setUser);
-        if (!loggedIn || loggedIn === null) {
-          router.push('/')
+    const getUser = async (): Promise<void> => {
+      // await supabase.auth.signOut()
+      const userAuthInfo = await supabase.auth.getUser();
+      console.log(userAuthInfo)
+      if (userAuthInfo?.data?.user !== null) {
+        const id = userAuthInfo.data.user.id
+        const { data, error } = await supabase
+          .from('users')
+          .select()
+          .eq('user_id', id)
+        if (data !== null) {
+          const { email, username, preferredLanguage, avatar } = data[0]
+          setUser(({
+            UID: id,
+            email,
+            username,
+            preferredLanguage,
+            avatar
+          }))
         }
-      } else if (user.UID !== null && user.username !== null) {
-        await retrieveUserInfo(user, setUser);
+      } else {
+        router.push('/')
       }
-    };
-    getUserInfo();
-  }, [user])
+    }
+    getUser().catch(console.error)
+  }, [])
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
