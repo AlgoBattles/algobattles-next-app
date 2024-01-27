@@ -16,17 +16,21 @@ const OpponentEditor = (): React.ReactElement => {
     </div>
   );
 };
-const SkeletonEditor = ({ text }: { text: string }) => {
-  const lines = text.split('\n'); // Split the text into lines
+const SkeletonEditor = ({ text }: { text: string }): React.JSX.Element => {
+  const lines = text === null
+    ? null
+    : text.split('\n'); // Split the text into lines
   return (
     <div className="w-full h-full bg-gray-950 p-4 box-border overflow-auto">
-      {lines.map((line, index) => (
-        <div
-          key={index}
-          className="h-4 mb-1 bg-gray-800"
-          style={{ width: `${Math.min(line.length, 100)}%` }} // Set width based on line length, max 100%
-        ></div>
-      ))}
+      {lines === null
+        ? null
+        : lines.map((line, index) => (
+          <div
+            key={index}
+            className="h-4 mb-1 bg-gray-800"
+            style={{ width: `${Math.min(line.length, 100)}%` }} // Set width based on line length, max 100%
+          ></div>
+        ))}
     </div>
   );
 };

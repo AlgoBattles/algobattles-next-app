@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FaEnvelope } from 'react-icons/fa';
 import { useRouter, usePathname } from 'next/navigation'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
@@ -30,7 +30,6 @@ const theme = createTheme({
 const supabase = createClientComponentClient()
 
 const Header = (): React.ReactElement => {
-  console.log('re rendering header')
   const [showMailComponent, setShowMailComponent] = useState(false);
   const [showProfileComponent, setShowProfileComponent] = useState(false);
   const { user } = useUser()
@@ -40,11 +39,9 @@ const Header = (): React.ReactElement => {
   const pathname = usePathname()
 
   const showWarningModal = (linkToRedirect: string, warningText: string): void => {
-    console.log('executing function at all')
     if (pathname === '/home/battle') {
       setInfo({ ...info, isOpen: true, buttonTitle: 'Forfeit Battle', warningMessage: warningText, link: linkToRedirect })
     } else if (pathname === '/home/matchmaking/lobby') {
-      console.log('executing lobby case')
       setInfo({ ...info, isOpen: true, buttonTitle: 'Leave Lobby', warningMessage: warningText, link: linkToRedirect })
     } else {
       router.push(linkToRedirect)

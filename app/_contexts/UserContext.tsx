@@ -1,7 +1,6 @@
 'use client'
 import React, { createContext, useState, useContext, useEffect, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation'
-import { checkAuthStatus, retrieveUserInfo } from '../_helpers/authHelpers';
 import type { User } from '../_types/userTypes';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 

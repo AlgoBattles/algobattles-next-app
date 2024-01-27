@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react'
 import ProgressBar from './ProgressBar'
-import { Button, IconButton, Tooltip } from '@mui/material'
+import { IconButton, Tooltip } from '@mui/material'
 import { Replay, PlayArrow } from '@mui/icons-material'
 import { useUser } from '../_contexts/UserContext'
 import { useBattle } from '../_contexts/BattleContext'
@@ -111,12 +111,12 @@ const AceEditor = ({ sendCode }: AceEditorProps): React.ReactElement => {
     editor1.setTheme('ace/theme/chaos');
     if (user.preferredLanguage === 'python') {
       editor1.session.setMode('ace/mode/python');
-      userCode === '' || userCode === null
+      userCode === '' || userCode === 'null'
         ? editor1.setValue(`${templateCodePython}`)
         : editor1.setValue(`${userCode}`);
     } else if (user.preferredLanguage === 'javascript') {
       editor1.session.setMode('ace/mode/javascript')
-      userCode === '' || userCode === null
+      userCode === '' || userCode === 'null'
         ? editor1.setValue(`${templateCodeJS}`)
         : editor1.setValue(`${userCode}`)
     }

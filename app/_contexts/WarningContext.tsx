@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useContext, createContext } from 'react';
+import React, { useState, useContext, createContext, type ReactNode } from 'react';
 
 interface WarningContextInfo {
   buttonTitle: string;
