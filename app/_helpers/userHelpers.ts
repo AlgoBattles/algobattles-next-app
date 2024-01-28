@@ -10,8 +10,7 @@ export async function getUserInfo (userId: string): Promise<any> {
   if (userData !== null && userData.length >= 1) {
     console.log('user data is: ' + userData[0])
     return userData[0]
-  }
-  else if (userError !== null) {
+  } else if (userError !== null) {
     console.log('error retrieving user data')
     console.log(userError)
   }

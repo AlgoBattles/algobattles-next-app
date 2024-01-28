@@ -97,7 +97,25 @@ export default function Home (): React.ReactElement {
           )}
             {selected === 'login' && (
                 <div>
-                  <div className="mb-6 mt-6">
+                    <div className='mt-3 mb-3 py-3 flex flex-row justify-center items-center'>
+                      <button
+                        className='py-2 px-5 w-full rounded-xl bg-gray-650 border-[1px] border-gray-700'
+                        onClick={ () => {
+                          supabase.auth.signInWithOAuth({
+                            provider: 'google',
+                            options: {
+                              redirectTo: 'http://localhost:3000/home'
+                            }
+                          }).catch(console.error)
+                        }}>
+                          <div className='flex flex-row'>
+                          <img className='h-[35px]' src='/google1.png'></img>
+                          Continue With Google
+                          </div>
+                        </button>
+                      <button></button>
+                    </div>
+                  <div className="mb-6 mt-3">
                     <label className="text-white mb-2 block font-semibold">Email</label>
                     <div className="flex items-center bg-gray-900 p-2 rounded">
                       <input type="text" onChange={handleEmailInput} placeholder="admiralsnackbar@algobattles.xyz" className="bg-transparent text-white flex-grow focus:outline-none" />
@@ -110,7 +128,7 @@ export default function Home (): React.ReactElement {
                     </div>
                     <label className="text-red-500 text-sm mt-2 mb-2 block">{error}</label>
                   </div>
-                    <button onClick={() => { handleSignIn().catch(console.error) }} className="bg-orange-500 text-white w-full py-2 font-bold rounded-3xl">CONTINUE</button>
+                    <button onClick={() => { handleSignIn().catch(console.error) }} className="bg-orange-500 text-white w-full py-2 font-bold rounded-3xl">Sign In</button>
                 </div>
             )}
         </div>
