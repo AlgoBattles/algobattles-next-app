@@ -23,7 +23,7 @@ const defaultUserContext: UserContextType = {
     avatar: '',
     UID: ''
   },
-  setUser: () => {},
+  setUser: () => {}
 };
 
 export const UserContext = createContext<UserContextType>(defaultUserContext);

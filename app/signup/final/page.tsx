@@ -1,6 +1,6 @@
 'use client'
 import Head from 'next/head';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useUser } from '../../_contexts/UserContext';
 import Image from 'next/image'
 
@@ -22,11 +22,17 @@ export default function Page (): JSX.Element {
   const handleUsernameInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
   }
+  useEffect(() => {
+    console.log(user)
+    if (user.avatar !== '') {
+      router.push('/')
+    }
+  }, [user])
 
   const handleFinish = async (): Promise<void> => {
     if (username !== null && username.length > 16) {
       setError('Username must be less than 16 characters')
-    } else if (email !== '' && avatar !== '' && username !== '' && preferredLanguage !== '' && UID !== '') {
+    } else if (email !== '' && email !== undefined && avatar !== '' && avatar !== undefined && username !== '' && username !== undefined && preferredLanguage !== '' && preferredLanguage !== undefined && UID !== '') {
       setUser(({ ...user, email, avatar, username, preferredLanguage, UID }));
       console.log('user is: ', user)
       const { data, error } = await supabase
