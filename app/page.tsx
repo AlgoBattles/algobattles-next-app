@@ -53,8 +53,8 @@ export default function Home (): React.ReactElement {
     <Head>
       <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300&display=swap" rel="stylesheet"/>
     </Head>
-    <div className="flex flex-col h-screen">
-      <h1 style={{ fontFamily: 'LuckiestGuy', fontSize: '50px', textAlign: 'left', width: '100%', marginTop: '20px', marginLeft: '20px', color: 'white' }} >AlgoBattles</h1>
+    <div className="flex flex-col h-screen w-screen">
+      <h1 style={{ fontFamily: 'LuckiestGuy', fontSize: '50px', textAlign: 'left', marginTop: '20px', marginLeft: '20px', color: 'white' }} >AlgoBattles</h1>
         <div className="flex justify-center items-center flex-grow">
           <div className="bg-gray-800 w-[400px] h-[500px] p-6 rounded-lg border-[1px] border-gray-700">
             <div className="bg-gray-900 p-1 w-auto inline-block rounded-md mb-4">
