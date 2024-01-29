@@ -9,7 +9,7 @@ function TabComponent (): React.ReactElement {
   const { algoPrompt }: { algoPrompt: string } = battle
 
   return (
-    <div className="bg-gray-900 p-4 rounded-lg w-full overflow-y-auto overflow-x-auto">
+    <div className="flex flex-col bg-gray-900 p-4 rounded-lg w-full">
       <div className="flex border-b border-gray-700 mb-4">
         <button
           onClick={() => { setActiveTab('Task') }} 

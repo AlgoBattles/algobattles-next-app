@@ -6,7 +6,7 @@ import { useBattle } from '../_contexts/BattleContext';
 const OpponentEditor = (): React.ReactElement => {
   const { battle } = useBattle();
   return (
-    <div className="w-full h-[50vh] border border-red-700 rounded-[3px]">
+    <div className="w-full h-full border border-red-700 rounded-[3px]">
       <div className="flex flex-row w-full h-[13%] rounded-[3px] bg-black justify-between">
       <ProgressBar percentage={battle.opponentProgress} />
       </div>

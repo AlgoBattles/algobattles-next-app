@@ -7,9 +7,9 @@ const TabComponent = (): React.ReactElement => {
   const { battle } = useBattle();
   const { testCasesObj, userResults }: { testCasesObj: Record<string, TestCase> | null, userResults: Result[] | null } = battle;
   return (
-    <div>
+    <>
     {testCasesObj !== null &&
-      <div className="bg-black p-6 m-2 box-border rounded-md max-w-full h-75 overflow-y-auto overflow-x-auto">
+      <div className="flex-grow flex flex-col bg-black p-6 rounded-md max-w-full overflow-y-scroll overflow-x-auto">
         <div className="flex flex-row space-x-4">
         {Object.keys(testCasesObj).map((key, index) => (
             <button
@@ -41,7 +41,7 @@ const TabComponent = (): React.ReactElement => {
       </div>
     </div>
     }
-    </div>
+    </>
   );
 };
 
