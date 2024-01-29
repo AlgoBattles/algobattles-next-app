@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Head from 'next/head'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter } from 'next/navigation'
+import EmailIcon from '@mui/icons-material/Email';
 
 export default function Home (): React.ReactElement {
   const [selected, setSelected] = useState('signup')
@@ -82,15 +83,27 @@ export default function Home (): React.ReactElement {
                     redirectTo: 'http://localhost:3000/signup/final'
                   }
                 }).catch(console.error)
-              }} className=" bg-white hover:bg-white-100 text-black font-bold py-2 px-4 w-[100%] rounded-3xl">
-              Sign up with Google
+              }} className="py-1 px-1 w-full rounded-3xl hover:bg-gray-200 bg-white border-[1px] border-gray-700">
+              <div className='flex flex-row justify-center items-center'>
+                <img className='h-[35px]' src='/google1.png'></img>
+                <div className='font-medium text-sm text-black'>
+                  Sign up with Google
+                </div>
+              </div>
               </button>
-              <button className=" bg-white hover:bg-white-100 text-black font-bold py-2 px-4 w-[100%] rounded-3xl">
-              Sign up with Apple
-              </button>
+              <div className="flex items-center w-full justify-center mt-3 mb-3">
+                <div className="bg-blue-500 border-t border-gray-600 flex-grow mr-3 ml-3"></div>
+                <span className="text-gray-200 font-light text-sm">or</span>
+                <div className="border-t border-gray-600 flex-grow ml-3 mr-3"></div>
+              </div>
               <Link className='w-[100%]' href={'/signup/email'}>
-              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 w-[100%] rounded-3xl">
-              Sign up with Email
+              <button className="bg-blue-600 hover:bg-blue-700 text-white text-base font-medium py-2.5 w-full rounded-3xl">
+              <div className='flex flex-row justify-center items-center ml-[-6px]'>
+                <EmailIcon/>
+                <div className='font-medium ml-[6px] text-sm text-white'>
+                  Sign up with email
+                </div>
+              </div>
               </button>
               </Link>
           </div>
@@ -99,7 +112,7 @@ export default function Home (): React.ReactElement {
                 <div>
                     <div className='mt-3 mb-3 py-3 flex flex-row justify-center items-center'>
                       <button
-                        className='py-2 px-5 w-full rounded-xl bg-gray-650 border-[1px] border-gray-700'
+                        className='py-1 px-1 w-full rounded-3xl hover:bg-gray-200 bg-white border-[1px] border-gray-700'
                         onClick={ () => {
                           supabase.auth.signInWithOAuth({
                             provider: 'google',
@@ -108,27 +121,29 @@ export default function Home (): React.ReactElement {
                             }
                           }).catch(console.error)
                         }}>
-                          <div className='flex flex-row'>
-                          <img className='h-[35px]' src='/google1.png'></img>
-                          Continue With Google
+                          <div className='flex flex-row justify-center items-center'>
+                            <img className='h-[35px]' src='/google1.png'></img>
+                            <div className='font-medium text-sm text-black'>
+                              Sign in with Google
+                            </div>
                           </div>
                         </button>
                       <button></button>
                     </div>
                   <div className="mb-6 mt-3">
-                    <label className="text-white mb-2 block font-semibold">Email</label>
+                    <label className="text-white text-sm mb-2 block font-medium">Email</label>
                     <div className="flex items-center bg-gray-900 p-2 rounded">
                       <input type="text" onChange={handleEmailInput} placeholder="admiralsnackbar@algobattles.xyz" className="bg-transparent text-white flex-grow focus:outline-none" />
                     </div>
                   </div>
                   <div className="mb-6 mt-6">
-                    <label className="text-white mb-2 block font-semibold">Password</label>
+                    <label className="text-white text-sm mb-2 block font-medium">Password</label>
                     <div className="flex items-center bg-gray-900 p-2 rounded">
                       <input type="password" onChange={handlePasswordInput} placeholder="Password" className="bg-transparent text-white flex-grow focus:outline-none" />
                     </div>
                     <label className="text-red-500 text-sm mt-2 mb-2 block">{error}</label>
                   </div>
-                    <button onClick={() => { handleSignIn().catch(console.error) }} className="bg-orange-500 text-white w-full py-2 font-bold rounded-3xl">Sign In</button>
+                    <button onClick={() => { handleSignIn().catch(console.error) }} className="bg-orange-500 text-white w-full py-2 font-medium rounded-3xl">Sign In</button>
                 </div>
             )}
         </div>
