@@ -25,8 +25,6 @@ const AceEditor = ({ sendCode }: AceEditorProps): React.ReactElement => {
     userProgress
   } = battle
 
-  console.log(battle)
-
   const editor1Ref = useRef<HTMLDivElement | null>(null);
   const [testCasesArray, setTestCasesArray] = useState<any[][] | null>(null)
 
@@ -41,7 +39,6 @@ const AceEditor = ({ sendCode }: AceEditorProps): React.ReactElement => {
   }
 
   const resetCode = (): void => {
-    console.log('resetting code')
     const editor = ace.edit(editor1Ref.current);
     if (user.preferredLanguage === 'javascript') {
       sendCode(battle.templateCodeJS)
@@ -110,7 +107,6 @@ const AceEditor = ({ sendCode }: AceEditorProps): React.ReactElement => {
     require('ace-builds/src-noconflict/mode-javascript');
     require('ace-builds/src-noconflict/mode-python')
     const editor1 = ace.edit(editor1Ref.current);
-    console.log('mounting editor')
     editor1.setTheme('ace/theme/chaos');
     if (user.preferredLanguage === 'python') {
       editor1.session.setMode('ace/mode/python');
@@ -120,12 +116,8 @@ const AceEditor = ({ sendCode }: AceEditorProps): React.ReactElement => {
     } else if (user.preferredLanguage === 'javascript') {
       editor1.session.setMode('ace/mode/javascript')
       if (userCode === '' || userCode === null || userCode === 'null') {
-        console.log('setting template code')
-        console.log('template code is', templateCodeJS)
         editor1.setValue(`${templateCodeJS}`)
       } else {
-        console.log('setting user code')
-        console.log('user code is', userCode)
         editor1.setValue(`${userCode}`)
       }
       // userCode === '' || userCode === 'null' || userCode === null
@@ -135,7 +127,7 @@ const AceEditor = ({ sendCode }: AceEditorProps): React.ReactElement => {
     editor1.setOptions({
       fontSize: '10pt'
     })
-    // Add event listener for the change event
+    // event listener for the change event
     editor1.on('change', function (): void {
       const code = editor1.getValue()
       setBattle(prevBattle => ({ ...prevBattle, userCode: `${code}` }))

@@ -9,6 +9,7 @@ const supabase = createClientComponentClient()
 interface UserContextType {
   user: User;
   setUser: React.Dispatch<React.SetStateAction<User>>;
+  getUserInfo: () => Promise<void>;
 }
 
 interface UserProviderProps {
@@ -23,8 +24,9 @@ const defaultUserContext: UserContextType = {
     avatar: '',
     UID: ''
   },
-  setUser: () => {}
-};
+  setUser: () => {},
+  getUserInfo: async (): Promise<void> => {}
+}
 
 export const UserContext = createContext<UserContextType>(defaultUserContext);
 
@@ -32,60 +34,43 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User>(defaultUserContext.user);
   const router = useRouter()
 
-  // useEffect(() => {
-  //   console.log('pulling user')
-  //   const getUserInfo = async (): Promise<void> => {
-  //     if (user.UID === '') {
-  //       const loggedIn = await checkAuthStatus(user, setUser);
-  //       if (!loggedIn || loggedIn === null) {
-  //         router.push('/')
-  //       }
-  //     } else if (user.UID !== null && user.username !== null) {
-  //       await retrieveUserInfo(user, setUser);
-  //     }
-  //   };
-  //   getUserInfo().catch(console.error );
-  // }, [user])
+  const getUserInfo = async (): Promise<void> => {
+    const userAuthInfo = await supabase.auth.getUser();
+    if (userAuthInfo?.data?.user !== null) {
+      const { id, email } = userAuthInfo.data.user
+      const { data } = await supabase
+        .from('users')
+        .select()
+        .eq('user_id', id)
+      if (data !== null && data.length > 0) {
+        const { email, username, preferredLanguage, avatar } = data[0]
+        setUser(({
+          UID: id,
+          email,
+          username,
+          preferredLanguage,
+          avatar
+        }))
+      } else {
+        if (email !== null && email !== '' && email !== undefined) {
+          setUser(({
+            ...user,
+            UID: id,
+            email
+          }))
+        }
+      }
+    } else {
+      router.push('/')
+    }
+  }
 
   useEffect(() => {
-    const getUser = async (): Promise<void> => {
-      // await supabase.auth.signOut()
-      const userAuthInfo = await supabase.auth.getUser();
-      console.log(userAuthInfo)
-      if (userAuthInfo?.data?.user !== null) {
-        const { id, email } = userAuthInfo.data.user
-        const { data } = await supabase
-          .from('users')
-          .select()
-          .eq('user_id', id)
-        if (data !== null && data.length > 0) {
-          console.log('data is', data)
-          const { email, username, preferredLanguage, avatar } = data[0]
-          setUser(({
-            UID: id,
-            email,
-            username,
-            preferredLanguage,
-            avatar
-          }))
-        } else {
-          if (email !== null && email !== '' && email !== undefined) {
-            setUser(({
-              ...user,
-              UID: id,
-              email
-            }))
-          }
-        }
-      } else {
-        router.push('/')
-      }
-    }
-    getUser().catch(console.error)
+    getUserInfo().catch(console.error)
   }, [])
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, getUserInfo }}>
       {children}
     </UserContext.Provider>
   );

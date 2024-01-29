@@ -1,8 +1,17 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Link from 'next/link'
+import { useUser } from '../_contexts/UserContext'
 
 export default function Home (): React.ReactElement {
+  const { user, getUserInfo } = useUser()
+
+  useEffect(() => {
+    if (user.username === '') {
+      getUserInfo().catch(console.error)
+    }
+  }, [])
+
   return (
     <div className="flex flex-col h-full">
       <div className="flex justify-center items-center flex-grow">
