@@ -150,8 +150,8 @@ const AceEditor = ({ sendCode }: AceEditorProps): React.ReactElement => {
   }, [testCasesObj])
 
   return (
-    <div className="w-full h-full border border-blue-700 rounded-[3px]">
-      <div className="flex flex-row w-full h-[13%] rounded-[3px] bg-black justify-between">
+    <div className="w-full h-full flex flex-col border border-blue-700 rounded-[3px]">
+      <div className="flex flex-row w-full rounded-[3px] bg-black justify-between">
         <div>
           <Tooltip title="Execute Code" enterDelay={100} leaveDelay={50}>
             <IconButton
@@ -174,7 +174,7 @@ const AceEditor = ({ sendCode }: AceEditorProps): React.ReactElement => {
         </div>
         <ProgressBar percentage={userProgress} />
       </div>
-      <div id="editor1" ref={editor1Ref} className="w-full h-[87%] rounded-[3px]" />
+      <div id="editor1" ref={editor1Ref} className="w-full flex-grow rounded-[3px]" />
     </div>
   )
 }
