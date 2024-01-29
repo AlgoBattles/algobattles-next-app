@@ -10,7 +10,6 @@ import OpponentEditor from '../../_components/OpponentEditor';
 import TestCases from '../../_components/TestCases';
 import OutputConsole from '@/app/_components/Output';
 import GameOver from '../../_components/GameOverModal';
-import WarningModal from '@/app/_components/WarningModal';
 
 // context
 import { useUser } from '../../_contexts/UserContext';
@@ -27,7 +26,8 @@ const Battle = (): React.JSX.Element => {
 
   useEffect(() => {
     const setBattleState = async (): Promise<void> => {
-      if (user.UID !== '' && battle.algoPrompt === '') {
+      if (user.UID !== '') {
+        console.log('battleID is', battleId)
         const result = await pullBattleStateFromDB(user, battle, setBattle, Number(battleId));
         if (result === null) {
           router.push('/home')
@@ -83,15 +83,12 @@ const Battle = (): React.JSX.Element => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen items-center justify-center">
-    <div className="grid grid-cols-2 grid-rows-2 gap-4 p-4 w-full">
+    <div className="grid grid-cols-2 min-h-screen max-h-screen grid-rows-2 gap-4 p-4 w-full">
       <GameOver show={battle.gameOver} userWon={battle.userWon}></GameOver>
       <Editor sendCode={sendCode}></Editor>
       <OpponentEditor></OpponentEditor>
       <TestCases></TestCases>
       <OutputConsole></OutputConsole>
-      <WarningModal></WarningModal>
-    </div>
     </div>
   );
 };

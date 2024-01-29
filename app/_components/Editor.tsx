@@ -7,6 +7,7 @@ import { useUser } from '../_contexts/UserContext'
 import { useBattle } from '../_contexts/BattleContext'
 import type { TestCase } from '../_types/battleTypes'
 
+
 interface AceEditorProps {
   sendCode: (message: string) => void
 };
@@ -23,6 +24,8 @@ const AceEditor = ({ sendCode }: AceEditorProps): React.ReactElement => {
     userCode,
     userProgress
   } = battle
+
+  console.log(battle)
 
   const editor1Ref = useRef<HTMLDivElement | null>(null);
   const [testCasesArray, setTestCasesArray] = useState<any[][] | null>(null)
@@ -107,18 +110,27 @@ const AceEditor = ({ sendCode }: AceEditorProps): React.ReactElement => {
     require('ace-builds/src-noconflict/mode-javascript');
     require('ace-builds/src-noconflict/mode-python')
     const editor1 = ace.edit(editor1Ref.current);
-
+    console.log('mounting editor')
     editor1.setTheme('ace/theme/chaos');
     if (user.preferredLanguage === 'python') {
       editor1.session.setMode('ace/mode/python');
-      userCode === '' || userCode === 'null'
+      userCode === '' || userCode === 'null' || userCode === null
         ? editor1.setValue(`${templateCodePython}`)
         : editor1.setValue(`${userCode}`);
     } else if (user.preferredLanguage === 'javascript') {
       editor1.session.setMode('ace/mode/javascript')
-      userCode === '' || userCode === 'null'
-        ? editor1.setValue(`${templateCodeJS}`)
-        : editor1.setValue(`${userCode}`)
+      if (userCode === '' || userCode === null || userCode === 'null') {
+        console.log('setting template code')
+        console.log('template code is', templateCodeJS)
+        editor1.setValue(`${templateCodeJS}`)
+      } else {
+        console.log('setting user code')
+        console.log('user code is', userCode)
+        editor1.setValue(`${userCode}`)
+      }
+      // userCode === '' || userCode === 'null' || userCode === null
+      //   ? editor1.setValue(`${templateCodeJS}`)
+      //   : editor1.setValue(`${userCode}`)
     }
     editor1.setOptions({
       fontSize: '10pt'
@@ -138,35 +150,26 @@ const AceEditor = ({ sendCode }: AceEditorProps): React.ReactElement => {
   }, [testCasesObj])
 
   return (
-    <div className="w-full h-[50vh] border border-blue-700 rounded-[3px]">
+    <div className="w-full h-full border border-blue-700 rounded-[3px]">
       <div className="flex flex-row w-full h-[13%] rounded-[3px] bg-black justify-between">
         <div>
-          {/* <Button variant="contained"
-          onClick={() => { runCode().catch(console.error) }}
-          startIcon={<PlayArrow />}
-          className="h-8 w-30 bg-blue-500 hover:bg-blue-700 m-2 text-white" 
-          sx={{
-            fontSize: '12px',
-            fontFamily: 'arial'
-          }}>Run Code</Button> */}
           <Tooltip title="Execute Code" enterDelay={100} leaveDelay={50}>
-          <IconButton
-            aria-label="execute code"
-            className="h-8 w-8 rounded bg-blue-500 hover:bg-blue-700 m-2 text-white"
-            onClick={() => { runCode().catch(console.error) }}
-          >
-            <PlayArrow />
-          </IconButton>
+            <IconButton
+              aria-label="execute code"
+              className="h-8 w-8 rounded bg-blue-500 hover:bg-blue-700 m-2 text-white"
+              onClick={() => { runCode().catch(console.error) }}
+            >
+              <PlayArrow />
+            </IconButton>
           </Tooltip>
-
           <Tooltip title="Reset Code" enterDelay={100} leaveDelay={50}>
-          <IconButton
-            aria-label="reset code"
-            className="h-8 w-8 bg-black rounded hover:bg-gray-700 text-white"
-            onClick = {() => { resetCode() }}
-          >
-            <Replay />
-          </IconButton>
+            <IconButton
+              aria-label="reset code"
+              className="h-8 w-8 bg-black rounded hover:bg-gray-700 text-white"
+              onClick = {() => { resetCode() }}
+            >
+              <Replay />
+            </IconButton>
           </Tooltip>
         </div>
         <ProgressBar percentage={userProgress} />
