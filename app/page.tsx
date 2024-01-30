@@ -21,6 +21,7 @@ export default function Home (): React.ReactElement {
   const router = useRouter()
   const supabase = createClientComponentClient()
   const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [isMobile, setIsMobile] = useState(false);
 
   const handleEmailInput = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setEmail(event.target.value)
@@ -48,6 +49,18 @@ export default function Home (): React.ReactElement {
   }
 
   useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    // Only add the event listener if window is defined (we're in the browser)
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', handleResize);
+      handleResize();
+      return () => { window.removeEventListener('resize', handleResize) };
+    }
+  }, []);
+
+  useEffect(() => {
     const checkAuth = async (): Promise<void> => {
       await checkIfLoggedIn()
     }
@@ -56,6 +69,34 @@ export default function Home (): React.ReactElement {
     })
   }, [])
 
+  if (isMobile) {
+    return (
+      <>
+        <Head>
+          <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300&display=swap" rel="stylesheet"/>
+        </Head>
+        <h1 style={{ fontFamily: 'LuckiestGuy', fontSize: '50px', textAlign: 'center', marginTop: '20px', color: 'white' }} >AlgoBattles</h1>
+        <div className='flex flex-col w-full h-[75%] items-center justify-center'>
+        <div className="bg-gray-800 text-white rounded-lg overflow-hidden shadow-xl max-w-sm w-[75vw]">
+        <div className="px-6 py-4 bg-gray-900 flex justify-center items-center">
+          <span className="text-lg text-center font-semibold">Welcome to AlgoBattles</span>
+        </div>
+        <div className="px-6 pt-6 pb-4">
+          <p className="text-white text-base">
+          Unfortunately, it is not yet possible to code like a pro on mobile.
+              Please use a desktop device.
+          </p>
+        </div>
+        <div className="flex flex-col px-6 py-4 items-center">
+          <button onClick={() => { window.location.href = 'https://twitter.com' }} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
+            Take me to Twitter!
+          </button>
+        </div>
+        </div>
+      </div>
+      </>
+    );
+  }
   return (
     <>
     <Head>
