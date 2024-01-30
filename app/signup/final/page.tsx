@@ -6,7 +6,6 @@ import Image from 'next/image'
 
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter } from 'next/navigation'
-import type { Database } from '@/lib/database.types'
 
 export default function Page (): JSX.Element {
   const { user, setUser } = useUser();
@@ -17,7 +16,7 @@ export default function Page (): JSX.Element {
   const { UID, email } = user
 
   const router = useRouter()
-  const supabase = createClientComponentClient<Database>()
+  const supabase = createClientComponentClient()
 
   const handleUsernameInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);

@@ -5,19 +5,14 @@ import { useUser } from '../../_contexts/UserContext';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter } from 'next/navigation'
 
-import type { Database } from '@/lib/database.types'
-import Head from 'next/head';
-
-export default function Home() {
+export default function Home(): JSX.Element {
   const { user, setUser } = useUser();
   const [email, setEmail] = useState(''); 
   const [password, setPassword] = useState('')
-  
   const [error, setError] = useState('')
 
   const router = useRouter()
-  const supabase = createClientComponentClient<Database>()
-
+  const supabase = createClientComponentClient()
 
   const handleEmailInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -30,7 +25,7 @@ export default function Home() {
     setUser(({ ...user, email}));
   }
   const handleSignUp = async () => {
-  const { data: userData, error: userError } = await supabase
+    const { data: userData, error: userError } = await supabase
       .from('users')
       .select()
       .eq('email', email)
