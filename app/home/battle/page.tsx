@@ -27,7 +27,6 @@ const Battle = (): React.JSX.Element => {
   useEffect(() => {
     const setBattleState = async (): Promise<void> => {
       if (user.UID !== '') {
-        console.log('battleID is', battleId)
         const result = await pullBattleStateFromDB(user, battle, setBattle, Number(battleId));
         if (result === null) {
           router.push('/home')
@@ -46,6 +45,7 @@ const Battle = (): React.JSX.Element => {
       const serverURL = 'http://localhost:8081';
       const socket = io(serverURL, {
         query: {
+          authorization: process.env.NEXT_PUBLIC_ENGINE_AUTH_KEY,
           roomId: battleRoomId,
           userId: user.UID
         }
@@ -74,7 +74,7 @@ const Battle = (): React.JSX.Element => {
   useEffect(() => {
     // emit code changes to socket server
     battle.userCode !== '' && sendCode(battle.userCode);
-  }, [battle.userCode]); 
+  }, [battle.userCode]);
 
   const sendCode = (message: string): void => {
     if (socketRef.current !== null) {

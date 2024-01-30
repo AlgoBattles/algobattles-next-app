@@ -7,7 +7,6 @@ import { useUser } from '../_contexts/UserContext'
 import { useBattle } from '../_contexts/BattleContext'
 import type { TestCase } from '../_types/battleTypes'
 
-
 interface AceEditorProps {
   sendCode: (message: string) => void
 };
@@ -29,7 +28,7 @@ const AceEditor = ({ sendCode }: AceEditorProps): React.ReactElement => {
   const [testCasesArray, setTestCasesArray] = useState<any[][] | null>(null)
 
   // formats test cases for execution engine compatibility
-  const formatTestCases = (data: { [key: string]: TestCase }) => { 
+  const formatTestCases = (data: Record<string, TestCase>) => { 
     // console.log('raw test cases are')
     // console.log(data)
     const result = Object.values(data).map(testCase => {
@@ -57,10 +56,16 @@ const AceEditor = ({ sendCode }: AceEditorProps): React.ReactElement => {
   }
 
   const runCode = async (): Promise<void> => {
+    const authKey = process.env.NEXT_PUBLIC_ENGINE_AUTH_KEY;
+    console.log(authKey)
+    if (authKey === '' || authKey === undefined) {
+      throw new Error('ENGINE_AUTH_KEY is not defined');
+    }
     const result = await fetch('http://localhost:8081/execute', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Authorization: authKey
       },
       body: JSON.stringify({
         code: userCode,

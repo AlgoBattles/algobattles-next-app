@@ -2,7 +2,7 @@ import React from 'react';
 
 const ProgressBar = ({ percentage }: { percentage: number }): JSX.Element => {
   return (
-    <div className="flex flex-col items-center bg-black text-white p-2 rounded-lg w-[20vw] max-w-60">
+    <div className="flex flex-col items-center text-white p-2 rounded-lg w-[20vw] max-w-60">
       <div className="flex w-full items-center mr-3">
         <div className="mr-2.5">
         <div className="text-right">

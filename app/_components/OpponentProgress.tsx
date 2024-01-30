@@ -6,7 +6,7 @@ interface ProgressBarProps {
 
 const ProgressBar: React.FC<ProgressBarProps> = ({ percentage }) => {
   return (
-    <div className="flex flex-col items-center bg-black text-white p-2 rounded-lg z-0 w-[20vw] min-w-30 max-w-60">
+    <div className="flex flex-col items-center text-white p-2 rounded-lg z-0 w-[20vw] min-w-30 max-w-60">
       <div className="flex w-full items-center">
         <div className="mr-2.5 ml-2">
           <div className="text-right">
