@@ -30,11 +30,18 @@ const AceEditor = ({ sendCode }: AceEditorProps): React.ReactElement => {
 
   // formats test cases for execution engine compatibility
   const formatTestCases = (data: { [key: string]: TestCase }) => { 
-    const result = Object.values(data).map(key => {
-      const inputValues = [key.input.nums, key.input.target];
-      const expectedOutput = key.output.expected;
+    // console.log('raw test cases are')
+    // console.log(data)
+    const result = Object.values(data).map(testCase => {
+      const inputValues = []
+      for (const variable in testCase.input) {
+        inputValues.push(testCase.input[variable])
+      }
+      const expectedOutput = testCase.output.expected;
       return [inputValues, expectedOutput];
     })
+    // console.log('formatted cases are')
+    // console.log(result)
     return result
   }
 
