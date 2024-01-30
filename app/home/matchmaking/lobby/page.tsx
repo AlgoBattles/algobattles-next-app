@@ -58,6 +58,7 @@ export default function Lobby (): React.ReactElement {
     const serverURL = 'https://algobattles-socketio.onrender.com';
     const socket = io(serverURL, {
       query: {
+        authorization: process.env.NEXT_PUBLIC_ENGINE_AUTH_KEY,
         roomId: lobbyRoomId,
         userId: user.UID
       }
