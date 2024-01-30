@@ -61,7 +61,7 @@ const AceEditor = ({ sendCode }: AceEditorProps): React.ReactElement => {
     if (authKey === '' || authKey === undefined) {
       throw new Error('ENGINE_AUTH_KEY is not defined');
     }
-    const result = await fetch('http://localhost:8081/execute', {
+    const result = await fetch('https://algobattles-socketio.onrender.com/execute', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
