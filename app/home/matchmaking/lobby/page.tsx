@@ -55,7 +55,7 @@ export default function Lobby (): React.ReactElement {
 
   // connect to lobby socket
   useEffect(() => {
-    const serverURL = 'https://algobattles-socketio.onrender.com/';
+    const serverURL = 'https://algobattles-socketio.onrender.com';
     const socket = io(serverURL, {
       query: {
         roomId: lobbyRoomId,
