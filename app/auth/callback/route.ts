@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 
 import type { NextRequest } from 'next/server'
 
-export async function GET(request: NextRequest) {
+export async function GET(request: NextRequest): Promise<NextResponse<unknown>> {
   const requestUrl = new URL(request.url)
   const code = requestUrl.searchParams.get('code')
 
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
   return NextResponse.redirect(requestUrl.origin + '/signup/final')
 }
 
-export async function POST(request: Request) {
+export async function POST(request: Request): Promise<NextResponse<unknown>> {
   const requestUrl = new URL(request.url)
   const cookieStore = cookies()
   const supabase = createRouteHandlerClient({ cookies: () => cookieStore })

@@ -1,5 +1,4 @@
 'use client'
-import Head from 'next/head';
 import React, { useState, useEffect } from 'react';
 import { useUser } from '../../_contexts/UserContext';
 import Image from 'next/image'
@@ -31,7 +30,9 @@ export default function Page (): JSX.Element {
   const handleFinish = async (): Promise<void> => {
     if (username !== null && username.length > 16) {
       setError('Username must be less than 16 characters')
-    } else if (email !== '' && email !== undefined && avatar !== '' && avatar !== undefined && username !== '' && username !== undefined && preferredLanguage !== '' && preferredLanguage !== undefined && UID !== '') {
+    } else if (email !== '' && email !== undefined && avatar !== '' && avatar !== undefined &&
+      avatar !== null && username !== null && username !== '' && username !== undefined &&
+      preferredLanguage !== '' && preferredLanguage !== undefined && preferredLanguage !== null && UID !== '') {
       setUser(({ ...user, email, avatar, username, preferredLanguage, UID }));
       console.log('user is: ', user)
       const { data, error } = await supabase
@@ -84,7 +85,7 @@ export default function Page (): JSX.Element {
           <div className="h-10">
           <label className="text-red-500 text-sm mt-2 mb-2 block">{error}</label>
           </div>
-          <button onClick={handleFinish} className="bg-orange-500 text-white w-full py-2 rounded-3xl font-bold mt-10">FINISH</button>
+          <button onClick={() => { handleFinish().catch(console.error) }} className="bg-orange-500 text-white w-full py-2 rounded-3xl font-bold mt-10">FINISH</button>
         </div>
       </div>
       </div>

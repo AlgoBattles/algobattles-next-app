@@ -1,14 +1,8 @@
 'use client'
 import React, { useEffect } from 'react';
-import { css } from '@emotion/react';
 import { ClipLoader } from 'react-spinners';
 import { useRouter } from 'next/navigation'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-
-const override = css`
-  display: block;
-  margin: 0 auto;
-`;
 
 const LogoutPage: React.FC = () => {
   const router = useRouter()

@@ -1,15 +1,9 @@
-export type TestCase = {
-  input: {
-    [key: string]: any;
-    };
-    output: {
-      [key: string]: any;
-    };
-  };
-
-export type Result = {
-      [key: string]: any;
+export interface TestCase {
+  input: Record<string, any>;
+  output: Record<string, any>;
 };
+
+export interface Result extends Record<string, any> {}
 
 export interface Battle {
   battleId: number;
@@ -18,7 +12,7 @@ export interface Battle {
   funcName: string;
   templateCodeJS: string;
   templateCodePython: string;
-  testCasesObj: { [key: string]: TestCase } | null;
+  testCasesObj: Record<string, TestCase> | null;
   userRole: string;
   userId: string;
   opponentId: string;

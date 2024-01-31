@@ -33,12 +33,12 @@ export const InvitesProvider: React.FC<InvitesProviderProps> = ({ children }) =>
   const { user } = useUser();
 
   const retrieveInviteDetails = async (): Promise<void> => {
-    const userAuthInfo = await supabase.auth.getUser();
-    if (userAuthInfo?.data?.user?.id) {
+    const userId = (await supabase.auth.getUser())?.data?.user?.id ?? null;
+    if (userId !== null) {
       const { data } = await supabase
         .from('battle_invites')
         .select()
-        .eq('recipient_id', userAuthInfo.data.user.id)
+        .eq('recipient_id', userId)
       if (data !== null && data.length >= 1) {
         for (const invite of data) {
           const { data: userData } = await supabase
@@ -59,7 +59,7 @@ export const InvitesProvider: React.FC<InvitesProviderProps> = ({ children }) =>
     };
     checkForInvite().catch(console.error);
     // connect to socket server to listen for real time invites
-    const channels = supabase.channel('custom-all-channel')
+    supabase.channel('custom-all-channel')
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'battle_invites' },

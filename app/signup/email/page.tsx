@@ -1,11 +1,11 @@
-"use client"
-import React, { useState, useEffect } from 'react';
+'use client'
+import React, { useState } from 'react';
 import { useUser } from '../../_contexts/UserContext';
 
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter } from 'next/navigation'
 
-export default function Home(): JSX.Element {
+export default function Home (): JSX.Element {
   const { user, setUser } = useUser();
   const [email, setEmail] = useState(''); 
   const [password, setPassword] = useState('')
@@ -21,15 +21,12 @@ export default function Home(): JSX.Element {
     setPassword(event.target.value);
   }
 
-  const setStateObj = () => {
-    setUser(({ ...user, email}));
-  }
-  const handleSignUp = async () => {
+  const handleSignUp = async (): Promise<void> => {
     const { data: userData, error: userError } = await supabase
       .from('users')
       .select()
       .eq('email', email)
-    if (userData && userData.length > 0) {
+    if (userData !== null && userData.length > 0) {
       setError('User already exists')
     } else {
       const { data, error } = await supabase.auth.signUp({
@@ -37,21 +34,20 @@ export default function Home(): JSX.Element {
         password,
         options: {
           emailRedirectTo: `${location.origin}/auth/callback`,
-        },
+        }
       })
-      if (error) {
+      if (error !== null) {
         setError(error.message)
         console.log(error)
-        return
-      }
-      else if (data) {
+      } else if (data !== null) {
         router.push('/signup/verify')
       }
     }
   }
+
   return (
     <div className="flex flex-col h-screen">
-      <h1 style={{fontFamily: 'LuckiestGuy', fontSize: '50px', textAlign: 'left', width: '100%', marginTop: '20px', marginLeft: '20px'}} >AlgoBattles</h1>
+      <h1 style={{ fontFamily: 'LuckiestGuy', fontSize: '50px', textAlign: 'left', width: '100%', marginTop: '20px', marginLeft: '20px' }} >AlgoBattles</h1>
       <div className="flex justify-center items-center flex-grow">
         <div className="bg-gray-800 w-[400px] h-[500px] p-6 rounded-lg border-[1px] border-gray-700">
         {/* // some funny animation or illustration here */}
@@ -66,7 +62,7 @@ export default function Home(): JSX.Element {
         <div className="h-10">
           <label className="text-red-500 text-sm mt-2 mb-2 block">{error}</label>
         </div>
-        <button onClick={handleSignUp} className="bg-orange-500 text-white font-bold w-full py-2 rounded-3xl">CONTINUE</button>
+        <button onClick={ () => { handleSignUp().catch(console.error) }} className="bg-orange-500 text-white font-bold w-full py-2 rounded-3xl">CONTINUE</button>
         </div>
       </div>
     </div>
