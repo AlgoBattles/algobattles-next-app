@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Suspense } from "react";
 import io from "socket.io-client";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useUser } from "../../../_contexts/UserContext";
@@ -103,78 +103,84 @@ export default function Lobby(): React.ReactElement {
   };
 
   return (
-    <div className="flex flex-col h-screen">
-      <div className="flex justify-center items-center flex-grow">
-        <div
-          className={`flex flex-col bg-gray-800 w-[400px] h-[400px] rounded-lg border-[1px] border-gray-700 ${opponentReady ? "bg-green-gradient" : "bg-gold-gradient"}`}
-        >
-          <div className="px-6 py-4">
-            <div className="mb-6">
-              {opponentReady ? (
+    <Suspense>
+      <div className="flex flex-col h-screen">
+        <div className="flex justify-center items-center flex-grow">
+          <div
+            className={`flex flex-col bg-gray-800 w-[400px] h-[400px] rounded-lg border-[1px] border-gray-700 ${opponentReady ? "bg-green-gradient" : "bg-gold-gradient"}`}
+          >
+            <div className="px-6 py-4">
+              <div className="mb-6">
+                {opponentReady ? (
+                  <div
+                    className={
+                      "text-2xl font-semibold mb-6 mt-6 text-green-400"
+                    }
+                  >
+                    Opponent is ready...
+                  </div>
+                ) : (
+                  <div
+                    className={"text-2xl font-semibold mb-6 mt-6 text-white"}
+                  >
+                    Waiting for opponent...
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col">
                 <div
-                  className={"text-2xl font-semibold mb-6 mt-6 text-green-400"}
+                  className={`flex flex-row p-2 items-center bg-gray-900 border-[1.5px] ${opponentReady ? "border-green-600" : "border-gray-700"} rounded-xl`}
                 >
-                  Opponent is ready...
+                  {opponentAvatar !== null && (
+                    <img
+                      className="h-[50px] rounded-xl"
+                      src={`/${opponentAvatar}`}
+                    ></img>
+                  )}
+                  <div className="flex flex-col ml-6">
+                    {opponentUsername !== "" && opponentUsername !== null ? (
+                      <div className="text-xl font-semibold">
+                        {opponentUsername}
+                      </div>
+                    ) : (
+                      <Skeleton
+                        baseColor="#202020"
+                        highlightColor="#808080"
+                      ></Skeleton>
+                    )}
+                    {opponentLanguage !== "" && opponentLanguage !== null ? (
+                      <div className="text-xs font-light">
+                        {opponentLanguage.toUpperCase()}
+                      </div>
+                    ) : (
+                      <Skeleton
+                        baseColor="#202020"
+                        highlightColor="#808080"
+                      ></Skeleton>
+                    )}
+                  </div>
                 </div>
+              </div>
+            </div>
+            <div className="flex flex-col bg-gray-900 w-full mt-8 items-center flex-grow overflow-y-clip rounded-bl-lg rounded-br-lg">
+              {!ready ? (
+                <button
+                  onClick={() => {
+                    handleReadyUp().catch(console.error);
+                  }}
+                  className="bg-orange-500 mt-12 py-2 px-32 hover:bg-orange-600 text-white font-bold text-lg rounded-lg"
+                >
+                  {"I'm Ready"}
+                </button>
               ) : (
-                <div className={"text-2xl font-semibold mb-6 mt-6 text-white"}>
-                  Waiting for opponent...
+                <div className="bg-gray-700 border-[1px] border-gray-600 mt-12 py-2 px-32 font-bold text-lg text-green-400 rounded-lg">
+                  {"I'm Ready"}
                 </div>
               )}
             </div>
-            <div className="flex flex-col">
-              <div
-                className={`flex flex-row p-2 items-center bg-gray-900 border-[1.5px] ${opponentReady ? "border-green-600" : "border-gray-700"} rounded-xl`}
-              >
-                {opponentAvatar !== null && (
-                  <img
-                    className="h-[50px] rounded-xl"
-                    src={`/${opponentAvatar}`}
-                  ></img>
-                )}
-                <div className="flex flex-col ml-6">
-                  {opponentUsername !== "" && opponentUsername !== null ? (
-                    <div className="text-xl font-semibold">
-                      {opponentUsername}
-                    </div>
-                  ) : (
-                    <Skeleton
-                      baseColor="#202020"
-                      highlightColor="#808080"
-                    ></Skeleton>
-                  )}
-                  {opponentLanguage !== "" && opponentLanguage !== null ? (
-                    <div className="text-xs font-light">
-                      {opponentLanguage.toUpperCase()}
-                    </div>
-                  ) : (
-                    <Skeleton
-                      baseColor="#202020"
-                      highlightColor="#808080"
-                    ></Skeleton>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col bg-gray-900 w-full mt-8 items-center flex-grow overflow-y-clip rounded-bl-lg rounded-br-lg">
-            {!ready ? (
-              <button
-                onClick={() => {
-                  handleReadyUp().catch(console.error);
-                }}
-                className="bg-orange-500 mt-12 py-2 px-32 hover:bg-orange-600 text-white font-bold text-lg rounded-lg"
-              >
-                {"I'm Ready"}
-              </button>
-            ) : (
-              <div className="bg-gray-700 border-[1px] border-gray-600 mt-12 py-2 px-32 font-bold text-lg text-green-400 rounded-lg">
-                {"I'm Ready"}
-              </div>
-            )}
           </div>
         </div>
       </div>
-    </div>
+    </Suspense>
   );
 }
