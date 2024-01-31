@@ -25,7 +25,7 @@ const LogoutPage: React.FC = () => {
   return (
     <div>
       <h1>Signing out</h1>
-      <ClipLoader color="#000000" loading={true} css={override} size={150} />
+      <ClipLoader color="#000000" loading={true} size={150} />
     </div>
   );
 };
