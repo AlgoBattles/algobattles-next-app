@@ -1,7 +1,7 @@
 export interface TestCase {
   input: Record<string, any>;
   output: Record<string, any>;
-};
+}
 
 export interface Result extends Record<string, any> {}
 
@@ -19,7 +19,7 @@ export interface Battle {
   userCode: string;
   opponentCode: string;
   userResults: Result[] | null;
-  testOutput: string | null,
+  testOutput: string | null;
   opponentResults: Result[] | null;
   userProgress: number;
   opponentProgress: number;

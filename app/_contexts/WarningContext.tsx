@@ -1,12 +1,17 @@
-'use client'
-import React, { useState, useContext, createContext, type ReactNode } from 'react';
+"use client";
+import React, {
+  useState,
+  useContext,
+  createContext,
+  type ReactNode,
+} from "react";
 
 interface WarningContextInfo {
   buttonTitle: string;
   warningMessage: string;
   link: string;
   isOpen: boolean;
-};
+}
 
 interface WarningContextType {
   info: WarningContextInfo;
@@ -18,24 +23,30 @@ interface WarningProviderProps {
 }
 
 // Create the context with default values
-const defaultWarningContext: WarningContextType = ({
+const defaultWarningContext: WarningContextType = {
   info: {
-    buttonTitle: '',
-    warningMessage: '',
-    link: '',
-    isOpen: false
-  }, 
-  setInfo: () => {}
-});
+    buttonTitle: "",
+    warningMessage: "",
+    link: "",
+    isOpen: false,
+  },
+  setInfo: () => {},
+};
 
-export const WarningContext = createContext<WarningContextType>(defaultWarningContext);
+export const WarningContext = createContext<WarningContextType>(
+  defaultWarningContext,
+);
 
-export const WarningProvider: React.FC<WarningProviderProps> = ({ children }) => {
-  const [info, setInfo] = useState<WarningContextInfo>(defaultWarningContext.info);
+export const WarningProvider: React.FC<WarningProviderProps> = ({
+  children,
+}) => {
+  const [info, setInfo] = useState<WarningContextInfo>(
+    defaultWarningContext.info,
+  );
 
   return (
     <WarningContext.Provider value={{ info, setInfo }}>
-    {children}
+      {children}
     </WarningContext.Provider>
   );
 };

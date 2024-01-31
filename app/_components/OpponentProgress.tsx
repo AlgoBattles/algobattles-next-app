@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
 interface ProgressBarProps {
-  percentage: number
+  percentage: number;
 }
 
 const ProgressBar: React.FC<ProgressBarProps> = ({ percentage }) => {
@@ -11,7 +11,9 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ percentage }) => {
         <div className="mr-2.5 ml-2">
           <div className="text-right">
             <span className="block font-bold text-[16px]">{percentage}%</span>
-            <span className="block mt-[-0.25rem] text-[10px] text-gray-400 font-light">TEST-CASES</span>
+            <span className="block mt-[-0.25rem] text-[10px] text-gray-400 font-light">
+              TEST-CASES
+            </span>
           </div>
         </div>
         <div className="flex-1 h-3.5 bg-gray-800 rounded-xl relative overflow-hidden z-0">
@@ -23,6 +25,6 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ percentage }) => {
       </div>
     </div>
   );
-}
+};
 
 export default ProgressBar;

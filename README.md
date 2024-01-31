@@ -1,12 +1,11 @@
-
 <a name="readme-top"></a>
 
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-<!-- [![MIT License][license-shield]][license-url] -->
 
+<!-- [![MIT License][license-shield]][license-url] -->
 
 <!-- PROJECT LOGO -->
 <br />
@@ -52,15 +51,15 @@
   </ol>
 </details>
 
-
 <!-- GETTING STARTED -->
+
 ## Getting Started
 
-AlgoBattles is comprised of: 
-1. A Next.js frontend (this repo) 
+AlgoBattles is comprised of:
+
+1. A Next.js frontend (this repo)
 2. Supabase for user management/auth & postgres instance to persist game invites and game state
 3. A socket server for realtime gameplay and remote code execution engine to execute user code [another repo pending relese]
-
 
 ### Prerequisites
 
@@ -122,13 +121,12 @@ CREATE TABLE battles (
 );
 ```
 
-
 3. Clone and run the RCE/Socket server (repo pending release)
-
 
 ### Installation
 
 1. Install dependencies
+
    ```sh
    npm install
    ```
@@ -140,8 +138,8 @@ CREATE TABLE battles (
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
 <!-- USAGE EXAMPLES -->
+
 ## Screenshots
 
 <img src="public/screenshots/screenshot1.png" alt="Logo" height="400">
@@ -154,13 +152,10 @@ CREATE TABLE battles (
 
 <img src="public/screenshots/screenshot7.png" alt="Logo" height="400">
 
-
-
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
 <!-- CONTRIBUTING -->
+
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
@@ -178,25 +173,21 @@ See the [open issues](https://github.com/WatchDogCLI/WatchDog/issues) for a full
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
 <!-- LICENSE -->
+
 ## License
 
 Distributed under the MIT License.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
 <!-- CONTACT -->
+
 ## Contact
 
 Oliver Wendell-Braly - [@linkedIn](https://www.linkedin.com/in/oliverbraly/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- ACKNOWLEDGMENTS
 ## Acknowledgments
@@ -207,10 +198,9 @@ Oliver Wendell-Braly - [@linkedIn](https://www.linkedin.com/in/oliverbraly/)
 
 <!-- <p align="right">(<a href="#readme-top">back to top</a>)</p> -->
 
-
-
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
 [contributors-shield]: https://img.shields.io/github/contributors/AlgoBattles/algobattles-next-app.svg?style=for-the-badge
 [contributors-url]: https://github.com/AlgoBattles/algobattles-next-app/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/AlgoBattles/algobattles-next-app.svg?style=for-the-badge
@@ -224,7 +214,7 @@ Oliver Wendell-Braly - [@linkedIn](https://www.linkedin.com/in/oliverbraly/)
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/linkedin_username
 [product-screenshot]: images/screenshot.png
-[minikube]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB 
+[minikube]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
 [Minikube-url]: https://minikube.sigs.k8s.io/
 [Docker-url]: https://www.docker.com/
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
@@ -242,5 +232,5 @@ Oliver Wendell-Braly - [@linkedIn](https://www.linkedin.com/in/oliverbraly/)
 [Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
 [Bootstrap-url]: https://getbootstrap.com
 [JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
-[JQuery-url]: https://jquery.com 
+[JQuery-url]: https://jquery.com
 [supabase-url]: https://supabase.com/

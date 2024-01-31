@@ -1,10 +1,16 @@
-'use client'
-import React, { createContext, useState, useContext, useEffect, type ReactNode } from 'react';
-import { useRouter } from 'next/navigation'
-import type { User } from '../_types/userTypes';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+"use client";
+import React, {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  type ReactNode,
+} from "react";
+import { useRouter } from "next/navigation";
+import type { User } from "../_types/userTypes";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-const supabase = createClientComponentClient()
+const supabase = createClientComponentClient();
 
 interface UserContextType {
   user: User;
@@ -18,56 +24,53 @@ interface UserProviderProps {
 
 const defaultUserContext: UserContextType = {
   user: {
-    email: '',
-    username: '',
-    preferredLanguage: '',
-    avatar: '',
-    UID: ''
+    email: "",
+    username: "",
+    preferredLanguage: "",
+    avatar: "",
+    UID: "",
   },
   setUser: () => {},
-  getUserInfo: async (): Promise<void> => {}
-}
+  getUserInfo: async (): Promise<void> => {},
+};
 
 export const UserContext = createContext<UserContextType>(defaultUserContext);
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User>(defaultUserContext.user);
-  const router = useRouter()
+  const router = useRouter();
 
   const getUserInfo = async (): Promise<void> => {
     const userAuthInfo = await supabase.auth.getUser();
     if (userAuthInfo?.data?.user !== null) {
-      const { id, email } = userAuthInfo.data.user
-      const { data } = await supabase
-        .from('users')
-        .select()
-        .eq('user_id', id)
+      const { id, email } = userAuthInfo.data.user;
+      const { data } = await supabase.from("users").select().eq("user_id", id);
       if (data !== null && data.length > 0) {
-        const { email, username, preferredLanguage, avatar } = data[0]
-        setUser(({
+        const { email, username, preferredLanguage, avatar } = data[0];
+        setUser({
           UID: id,
           email,
           username,
           preferredLanguage,
-          avatar
-        }))
+          avatar,
+        });
       } else {
-        if (email !== null && email !== '' && email !== undefined) {
-          setUser(({
+        if (email !== null && email !== "" && email !== undefined) {
+          setUser({
             ...user,
             UID: id,
-            email
-          }))
+            email,
+          });
         }
       }
     } else {
-      router.push('/')
+      router.push("/");
     }
-  }
+  };
 
   useEffect(() => {
-    getUserInfo().catch(console.error)
-  }, [])
+    getUserInfo().catch(console.error);
+  }, []);
 
   return (
     <UserContext.Provider value={{ user, setUser, getUserInfo }}>
