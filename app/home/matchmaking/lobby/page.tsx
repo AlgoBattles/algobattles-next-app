@@ -184,5 +184,5 @@ function Lobby(): React.ReactElement {
         </div>
       </div>
     </div>
-);
+  );
 }
