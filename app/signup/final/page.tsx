@@ -21,7 +21,7 @@ export default function Page(): JSX.Element {
     setUsername(event.target.value);
   };
   useEffect(() => {
-    if (user.avatar !== "") {
+    if (user.avatar.length > 1) {
       router.push("/");
     }
   }, [user, router]);
