@@ -220,7 +220,7 @@ export default function Home(): React.ReactElement {
                           provider: "google",
                           options: {
                             redirectTo:
-                              "https://algobattles-next-app.vercel.app//home",
+                              "https://algobattles-next-app.vercel.app/home",
                           },
                         })
                         .catch(console.error);
