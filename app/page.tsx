@@ -177,7 +177,8 @@ export default function Home(): React.ReactElement {
                       .signInWithOAuth({
                         provider: "google",
                         options: {
-                          redirectTo: "http://localhost:3000/signup/final",
+                          redirectTo:
+                            "https://algobattles-next-app.vercel.app/signup/final",
                         },
                       })
                       .catch(console.error);
@@ -218,7 +219,8 @@ export default function Home(): React.ReactElement {
                         .signInWithOAuth({
                           provider: "google",
                           options: {
-                            redirectTo: "http://localhost:3000/home",
+                            redirectTo:
+                              "https://algobattles-next-app.vercel.app//home",
                           },
                         })
                         .catch(console.error);
