@@ -178,7 +178,7 @@ export default function Home(): React.ReactElement {
                         provider: "google",
                         options: {
                           redirectTo:
-                            "https://algobattles-next-app.vercel.app/signup/final",
+                            "https://www.algobattles.xyz/signup/final",
                         },
                       })
                       .catch(console.error);
@@ -219,8 +219,7 @@ export default function Home(): React.ReactElement {
                         .signInWithOAuth({
                           provider: "google",
                           options: {
-                            redirectTo:
-                              "https://algobattles-next-app.vercel.app/home",
+                            redirectTo: "https://www.algobattles.xyz/home",
                           },
                         })
                         .catch(console.error);
