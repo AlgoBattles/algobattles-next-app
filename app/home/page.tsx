@@ -16,13 +16,11 @@ export default function Home(): React.ReactElement {
     <div className="flex flex-col h-full">
       <div className="flex justify-center items-center flex-grow">
         <Link href="/home/matchmaking/sendInvite">
-          <div className="flex flex-col bg-black items-center w-[275px] h-[400px] p-6 rounded-3xl border-[1px] border-gray-800 hover:border-blue-500 hover:border-2 m-3">
-            <img
-              src="/group.png"
-              alt="friends"
-              className="mt-3 h-[190px] w-[190px]"
-            />
-            <p className="mt-4 font-bold text-xl">Play a Friend</p>
+          <div className="bg-gray-900 w-[600px] h-[420px] p-20 rounded-lg border-[1px] border-gray-700 flex flex-col items-center justify-between">
+            <div className="text-3xl font-medium">{`Welcome, ${user.username}`}</div>
+            <button className="px-8 py-4 text-lg font-medium bg-orange-600 hover:bg-orange-700 text-white rounded-full">
+              Join Lobby
+            </button>
           </div>
         </Link>
       </div>

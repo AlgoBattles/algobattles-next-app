@@ -223,7 +223,7 @@ export default function Home(): React.ReactElement {
                         .signInWithOAuth({
                           provider: "google",
                           options: {
-                            redirectTo: `https://${url}/home`,
+                            redirectTo: `https://${url}//home`,
                           },
                         })
                         .catch(console.error);
