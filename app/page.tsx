@@ -23,6 +23,11 @@ export default function Home(): React.ReactElement {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState(false);
 
+  const url =
+    process.env.NODE_ENV === "production"
+      ? process.env.NEXT_PUBLIC_PROD_URL
+      : process.env.NEXT_PUBLIC_DEV_URL;
+
   const handleEmailInput = (
     event: React.ChangeEvent<HTMLInputElement>,
   ): void => {
@@ -177,8 +182,7 @@ export default function Home(): React.ReactElement {
                       .signInWithOAuth({
                         provider: "google",
                         options: {
-                          redirectTo:
-                            "https://www.algobattles.xyz/signup/final",
+                          redirectTo: `https://${url}/signup/final`,
                         },
                       })
                       .catch(console.error);
@@ -219,7 +223,7 @@ export default function Home(): React.ReactElement {
                         .signInWithOAuth({
                           provider: "google",
                           options: {
-                            redirectTo: "https://www.algobattles.xyz/home",
+                            redirectTo: `https://${url}/home`,
                           },
                         })
                         .catch(console.error);
