@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import ProgressBar from "./ProgressBar";
-import { IconButton, Tooltip } from "@mui/material";
+import { Button, IconButton, Tooltip } from "@mui/material";
 import { Replay, PlayArrow } from "@mui/icons-material";
 import { useUser } from "../_contexts/UserContext";
 import { useBattle } from "../_contexts/BattleContext";
@@ -175,18 +175,64 @@ const AceEditor = ({ sendCode }: AceEditorProps): React.ReactElement => {
           <Tooltip title="Execute Code" enterDelay={100} leaveDelay={50}>
             <IconButton
               aria-label="execute code"
-              className="h-8 w-8 rounded bg-blue-500 hover:bg-blue-700 m-2 text-white"
+              sx={{
+                height: 32, // equivalent to h-8 in Tailwind CSS
+                width: 32, // equivalent to w-8 in Tailwind CSS
+                borderRadius: 1, // This applies a moderate border-radius. Adjust as needed.
+                backgroundColor: "#1976d2 !important", // Directly using a hex color for background
+                color: "#ffffff", // Setting the text color using hex
+                "&:hover": {
+                  backgroundColor: "#1565c0 !important", // Darken the background color on hover using a hex color
+                },
+                margin: 1, // equivalent to m-2 in Tailwind CSS (MUI theme spacing may vary)
+              }}
               onClick={() => {
                 runCode().catch(console.error);
               }}
             >
-              <PlayArrow />
+              <PlayArrow style={{ fontSize: 30 }} />
             </IconButton>
+            {/* <Button
+              variant="contained"
+              startIcon={
+                <PlayArrow sx={{ fontSize: 28 }} /> // Adjust `fontSize` to scale the icon
+              }
+              aria-label="execute code"
+              sx={{
+                height: 32, // equivalent to h-8 in Tailwind CSS
+                width: 32, // equivalent to w-8 in Tailwind CSS
+                borderRadius: 1, // This applies a moderate border-radius. Adjust as needed.
+                backgroundColor: "#424242", // Directly using a hex color for background
+                color: "#ffffff",
+                fontWeight: 500,
+                fontSize: 16,
+                textTransform: "none",
+                "&:hover": {
+                  backgroundColor: "#1565c0", // Darken the background color on hover using a hex color
+                },
+                margin: 1, // equivalent to m-2 in Tailwind CSS (MUI theme spacing may vary)
+              }}
+              onClick={() => {
+                runCode().catch(console.error);
+              }}
+            >
+              Run
+            </Button>
+          */}
           </Tooltip>
           <Tooltip title="Reset Code" enterDelay={100} leaveDelay={50}>
             <IconButton
               aria-label="reset code"
-              className="h-8 w-8 bg-black rounded hover:bg-gray-700 text-white"
+              sx={{
+                height: 32, // equivalent to h-8 in Tailwind CSS
+                width: 32, // equivalent to w-8 in Tailwind CSS
+                backgroundColor: "#000000", // black background
+                borderRadius: "10%", // fully rounded
+                "&:hover": {
+                  backgroundColor: "#424242", // gray-700 on hover
+                },
+                color: "#ffffff", // text (icon) color white
+              }}
               onClick={() => {
                 resetCode();
               }}
