@@ -28,7 +28,7 @@ export default function Home(): React.ReactElement {
       ? process.env.NEXT_PUBLIC_PROD_URL
       : process.env.NEXT_PUBLIC_DEV_URL;
 
-  console.log("prod url is", process.env.NEXT_PUBLIC_PROD_URL);
+  // console.log("prod url is", process.env.NEXT_PUBLIC_PROD_URL);
 
   const handleEmailInput = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -221,8 +221,8 @@ export default function Home(): React.ReactElement {
                   <button
                     className="py-1 px-1 w-full rounded-3xl hover:bg-gray-200 bg-white border-[1px] border-gray-700"
                     onClick={() => {
-                      console.log("url is", url);
-                      console.log("node env is", process.env.NODE_ENV);
+                      // console.log("url is", url);
+                      // console.log("node env is", process.env.NODE_ENV);
                       supabase.auth
                         .signInWithOAuth({
                           provider: "google",
