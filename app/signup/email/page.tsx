@@ -60,7 +60,7 @@ export default function Home(): JSX.Element {
         AlgoBattles
       </h1>
       <div className="flex justify-center items-center flex-grow">
-        <div className="bg-gray-800 w-[400px] h-[500px] p-6 rounded-lg border-[1px] border-gray-700">
+        <div className="bg-gray-900 w-[400px] h-[500px] p-6 rounded-lg border-[1px] border-gray-700">
           {/* // some funny animation or illustration here */}
           <div className="mb-6 mt-6">
             <label className="text-white mb-2 block font-semibold">Email</label>
@@ -68,7 +68,7 @@ export default function Home(): JSX.Element {
               type="email"
               onChange={handleEmailInput}
               placeholder="admiralsnackbar@algobattles.xyz"
-              className="w-full p-2 bg-gray-900 text-white rounded focus:outline-none"
+              className="w-full p-2 bg-black text-white rounded focus:outline-none"
             />
           </div>
           <div className="mb-6 mt-6">
@@ -79,7 +79,7 @@ export default function Home(): JSX.Element {
               type="password"
               onChange={handlePasswordInput}
               placeholder="Password"
-              className="w-full p-2 bg-gray-900 text-white rounded focus:outline-none"
+              className="w-full p-2 bg-black text-white rounded focus:outline-none"
             />
           </div>
           <div className="h-10">
@@ -91,9 +91,9 @@ export default function Home(): JSX.Element {
             onClick={() => {
               handleSignUp().catch(console.error);
             }}
-            className="bg-orange-500 text-white font-bold w-full py-2 rounded-3xl"
+            className="bg-orange-600 hover:bg-orange-500 text-white font-bold w-full py-2 rounded-3xl"
           >
-            CONTINUE
+            Continue
           </button>
         </div>
       </div>
