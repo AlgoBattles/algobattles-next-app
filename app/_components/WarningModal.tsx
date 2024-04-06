@@ -23,7 +23,7 @@ const WarningModal = (): React.JSX.Element | null => {
         <p className="text-lg font-medium">{info.warningMessage}</p>
         <div className="flex flex-row">
           <button
-            className="px-6 py-2 mr-4 font-medium bg-red-500 hover:bg-red-600 rounded-3xl"
+            className="px-6 py-2 mr-4 font-medium bg-red-600 hover:bg-red-500 rounded-3xl"
             onClick={() => {
               navigateAndCloseModal(info.link);
             }}
@@ -31,7 +31,7 @@ const WarningModal = (): React.JSX.Element | null => {
             {info.buttonTitle}
           </button>
           <button
-            className="px-6 py-2 ml-4 font-medium bg-blue-500 hover:bg-blue-600 rounded-3xl"
+            className="px-6 py-2 ml-4 font-medium bg-blue-600 hover:bg-blue-500 rounded-3xl"
             onClick={() => {
               setInfo({ ...info, isOpen: false });
             }}
