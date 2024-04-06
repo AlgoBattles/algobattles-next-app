@@ -178,11 +178,12 @@ export default function Home(): React.ReactElement {
               <div className="flex flex-col items-center space-y-4 mt-[75px]">
                 <button
                   onClick={() => {
+                    console.log("url is", url);
                     supabase.auth
                       .signInWithOAuth({
                         provider: "google",
                         options: {
-                          redirectTo: `https://${url}/signup/final`,
+                          redirectTo: `${url}/signup/final`,
                         },
                       })
                       .catch(console.error);
@@ -223,7 +224,8 @@ export default function Home(): React.ReactElement {
                         .signInWithOAuth({
                           provider: "google",
                           options: {
-                            redirectTo: `https://${url}//home`,
+                            redirectTo: `
+                            ${url}/home`,
                           },
                         })
                         .catch(console.error);

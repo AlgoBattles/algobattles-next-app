@@ -77,7 +77,7 @@ export default function Page(): JSX.Element {
         AlgoBattles
       </h1>
       <div className="flex justify-center items-center flex-grow">
-        <div className="bg-gray-800 w-[400px] h-[500px] p-6 rounded-lg border-[1px] border-gray-700">
+        <div className="bg-gray-900 w-[400px] h-[500px] p-6 rounded-lg border-[1px] border-gray-700">
           <div className="mb-6">
             <label className="text-white mb-2 block font-semibold">
               Avatar
@@ -87,9 +87,15 @@ export default function Page(): JSX.Element {
                 onClick={() => {
                   setAvatar("dog.jpg");
                 }}
-                className={`px-2 py-2 text-[10pt] font-semibold rounded-xl ${avatar === "dog.jpg" ? "bg-blue-600 text-white" : "bg-gray-700 text-blue-500"}`}
+                className={`px-2 py-2 text-[10pt] font-semibold rounded-2xl ${avatar === "dog.jpg" ? "bg-blue-600 text-white" : "bg-gray-700 text-blue-500"}`}
               >
-                <Image src="/dog.jpg" width={40} height={40} alt="dog" />
+                <Image
+                  src="/dog.jpg"
+                  className="rounded-md"
+                  width={40}
+                  height={40}
+                  alt="dog"
+                />
               </button>
               <button
                 onClick={() => {
@@ -97,7 +103,13 @@ export default function Page(): JSX.Element {
                 }}
                 className={`px-2 py-2 text-[10pt] font-semibold rounded-xl ${avatar === "cat.jpg" ? "bg-blue-600 text-white" : "bg-gray-700 text-blue-500"}`}
               >
-                <Image src="/cat.jpg" width={40} height={40} alt="dog" />
+                <Image
+                  src="/cat.jpg"
+                  className="rounded-md"
+                  width={40}
+                  height={40}
+                  alt="dog"
+                />
               </button>
             </div>
           </div>
@@ -105,7 +117,7 @@ export default function Page(): JSX.Element {
             <label className="text-white mb-2 block font-semibold">
               Username
             </label>
-            <div className="flex items-center bg-gray-900 p-2 rounded">
+            <div className="flex items-center bg-black p-2 rounded">
               <input
                 type="text"
                 onChange={handleUsernameInput}
@@ -145,9 +157,9 @@ export default function Page(): JSX.Element {
               onClick={() => {
                 handleFinish().catch(console.error);
               }}
-              className="bg-orange-500 text-white w-full py-2 rounded-3xl font-bold mt-10"
+              className="bg-orange-600 hover:bg-orange-500 text-white w-full py-2 rounded-3xl font-bold mt-10"
             >
-              FINISH
+              Finish
             </button>
           </div>
         </div>
