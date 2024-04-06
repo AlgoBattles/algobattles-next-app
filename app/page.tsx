@@ -178,7 +178,6 @@ export default function Home(): React.ReactElement {
               <div className="flex flex-col items-center space-y-4 mt-[75px]">
                 <button
                   onClick={() => {
-                    console.log("url is", url);
                     supabase.auth
                       .signInWithOAuth({
                         provider: "google",
@@ -220,12 +219,13 @@ export default function Home(): React.ReactElement {
                   <button
                     className="py-1 px-1 w-full rounded-3xl hover:bg-gray-200 bg-white border-[1px] border-gray-700"
                     onClick={() => {
+                      console.log("url is", url);
+                      console.log("node env is", process.env.NODE_ENV);
                       supabase.auth
                         .signInWithOAuth({
                           provider: "google",
                           options: {
-                            redirectTo: `
-                            ${url}/home`,
+                            redirectTo: `${url}/home`,
                           },
                         })
                         .catch(console.error);

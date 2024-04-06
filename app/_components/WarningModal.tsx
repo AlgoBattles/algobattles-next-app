@@ -20,7 +20,7 @@ const WarningModal = (): React.JSX.Element | null => {
     >
       <div className="fixed inset-0 bg-black opacity-50"></div>
       <div className="relative h-[300px] w-[500px] bg-gray-900 border-[1px] border-gray-700 p-4 rounded-lg text-center z-200 flex flex-col justify-between items-center py-8">
-        <p className="text-lg font-medium">{info.warningMessage}</p>
+        <p className="text-2xl font-medium">{info.warningMessage}</p>
         <div className="flex flex-row">
           <button
             className="px-6 py-2 mr-4 font-medium bg-red-600 hover:bg-red-500 rounded-3xl"
