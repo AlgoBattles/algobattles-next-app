@@ -28,6 +28,8 @@ export default function Home(): React.ReactElement {
       ? process.env.NEXT_PUBLIC_PROD_URL
       : process.env.NEXT_PUBLIC_DEV_URL;
 
+  console.log("prod url is", process.env.NEXT_PUBLIC_PROD_URL);
+
   const handleEmailInput = (
     event: React.ChangeEvent<HTMLInputElement>,
   ): void => {
