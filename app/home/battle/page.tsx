@@ -47,7 +47,10 @@ const Battle = (): React.JSX.Element => {
   useEffect(() => {
     if (user.UID !== "") {
       // connect to socket server
-      const serverURL = "https://algobattles-socketio.onrender.com";
+      const serverURL = process.env.NEXT_PUBLIC_BACKEND_URL
+        ? process.env.NEXT_PUBLIC_BACKEND_URL
+        : "https://algobattles-socketio.onrender.com";
+      console.log("endpoint set to" + serverURL);
       const socket = io(serverURL, {
         query: {
           authorization: process.env.NEXT_PUBLIC_ENGINE_AUTH_KEY,

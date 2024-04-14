@@ -15,7 +15,11 @@ const AceEditor = ({ sendCode }: AceEditorProps): React.ReactElement => {
   const { user } = useUser();
   const { battle, setBattle } = useBattle();
   const ace = require("ace-builds/src-noconflict/ace");
+  const serverURL = process.env.NEXT_PUBLIC_BACKEND_URL
+    ? process.env.NEXT_PUBLIC_BACKEND_URL
+    : "https://algobattles-socketio.onrender.com";
 
+  console.log("endpoint set to" + serverURL);
   const {
     templateCodeJS,
     templateCodePython,
@@ -61,25 +65,22 @@ const AceEditor = ({ sendCode }: AceEditorProps): React.ReactElement => {
     if (authKey === "" || authKey === undefined) {
       throw new Error("ENGINE_AUTH_KEY is not defined");
     }
-    const result = await fetch(
-      "https://algobattles-socketio.onrender.com/execute",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: authKey,
-        },
-        body: JSON.stringify({
-          code: userCode,
-          testCases: JSON.stringify(testCasesArray),
-          funcName: battle.funcName,
-          language: user.preferredLanguage,
-          battleId: battle.battleId,
-          userNumber: battle.userRole,
-          userId: user.UID,
-        }),
+    const result = await fetch(`${serverURL}/execute`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: authKey,
       },
-    );
+      body: JSON.stringify({
+        code: userCode,
+        testCases: JSON.stringify(testCasesArray),
+        funcName: battle.funcName,
+        language: user.preferredLanguage,
+        battleId: battle.battleId,
+        userNumber: battle.userRole,
+        userId: user.UID,
+      }),
+    });
     const data = await result.json();
     // if no errors, update test case results in state
     if (data.run.code === 0) {
