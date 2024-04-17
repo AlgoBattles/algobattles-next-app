@@ -85,7 +85,7 @@ const Header = (): React.ReactElement => {
               marginTop: "5px",
               borderLeft: "15px solid transparent",
               borderRight: "15px solid transparent",
-              borderBottom: "20px solid #2d3748", // color equivalent to gray-900 in Tailwind
+              borderBottom: "20px solid #101827", // color equivalent to gray-900 in Tailwind
             }}
           />
           <div className="w-64 h-90 bg-gray-900 border border-gray-700 rounded-lg p-4">
@@ -198,7 +198,7 @@ const Header = (): React.ReactElement => {
             marginTop: "5px",
             borderLeft: "15px solid transparent",
             borderRight: "15px solid transparent",
-            borderBottom: "20px solid #2d3748", // color equivalent to gray-900 in Tailwind
+            borderBottom: "20px solid #101827", // color equivalent to gray-900 in Tailwind
           }}
         />
         <div className="w-64 h-90 bg-gray-900 border border-gray-700 rounded-lg p-4">
