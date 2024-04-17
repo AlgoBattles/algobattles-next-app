@@ -19,7 +19,7 @@ const AceEditor = ({ sendCode }: AceEditorProps): React.ReactElement => {
     ? process.env.NEXT_PUBLIC_BACKEND_URL
     : "https://algobattles-socketio.onrender.com";
 
-  console.log("endpoint set to" + serverURL);
+  // console.log("endpoint set to" + serverURL);
   const {
     templateCodeJS,
     templateCodePython,
@@ -82,7 +82,7 @@ const AceEditor = ({ sendCode }: AceEditorProps): React.ReactElement => {
       }),
     });
     const data = await result.json();
-    console.log(data);
+    // console.log(data);
     // if no errors, update test case results in state
     if (data.run.code === 0) {
       // check for game over
@@ -113,7 +113,7 @@ const AceEditor = ({ sendCode }: AceEditorProps): React.ReactElement => {
     } else if (data.run.code === 1) {
       // sets error in state to display in console
       const results = null;
-      console.log(data);
+      // console.log(data);
       setBattle((prevBattle) => ({
         ...prevBattle,
         userResults: results,

@@ -85,7 +85,7 @@ export const InvitesProvider: React.FC<InvitesProviderProps> = ({
         "postgres_changes",
         { event: "*", schema: "public", table: "battle_invites" },
         (payload) => {
-          console.log("Change received!", payload);
+          // console.log("Change received!", payload);
           retrieveInviteDetails().catch(console.error);
         },
       )

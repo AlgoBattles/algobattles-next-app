@@ -50,7 +50,7 @@ const Battle = (): React.JSX.Element => {
       const serverURL = process.env.NEXT_PUBLIC_BACKEND_URL
         ? process.env.NEXT_PUBLIC_BACKEND_URL
         : "https://algobattles-socketio.onrender.com";
-      console.log("endpoint set to" + serverURL);
+      // console.log("endpoint set to" + serverURL);
       const socket = io(serverURL, {
         query: {
           authorization: process.env.NEXT_PUBLIC_ENGINE_AUTH_KEY,
@@ -61,7 +61,7 @@ const Battle = (): React.JSX.Element => {
       socket.on("connect", () => {});
       socket.on("message", ({ message, action }) => {
         if (action === "player code") {
-          console.log("new code");
+          // console.log("new code");
           setBattle((prevBattle) => ({ ...prevBattle, opponentCode: message }));
         }
         if (action === "opponent progress") {
