@@ -18,7 +18,7 @@ const GameOverModal: React.FC<GameOverProps> = ({ show, userWon }) => {
           {userWon !== null && userWon ? "You won!" : "You lost!"}
         </h3>
         <Link href="/home">
-          <button className="rounded-3xl px-4 py-2 bg-blue-600 hover:bg-blue-500">
+          <button className="rounded-xl px-4 py-2 bg-blue-600 hover:bg-blue-500">
             Return Home
           </button>
         </Link>

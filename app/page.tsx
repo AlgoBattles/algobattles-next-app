@@ -106,8 +106,8 @@ export default function Home(): React.ReactElement {
           AlgoBattles
         </h1>
         <div className="flex flex-col w-full h-[75%] items-center justify-center">
-          <div className="bg-gray-800 text-white rounded-lg overflow-hidden shadow-xl max-w-sm w-[75vw]">
-            <div className="px-6 py-4 bg-gray-900 flex justify-center items-center">
+          <div className="bg-gray-900 text-white rounded-lg overflow-hidden shadow-xl max-w-sm w-[75vw]">
+            <div className="px-6 py-4 bg-black flex justify-center items-center">
               <span className="text-lg text-center font-semibold">
                 Welcome to AlgoBattles
               </span>
@@ -155,8 +155,8 @@ export default function Home(): React.ReactElement {
           AlgoBattles
         </h1>
         <div className="flex justify-center items-center flex-grow">
-          <div className="bg-gray-800 w-[400px] h-[500px] p-6 rounded-lg border-[1px] border-gray-700">
-            <div className="bg-gray-900 p-1 w-auto inline-block rounded-md mb-4">
+          <div className="bg-gray-900 w-[400px] h-[500px] p-6 rounded-lg border-[1px] border-gray-700">
+            <div className="bg-black p-1 w-auto inline-block rounded-md mb-4">
               <button
                 onClick={() => {
                   setSelected("signup");
