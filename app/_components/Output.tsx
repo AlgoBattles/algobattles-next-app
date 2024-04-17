@@ -11,9 +11,7 @@ const OutputConsole = (): React.ReactElement => {
       <div className="bg-black flex-grow text-white font-mono text-sm rounded-lg overflow-y-scroll p-4 mt-4">
         {lines === null
           ? null
-          : lines?.map(
-              (line, index) => index > 0 && <div key={index}>{line}</div>,
-            )}
+          : lines?.map((line, index) => <div key={index}>{line}</div>)}
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import ProgressBar from "./ProgressBar";
-import { Button, IconButton, Tooltip } from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
 import { Replay, PlayArrow } from "@mui/icons-material";
 import { useUser } from "../_contexts/UserContext";
 import { useBattle } from "../_contexts/BattleContext";
@@ -82,27 +82,23 @@ const AceEditor = ({ sendCode }: AceEditorProps): React.ReactElement => {
       }),
     });
     const data = await result.json();
+    console.log(data);
     // if no errors, update test case results in state
     if (data.run.code === 0) {
       // check for game over
       if (data.progress < 100) {
-        const output = JSON.parse(
-          data.run.output.replace(/'/g, '"').replace(/undefined/g, "null"),
-        );
-        const results = output.map((item: any, index: number) => {
+        const results = data.run.output.map((item: any, index: number) => {
           return item[0];
         });
+        console.log(data);
         setBattle((prevBattle) => ({
           ...prevBattle,
           userResults: results,
           userProgress: data.progress,
-          testOutput: data.run.stdout,
+          testOutput: data.run.stderr,
         }));
       } else if (data.progress === 100) {
-        const output = JSON.parse(
-          data.run.output.replace(/'/g, '"').replace(/undefined/g, "null"),
-        );
-        const results = output.map((item: any, index: number) => {
+        const results = data.run.output.map((item: any, index: number) => {
           return item[0];
         });
         setBattle((prevBattle) => ({
@@ -111,15 +107,13 @@ const AceEditor = ({ sendCode }: AceEditorProps): React.ReactElement => {
           userWon: true,
           battleuserResults: results,
           userProgress: data.progress,
-          testOutput:
-            output[0][0] !== null && output[0][0] !== undefined
-              ? output[0][0].toString()
-              : undefined,
+          testOutput: data.run.stderr,
         }));
       }
     } else if (data.run.code === 1) {
       // sets error in state to display in console
       const results = null;
+      console.log(data);
       setBattle((prevBattle) => ({
         ...prevBattle,
         userResults: results,
@@ -193,33 +187,6 @@ const AceEditor = ({ sendCode }: AceEditorProps): React.ReactElement => {
             >
               <PlayArrow style={{ fontSize: 30 }} />
             </IconButton>
-            {/* <Button
-              variant="contained"
-              startIcon={
-                <PlayArrow sx={{ fontSize: 28 }} /> // Adjust `fontSize` to scale the icon
-              }
-              aria-label="execute code"
-              sx={{
-                height: 32, // equivalent to h-8 in Tailwind CSS
-                width: 32, // equivalent to w-8 in Tailwind CSS
-                borderRadius: 1, // This applies a moderate border-radius. Adjust as needed.
-                backgroundColor: "#424242", // Directly using a hex color for background
-                color: "#ffffff",
-                fontWeight: 500,
-                fontSize: 16,
-                textTransform: "none",
-                "&:hover": {
-                  backgroundColor: "#1565c0", // Darken the background color on hover using a hex color
-                },
-                margin: 1, // equivalent to m-2 in Tailwind CSS (MUI theme spacing may vary)
-              }}
-              onClick={() => {
-                runCode().catch(console.error);
-              }}
-            >
-              Run
-            </Button>
-          */}
           </Tooltip>
           <Tooltip title="Reset Code" enterDelay={100} leaveDelay={50}>
             <IconButton
