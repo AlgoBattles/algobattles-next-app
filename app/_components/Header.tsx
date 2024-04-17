@@ -85,10 +85,10 @@ const Header = (): React.ReactElement => {
               marginTop: "5px",
               borderLeft: "15px solid transparent",
               borderRight: "15px solid transparent",
-              borderBottom: "20px solid #2d3748", // color equivalent to gray-800 in Tailwind
+              borderBottom: "20px solid #2d3748", // color equivalent to gray-900 in Tailwind
             }}
           />
-          <div className="w-64 h-90 bg-gray-800 border border-gray-700 rounded-lg p-4">
+          <div className="w-64 h-90 bg-gray-900 border border-gray-700 rounded-lg p-4">
             {invites.length > 0 ? (
               invites.map((item) => (
                 <InviteComponent key={uuidv4()} item={item} />
@@ -142,7 +142,7 @@ const Header = (): React.ReactElement => {
               declineInviteHandler(item.id).catch(console.error);
             }}
             className={
-              "bg-red-500 right-0 hover:bg-red-700 text-white font-bold font-md py-2.5 px-4 w-[100%] rounded-3xl opacity-0 hover:opacity-100"
+              "bg-red-600 right-0 hover:bg-red-700 text-white font-bold font-md py-2.5 px-4 w-[100%] rounded-xl opacity-0 hover:opacity-100"
             }
             style={{ width: "100%", height: "100%" }}
           >
@@ -154,7 +154,7 @@ const Header = (): React.ReactElement => {
           style={{ top: "50%", transform: "translateY(-50%)" }}
         >
           <Link href={`/home/matchmaking/lobby?id=${item.id}`}>
-            <button className="bg-blue-500 right-0 hover:bg-blue-700 text-white font-bold font-md py-2.5 px-4 w-[100%] rounded-3xl opacity-0 hover:opacity-100">
+            <button className="bg-blue-600 right-0 hover:bg-blue-700 text-white font-bold font-md py-2.5 px-4 w-[100%] rounded-xl opacity-0 hover:opacity-100">
               Join
             </button>
           </Link>
@@ -198,10 +198,10 @@ const Header = (): React.ReactElement => {
             marginTop: "5px",
             borderLeft: "15px solid transparent",
             borderRight: "15px solid transparent",
-            borderBottom: "20px solid #2d3748", // color equivalent to gray-800 in Tailwind
+            borderBottom: "20px solid #2d3748", // color equivalent to gray-900 in Tailwind
           }}
         />
-        <div className="w-64 h-90 bg-gray-800 border border-gray-700 rounded-lg p-4">
+        <div className="w-64 h-90 bg-gray-900 border border-gray-700 rounded-lg p-4">
           <div className="flex flex-col items-center">
             <img
               src={user?.avatar ? `/${user.avatar}` : `/anon.jpg`}
@@ -215,7 +215,7 @@ const Header = (): React.ReactElement => {
               onClick={() => {
                 setLang("javascript").catch(console.error);
               }}
-              className={`px-4 py-2 text-[10pt] font-semibold rounded-3xl ${user.preferredLanguage === "javascript" ? "bg-blue-600 text-white" : "bg-gray-700 text-blue-500"}`}
+              className={`px-4 py-2 text-[10pt] font-semibold rounded-3xl ${user.preferredLanguage === "javascript" ? "bg-blue-700 text-white" : "bg-gray-700 text-blue-500"}`}
             >
               JavaScript
             </button>
@@ -223,7 +223,7 @@ const Header = (): React.ReactElement => {
               onClick={() => {
                 setLang("python").catch(console.error);
               }}
-              className={`px-4 py-2 text-[10pt] font-semibold rounded-3xl ${user.preferredLanguage === "python" ? "bg-blue-600 text-white" : "bg-gray-700 text-blue-500"}`}
+              className={`px-4 py-2 text-[10pt] font-semibold rounded-3xl ${user.preferredLanguage === "python" ? "bg-blue-700 text-white" : "bg-gray-700 text-blue-500"}`}
             >
               Python
             </button>
@@ -235,7 +235,7 @@ const Header = (): React.ReactElement => {
                 "Are you sure you want to sign out? ",
               );
             }}
-            className="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 w-[100%] rounded-3xl mt-10"
+            className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 w-[100%] rounded-lg mt-10"
           >
             Sign Out
           </button>

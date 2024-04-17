@@ -32,7 +32,7 @@ export default function Home(): React.ReactElement {
           <div className="bg-gray-900 w-[600px] h-[420px] p-20 rounded-lg border-[1px] border-gray-700 flex flex-col items-center justify-between">
             {/* <div ref={el}className="text-3xl font-medium">{`Welcome, ${user.username}`}</div> */}
             <div ref={el} className="text-3xl font-medium"></div>
-            <button className="px-8 py-4 text-lg font-medium bg-orange-600 hover:bg-orange-700 text-white rounded-full">
+            <button className="px-8 py-3 text-lg font-medium bg-orange-600 hover:bg-orange-700 text-white rounded-xl">
               Join Lobby
             </button>
           </div>

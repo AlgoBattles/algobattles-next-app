@@ -66,7 +66,7 @@ export default function SendInvite(): React.ReactElement {
   return (
     <div className="flex flex-col h-screen">
       <div className="flex justify-center items-center flex-grow">
-        <div className="bg-gray-800 w-[400px] h-[320px] p-6 rounded-lg border-[1px] border-gray-700">
+        <div className="bg-gray-900 w-[400px] h-[320px] p-6 rounded-lg border-[1px] border-gray-700">
           <div className="mt-6">
             <div
               ref={el}
@@ -75,7 +75,7 @@ export default function SendInvite(): React.ReactElement {
             <label className="text-white mb-2 block font-semibold">
               Username
             </label>
-            <div className="flex items-center bg-gray-900 p-2 rounded">
+            <div className="flex items-center bg-black p-2 rounded">
               <input
                 type="text"
                 onChange={handleOpponentInput}
@@ -93,7 +93,7 @@ export default function SendInvite(): React.ReactElement {
             onClick={() => {
               handleSendInvite().catch(console.error);
             }}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 w-[100%] rounded-3xl"
+            className="bg-blue-700 hover:bg-blue-600 text-white font-semibold py-2 px-4 w-[100%] rounded-lg"
           >
             Send Invite
           </button>

@@ -117,7 +117,7 @@ function Lobby(): React.ReactElement {
     <div className="flex flex-col h-screen">
       <div className="flex justify-center items-center flex-grow">
         <div
-          className={`flex flex-col bg-gray-800 w-[400px] h-[400px] rounded-lg border-[1px] border-gray-700 ${opponentReady ? "bg-green-gradient" : "bg-gold-gradient"}`}
+          className={`flex flex-col bg-gray-900 w-[400px] h-[400px] rounded-lg border-[1px] border-gray-700 ${opponentReady ? "bg-green-gradient" : "bg-gold-gradient"}`}
         >
           <div className="px-6 py-4">
             <div className="mb-6">
